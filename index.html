@@ -6,36 +6,223 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href='https://fonts.googleapis.com/css?family=Raleway:400' rel='stylesheet subresource' type='text/css'>
         <style>
+            html {
+                height: 100%;
+            }
+            
             body {
-                background: #dedede;
-                font-family: 'Raleway', 'Arial', sans-serif;
-                font-weight: 400;
-                margin: 0;
+            	background-color: #1D1F20;
+            	background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTAwIiB3aWR0aD0iNjciPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjFweCIgZD0ibTAgMGwzMyAxMi41IDY3LTI1TTMzIDBsMCA1ME0wIDI1bDMzLTEyLjUgNjcgMjVNMCAyNWwwIDc1TTY3IDI1bDAgNzVNMCA2Mi41bDMzLTEyLjUgNjcgMjVNMCA2Mi41bDMzIDEyLjUgNjctMjVNMzMgNzVsMCAyNSI+PC9wYXRoPjwvc3ZnPg==");
+            	color: #fff;
+            	font-family: 'Raleway', sans-serif;
+            	letter-spacing: 1px;
+            	margin: 0;
+            	overflow-x: hidden;
+            	width: 100%;
+                min-height: 100%;
             }
-            .card {
-                background: #fff;
-                border-radius: 0.2em;
-                box-sizing: border-box;
-                box-shadow: 0 2px 3px rgba(0,0,0,0.4);
-                height: 100px;
-                left: 50%;
+            
+            * {
+            	box-sizing: border-box;
+            }
+            
+            .portfolio-opener {
                 position: fixed;
-                padding: 30px;
-                text-align: center;
                 top: 50%;
-                -webkit-transform: translate3d(-50%, -50%, 0);
+                left: 50%;
                 transform: translate3d(-50%, -50%, 0);
-                width: 260px;
+                width: 320px;
+                height: 150px;
+                padding: 20px;
             }
-            .card h1 {
+            
+            .portfolio-opener:before {
+                content: '';
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                height: calc(100% - 30px);
+                width: calc(100% - 30px);
+                background: #08c;
+                border: 2px solid #999;
+            }
+            
+            @keyframes left-breath-1 {
+                50% {
+                    transform: rotate(-12deg) translate3d(0,0,0);
+                }
+            }
+            
+            @keyframes left-breath-2 {
+                50% {
+                    transform: rotate(-12deg) translate3d(3px,0,0) scale(1.025);
+                }
+            }
+            
+            @keyframes right-breath-1 {
+                50% {
+                    transform: rotate(-2deg) translate3d(0,0,0);
+                }
+            }
+            
+            @keyframes right-breath-2 {
+                50% {
+                    transform: rotate(-2deg) translate3d(-3px,0,0) scale(1.025);
+                }
+            }
+            
+            .portfolio-opener .left-breather {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 1;
+            }
+            
+            .portfolio-opener .left-breather:before,
+            .portfolio-opener .left-breather:after {
+                content: '';
+                position: fixed;
+                top: -52px;
+                left: 2px;
+                height: 0;
+                width: 0;
+                border: 90px solid transparent;
+                border-top-width: 100px;
+                border-left-width: 340px;
+                transition: left 0.3s ease-in-out;
+            }
+            
+            .portfolio-opener .left-breather:before {
+                border-left-color: rgba(255,255,255,0.6);
+                transform: rotate(-10deg) translate3d(3px,0,0) scale(1.025);
+                animation: left-breath-2 5s ease-in-out infinite;
+            }
+            
+            .portfolio-opener .left-breather:after {
+                border-left-color: #08c;
+                transform: rotate(-10deg) translate3d(0,0,0);
+                animation: left-breath-1 5s ease-in-out infinite;
+            }
+            
+            .portfolio-opener .right-breather:before,
+            .portfolio-opener .right-breather:after {
+                content: '';
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 0;
+                width: 0;
+                border: 90px solid transparent;
+                border-bottom-width: 100px;
+                border-right-width: 340px;
+                transition: right 0.3s ease-in-out;
+            }
+            
+            .portfolio-opener .right-breather:before {
+                border-right-color: rgba(255,255,255,0.6);
+                transform: rotate(-5deg) translate3d(-3px,0,0) scale(1.025);
+                animation: right-breath-2 5s ease-in-out infinite;
+            }
+            
+            .portfolio-opener .right-breather:after {
+                border-right-color: #08c;
+                transform: rotate(-5deg) translate3d(0,0,0);
+                animation: right-breath-1 5s ease-in-out infinite;
+            }
+            
+            .portfolio-opener .opener-content {
+                position: relative;
+                z-index: 3;
+                transition: padding 0.3s ease-in-out;
+            }
+            
+            .portfolio-opener .open {
+                position: fixed;
+                bottom: 0px;
+                right: 12px;
+                z-index: 3;
+                width: 40px;
+                height: 40px;
+                transition: opacity 0.3s;
+            }
+            
+            .portfolio-opener .open:before,
+            .portfolio-opener .open:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 20px;
+                height: 4px;
+                background: #ccc;
+                transition: background 0.3s, translate 0.3s;
+            }
+            
+            .portfolio-opener .open:before {
+                transform: rotate(45deg) translate3d(16px,1px,0);
+                border-radius: 0.2em 0 0.2em 0;
+            }
+            
+            .portfolio-opener .open:after {
+                transform: rotate(-45deg) translate3d(-9px,24px,0);
+                border-radius: 0 0.2em 0 0.2em;
+            }
+            
+            .portfolio-opener .open:focus {
+                outline: none;
+            }
+            
+            .portfolio-opener .open:hover:before,
+            .portfolio-opener .open:hover:after,
+            .portfolio-opener .open:focus:before,
+            .portfolio-opener .open:focus:after {
+                background: #fff;
+            }
+            
+            .portfolio-opener h1 {
+                margin: 0 0 5px 0;
+                font-size: 24px;
                 font-weight: 400;
-                margin: 0;
             }
+            
+            .portfolio-opener p {
+                margin: 0;
+                color: #ccc;
+                font-weight: 300;
+            }
+            
+            /* When the arrow is clicked, reveal items in portfolio? probably not in this animation */
+            /*
+            .open:focus {
+                opacity: 0;
+            }
+            
+            .open:focus ~ .opener-content {
+                top: 0;
+                padding: 15px;
+            }
+            
+            .open:focus ~ .left-breather:before,
+            .open:focus ~ .left-breather:after {
+                left: -100vw;
+            }
+            
+            .open:focus ~ .right-breather:before,
+            .open:focus ~ .right-breather:after {
+                right: -100vw;
+            }
+            */
         </style>
     </head>
     <body>
-        <div class="card">
-            <h1>Coming soon</h1>
+        <div class="portfolio-opener">
+            <a href="http://codepen.io/zephyr/" class="open" target="_blank"></a>
+            <div class="left-breather"></div>
+            <div class="right-breather"></div>
+            <div class="opener-content">
+                <h1>Hey, I'm Tony</h1>
+                <p>And I'm a web developer</p>
+            </div>
         </div>
     </body>
 </html>
