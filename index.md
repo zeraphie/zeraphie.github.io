@@ -5,6 +5,8 @@ title: Home page
 
 ## Intro
 
+test
+
 This responsive template uses no libraries! Just some clever ES6 and SCSS and a [markdown parser](https://github.com/showdownjs/showdown) and [code highlighter](https://highlightjs.org/)
 
 Menu items use [google fonts](https://material.io/icons/) so change the icons as needed for better visual grepping while in the inactive view
