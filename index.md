@@ -49,8 +49,8 @@ This is a responsive table generated via markdown
 
 ### To-do List
 
-- [x]Todo list
-- [ ]Todo list item 2
+- [x] Todo list
+- [ ] Todo list item 2
 
 ---
 
