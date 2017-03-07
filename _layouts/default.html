@@ -1,25 +1,91 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<title>{{ page.title }}</title>
-			<!-- link to main stylesheet -->
-			<link rel="stylesheet" type="text/css" href="/css/main.css">
-		</head>
-		<body>
-			<nav>
-	    		<ul>
-	        		<li><a href="/">Home</a></li>
-	    		</ul>
-			</nav>
-			<div class="container">
-			
-			{{ content }}
-			
-			</div><!-- /.container -->
-			<footer>
-	    		<ul>
-          
-				</ul>
-			</footer>
-		</body>
-	</html>
+<html>
+	<head>
+		<title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet subresource">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource">
+        <link rel='stylesheet prefetch' href='http://cdn.zekken.rocks/css/waves.css'>
+        <link rel='stylesheet prefetch' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css'>
+		<link rel="stylesheet" type="text/css" href="/css/main.css">
+	</head>
+	<body>
+		<div class="sidebar">
+            <a class="sidebar-toggle waves-effect" href="#">Sidebar Toggle</a>
+            <ul class="sidebar-menu custom-scrollbar">
+            <li>
+                <a href="#intro" class="waves-effect">
+                <i class="material-icons">dashboard</i>
+                Intro
+                </a>
+            </li>
+            <li>
+                <a href="#text" class="waves-effect">
+                <i class="material-icons">text_fields</i>
+                Text
+                </a>
+            </li>
+            <li>
+                <a href="#blockquote" class="waves-effect">
+                <i class="material-icons">format_quote</i>
+                Blockquote
+                </a>
+            </li>
+            <li>
+                <a href="#table" class="waves-effect">
+                <i class="material-icons">view_module</i>
+                Table
+                </a>
+            </li>
+            <li>
+                <a href="#list" class="waves-effect">
+                <i class="material-icons">list</i>
+                Lists
+                </a>
+                <ul>
+                <li>
+                    <a href="#list" class="waves-effect">
+                    <i class="material-icons">list</i>
+                    List
+                    </a>
+                </li>
+                <li>
+                    <a href="#to-do-list" class="waves-effect">
+                    <i class="material-icons">playlist_add_check</i>
+                    To-do List
+                    </a>
+                </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#code" class="waves-effect">
+                <i class="material-icons">code</i>
+                Code
+                </a>
+            </li>
+            </ul>
+        </div>
+
+        <div class="wrapper">
+            <header>
+            <div class="container">
+                <div class="header-content content-wrapper">
+                <div class="header-title">
+                    <h1>Markdown App Template</h1>
+                </div>
+                </div>
+            </div>
+            </header>
+            <div class="body custom-scrollbar">
+            <div class="container">
+                <div class="markdown content-wrapper">{{ content }}</div>
+            </div>
+            </div>
+        </div>
+        
+        <script src='http://cdn.zekken.rocks/js/addons/waves.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.3/showdown.min.js'></script>
+        <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js'></script>
+        <script src='/js/main.js'></script>
+	</body>
+</html>
