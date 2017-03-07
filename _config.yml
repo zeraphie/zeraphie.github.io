@@ -1,5 +1,2 @@
 name: Jekyll Test
 markdown: github
-
-gems:
-  - jekyll-babel
