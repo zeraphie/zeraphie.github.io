@@ -36,14 +36,14 @@
                         <ul>
                             {% for posts in category %}
                                 {% for post in posts %}
-                                    {% unless post.category %}
-                                    <li>
-                                        <a href="{{ post.url }}">
-                                            <i class="material-icons">{{ post.icon }}</i>
-                                            {{ post.title }}
-                                        </a>
-                                    </li>
-                                    {% endunless %}
+                                    {% if post.category %}
+                                        <li>
+                                            <a href="{{ post.url }}">
+                                                <i class="material-icons">{{ post.icon }}</i>
+                                                {{ post.title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 {% endfor %}
                             {% endfor %}
                         </ul>
