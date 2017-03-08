@@ -27,7 +27,7 @@ body {
     box-sizing: border-box;
 }
 
-.custom-scrollbar {
+.custom-scrollbar, .highlight {
     &::-webkit-scrollbar {
         width: 7px;
         height: 7px;
@@ -476,6 +476,7 @@ table {
     box-shadow: $cardShadow;
     padding: 1px 16px;
     background: rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
 @media screen and (max-width: #{$sidebarWidth + 360}) {
