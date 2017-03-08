@@ -58,7 +58,7 @@ This is a responsive table generated via markdown
 
 Here's some `inline code`
 
-```javascript
+{% highlight javascript %}
 function $initHighlight(block, cls) {
     try {
         if (cls.search(/\bno\-highlight\b/) != -1){
@@ -76,4 +76,4 @@ function $initHighlight(block, cls) {
 }
 
 export  $initHighlight;
-```
+{% endhighlight %}
