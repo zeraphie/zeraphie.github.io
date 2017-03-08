@@ -67,10 +67,12 @@ body {
 }
 
 .cp_embed_wrapper {
+    background: #37474F;
     margin-top: 16px;
     box-shadow: $cardShadow;
     
     iframe {
+        background: #37474F;
         display: block;
     }
 }
