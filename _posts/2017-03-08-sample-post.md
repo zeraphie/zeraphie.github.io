@@ -1,6 +1,7 @@
 ---
 title: Sample Post
 icon: code
+category: style-guide
 ---
 
 ## Intro
