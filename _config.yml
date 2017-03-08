@@ -13,4 +13,5 @@ defaults:
       layout: "default"
       icon: "label"
       jsarr:
+      - js/waves.js
       - js/main.js
