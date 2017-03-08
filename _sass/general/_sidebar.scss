@@ -189,6 +189,7 @@
         transform-origin: 50% 25% 0;
         transition: transform 0.3s;
         display: none;
+        z-index: -1;
     }
     
     .sidebar-menu > .has-children > ul:before {
