@@ -21,7 +21,7 @@
                 {% for post in site.posts %}
                     <li>
                         <a href="{{ post.url }}">
-                            <i class="material-icons">label</i>
+                            <i class="material-icons">{{ post.icon }}</i>
                             {{ post.title }}
                         </a>
                     </li>
