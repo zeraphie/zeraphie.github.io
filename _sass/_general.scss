@@ -471,6 +471,13 @@ table {
     }
 }
 
+.highlight {
+    margin: 0;
+    box-shadow: $cardShadow;
+    padding: 1px 16px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
 @media screen and (max-width: #{$sidebarWidth + 360}) {
     .sidebar {
         width: $touchSize;
