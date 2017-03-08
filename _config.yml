@@ -10,5 +10,5 @@ defaults:
       path: ""
     values:
       layout: "default"
-    jsarr:
-    - js/main.js
+      jsarr:
+      - js/main.js
