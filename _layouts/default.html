@@ -12,6 +12,12 @@
         <div class="sidebar">
             <a class="sidebar-toggle waves-effect" href="#">Sidebar Toggle</a>
             <ul class="sidebar-menu custom-scrollbar">
+                <li>
+                    <a href="/">
+                        <i class="material-icons">dashboard</i>
+                        Home
+                    </a>
+                </li>
                 {% for post in site.posts %}
                     <li>
                         <a href="{{ post.url }}">
