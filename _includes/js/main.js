@@ -56,7 +56,6 @@ tables.forEach(function (table) {
         var cells = row.querySelectorAll('td, th');
         cells.forEach(function (cell, index) {
             var header = headers[index];
-            console.log(header);
             cell.setAttribute('data-title', header.innerText);
         });
     });
