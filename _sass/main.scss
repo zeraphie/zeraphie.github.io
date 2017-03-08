@@ -1,0 +1,597 @@
+---
+---
+
+$bezier: cubic-bezier(0.4, 0.0, 0.2, 1);
+$touchSize: 42px;
+$cardShadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+$mainBackground: #FFFFFF;
+$mainFontColour: #333333;
+$mainThemeColour: #0088CC;
+$mainThemeFontColour: #EEEEEE;
+$headerBackground: #0088CC;
+$headerFontColour: #FFFFFF;
+$sidebarWidth: 225px;
+$sidebarBackground: #37474F;
+$sidebarFontColour: #EEEEEE;
+$sidebarActionColour: rgba(255, 255, 255, 0.05);
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: greyscale;
+    text-rendering: optimizeLegibility;
+    font-family: 'Raleway', 'Arial', sans-serif;
+    line-height: 1.5;
+    color: $mainFontColour;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.custom-scrollbar {
+    &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        transition: background 0.3s;
+        &:hover {
+            background: rgba(0, 0, 0, 0.45);
+        }
+    }
+}
+
+.sidebar {
+    position: relative;
+    float: left;
+    background: $sidebarBackground;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: $sidebarWidth;
+    height: 100vh;
+    z-index: 9001;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    padding-top: $touchSize;
+    will-change: width;
+    transition: width 0.3s, background 0.3s;
+    
+    + .wrapper {
+        width: calc(100% - #{$sidebarWidth});
+        will-change: width;
+        transition: width 0.3s;
+    }
+    
+    &.side-bar-closed {
+        width: $touchSize;
+        + .wrapper {
+            width: calc(100% - #{$touchSize});
+        }
+        
+        .sidebar-title {
+            padding: 0 16px;
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        ul li a {
+            padding-left: 0;
+        }
+        
+        .sidebar-toggle:before {
+            transform: translate3d(-50%, -50%, 0);
+        }
+    }
+    
+    .sidebar-toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        text-indent: 9999px;
+        width: $touchSize;
+        height: $touchSize;
+        cursor: pointer;
+        overflow: hidden;
+        transition: background 0.3s;
+        
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: calc(50% + 5px);
+            border: 8px solid transparent;
+            border-left: 12px solid $sidebarFontColour;
+            transform-origin: 25% 50% 0;
+            transform: translate3d(-50%, -50%, 0) rotate(180deg);
+            transition: transform 0.3s $bezier;
+        }
+        
+        &:hover,
+        &:focus {
+            background: $sidebarActionColour;
+        }
+    }
+    
+    .sidebar-menu {
+        position: absolute;
+        top: $touchSize * 2;
+        height: calc(100vh - #{$touchSize * 2});
+        border-top: 2px solid $sidebarActionColour;
+        overflow: auto;
+        transition: height 0.3s, top 0.3s;
+        will-change: height, top;
+    }
+    
+    ul {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        
+        ul {
+            a {
+                opacity: 0;
+                max-height: 0;
+                overflow: hidden;
+                padding-left: 16px;
+            }
+            
+            ul a {
+                padding-left: 32px;
+            }
+        }
+    }
+    
+    li {
+        position: relative;
+        
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            border-bottom: 1px solid $sidebarActionColour;
+            box-shadow: 0 1px 1px $sidebarActionColour;
+            visibility: hidden;
+        }
+        
+        &.active {
+            background: $sidebarActionColour;
+            
+            &:after {
+                visibility: visible;
+            }
+            
+            > a {
+                background: $sidebarActionColour;
+            }
+            
+            > ul > li > a {
+                opacity: 1;
+                max-height: $touchSize;
+            }
+        }
+    }
+    
+    a {
+        display: block;
+        width: $sidebarWidth;
+        height: $touchSize;
+        line-height: $touchSize;
+        padding: 0 16px 0 0;
+        color: $sidebarFontColour;
+        transition: background 0.3s, padding 0.3s $bezier, max-height 0.3s, opacity 0.3s;
+        text-decoration: none;
+        will-change: padding;
+        
+        &:hover,
+        &:focus {
+            background: $sidebarActionColour;
+        }
+        
+        &:focus {
+            opacity: 1;
+            outline-color: $mainThemeColour;
+            max-height: $touchSize;
+        }
+    }
+    
+    i {
+        position: relative;
+        float: left;
+        width: $touchSize;
+        line-height: $touchSize;
+        text-align: center;
+    }
+    
+    .has-children > a:focus {
+        outline: none;
+    }
+    
+    .has-children > ul:after {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        width: $touchSize;
+        height: $touchSize;
+        background: $sidebarActionColour;
+    }
+    
+    .has-children > ul:before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + 7px);
+        right: 14px;
+        height: 0;
+        width: 0;
+        border: 8px solid transparent;
+        border-top: 12px solid $sidebarFontColour;
+        transform-origin: 50% 25% 0;
+        transition: transform 0.3s;
+        display: none;
+    }
+    
+    .sidebar-menu > .has-children > ul:before {
+        display: block;
+    }
+    
+    .active > ul > .has-children > ul:before {
+        display: block;
+    }
+    
+    .has-children.active > ul:before {
+        transform: rotate(180deg);
+    }
+}
+
+.wrapper {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: calc(100vh - #{$touchSize * 2});
+}
+
+header {
+    position: relative;
+    height: $touchSize * 2;
+    max-height: $touchSize * 2;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    background: $headerBackground;
+    color: $headerFontColour;
+    z-index: 9002;
+    transition: max-height 0.3s $bezier;
+    overflow: hidden;
+    
+    .header-title h1 {
+        margin: 0;
+        line-height: $touchSize * 2;
+        font-size: 28px;
+        transition: line-height 0.3s, font-size 0.3s;
+        will-change: line-height, font-size;
+    }
+}
+
+.body {
+    position: relative;
+    overflow: auto;
+    height: 100vh;
+    max-height: calc(100vh - #{$touchSize * 2});
+    background: $mainBackground;
+    transition: max-height 0.3s $bezier;
+}
+
+.container {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+    
+    &:before,
+    &:after {
+        content: '';
+        display: table-cell;
+        clear: both;
+    }
+}
+
+.content-wrapper {
+    margin: 0;
+    padding: 0 32px;
+    transition: padding 0.3s;
+    will-change: padding;
+}
+
+.markdown {
+    position: relative;
+    padding-top: 32px;
+    padding-bottom: 64px;
+    
+    > *:first-child {
+        margin-top: 0;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 20px 0 0 0;
+    font-weight: 300;
+    transition: font-size 0.3s;
+    will-change: font-size;
+}
+
+h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 12px;
+}
+
+hr {
+    margin: 24px 0 0 0;
+    border: none;
+    height: 2px;
+    background: #ddd;
+}
+
+p {
+    margin: 12px 0 0 0;
+}
+
+.body ul {
+    list-style: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+    box-shadow: $cardShadow;
+    
+    li {
+        border: 1px solid #eee;
+        border-bottom: none;
+        padding: 12px 16px;
+        transition: background 0.3s;
+        
+        &:last-child {
+            border-bottom: 1px solid #eee;
+        }
+        
+        &:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        &.task-list-item input[type="checkbox"] {
+            margin: 0 12px 3px 0 !important;
+        }
+    }
+    
+    ul {
+        box-shadow: none;
+        margin: 12px -16px -12px -16px;
+        border-top: 1px solid #eee;
+        
+        li {
+            margin-left: 16px;
+            border-left: none;
+            border-right: none;
+            
+            &:first-child {
+                border-top: none;
+            }
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+.body a {
+    text-decoration: none;
+    color: $mainThemeColour;
+    transition: color 0.3s;
+    
+    &:hover,
+    &:focus {
+        color: lighten($mainThemeColour, 16%);
+    }
+}
+
+blockquote {
+    margin: 24px 0 0 0;
+    padding: 12px 16px;
+    border-left: 4px solid $mainThemeColour;
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: $cardShadow;
+    
+    p:first-child {
+        margin-top: 0;
+    }
+}
+
+table {
+    margin-top: 16px;
+    width: 100%;
+    box-shadow: $cardShadow;
+    background: #fff;
+    border-collapse: collapse;
+    
+    tr {
+        border-bottom: 1px solid #eee;
+    }
+    
+    tbody tr {
+        transition: background 0.3s;
+        will-change: background;
+        
+        &:nth-child(odd) {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        
+        &:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        
+        &:last-child {
+            border: none;
+        }
+    }
+    
+    th,
+    td {
+        text-align: left;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        transition: background 0.3s;
+        will-change: background;
+        border: 1px solid #eee;
+    }
+}
+
+@media screen and (max-width: #{$sidebarWidth + 360}) {
+    .sidebar {
+        width: $touchSize;
+        
+        .sidebar-toggle {
+            display: none;
+        }
+        
+        + .wrapper {
+            width: calc(100% - #{$touchSize});
+        }
+        
+        .sidebar-menu {
+            top: $touchSize / 2 * 3;
+            height: calc(100vh - #{$touchSize / 2 * 3});
+        }
+        
+        ul li a {
+            padding-left: 0 !important;
+        }
+    }
+    
+    header {
+        max-height: $touchSize / 2 * 3;
+        
+        .header-title h1 {
+            line-height: $touchSize / 2 * 3;
+            font-size: 20px;
+        }
+    }
+    
+    .body {
+        max-height: calc(100vh - #{$touchSize / 2 * 3});
+    }
+    
+    .content-wrapper {
+        padding: 0 20px;
+    }
+    
+    .markdown {
+        padding-top: 20px;
+        padding-bottom: 40px;
+    }
+    
+    h1 {
+        font-size: 26px;
+    }
+    
+    h2 {
+        font-size: 23px;
+    }
+    
+    h3 {
+        font-size: 20px;
+    }
+    
+    h4 {
+        font-size: 17px;
+    }
+    
+    h5 {
+        font-size: 14px;
+    }
+    
+    h6 {
+        font-size: 11px;
+    }
+    
+    table {
+        box-shadow: none;
+        background: none;
+        width: 100%;
+        
+        thead {
+            display: none;
+        }
+        
+        tbody tr {
+            display: block;
+            margin: 16px 0;
+            box-shadow: $cardShadow;
+            background: #fff;
+            border: none;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &:hover,
+            &:nth-child(odd) {
+                background: #fff;
+            }
+
+            th,
+            td {
+                display: block;
+                width: 100%;
+                text-align: right;
+                border: none;
+                border-bottom: 1px solid #eee;
+
+                &:before {
+                    content: attr(data-title);
+                    float: left;
+                }
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.03);
+                }
+
+                &:first-child {
+                    border-top: 1px solid #eee;
+                }
+            }
+        }
+    }
+}
