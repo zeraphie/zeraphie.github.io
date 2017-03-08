@@ -31,7 +31,7 @@
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
                         <a href="{{ category | first }}">
                             <i class="material-icons">label</i>
-                            {{ category | first | slugify }}
+                            {{ category | first | replace: '-', ' ' }}
                         </a>
                         <ul>
                             {% for posts in category %}
