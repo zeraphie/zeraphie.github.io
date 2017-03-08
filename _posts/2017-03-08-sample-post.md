@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Sample Post
+jsarr:
+- js/main.js
 ---
 
 ## Intro
