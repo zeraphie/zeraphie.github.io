@@ -4,7 +4,7 @@ kramdown:
   syntax_highlighter: rouge
 sass:
   style: compressed
-permalink: /:title
+permalink: /:category/:title
 include: 
   - ".htaccess"
 defaults:
