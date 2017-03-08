@@ -153,7 +153,7 @@
                     'left': relativeX+'px',
                     'opacity': '0',
 
-                    // Duration
+                    /* Duration */
                     '-webkit-transition-duration': Effect.duration + 'ms',
                     '-moz-transition-duration': Effect.duration + 'ms',
                     '-o-transition-duration': Effect.duration + 'ms',
@@ -298,7 +298,7 @@
             Effect.duration = options.duration;
         }
 
-        //Wrap input inside <i> tag
+        /* Wrap input inside <i> tag */
         Effect.wrapInput($$('.waves-effect'));
 
         if ('ontouchstart' in window) {
