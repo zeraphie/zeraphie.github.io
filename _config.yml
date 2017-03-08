@@ -1,1 +1,4 @@
 name: Jekyll Test
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
