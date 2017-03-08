@@ -11,5 +11,6 @@ defaults:
       path: ""
     values:
       layout: "default"
+      icon: "label"
       jsarr:
       - js/main.js
