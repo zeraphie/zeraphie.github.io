@@ -25,13 +25,13 @@
                                 {{ post.title }}
                             </a>
                         </li>
-                    {% endunless%}
+                    {% endunless %}
                 {% endfor %}
                 {% for category in site.categories %}
                     <li>
                         <a href="#">
                             <i class="material-icons">label</i>
-                            {{ category }}
+                            {{ category | first }}
                         </a>
                         <ul>
                             {% for posts in category %}
