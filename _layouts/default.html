@@ -48,7 +48,7 @@
         
         <script src='http://cdn.zekken.rocks/js/addons/waves.js'></script>
         {% for js in page.jsarr %}
-            <script type="text/javascript">{% include {{ js }} %}</script>
+            <script type="text/javascript" id="{{ js }}">{% include {{ js }} %}</script>
         {% endfor %}
     </body>
 </html>
