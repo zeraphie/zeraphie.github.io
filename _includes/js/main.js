@@ -1,35 +1,35 @@
 'use strict';
 if (typeof NodeList.prototype.forEach === 'undefined') {
-    // Polyfill for nodelist foreach for ie11
+    /* Polyfill for nodelist foreach for ie11 */
     NodeList.prototype.forEach = function (callback, scope) {
         for (var i = 0; i < this.length; i++) {
-            callback.call(scope, this[i], i); // passes back stuff we need
+            callback.call(scope, this[i], i); /* passes back stuff we need */
         }
     };
 }
 
-// Cross browser friendly matches
+/* Cross browser friendly matches */
 var matches = function matches(el, selector) {
     return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
 };
 
-// Get the dom element's children
+/* Get the dom element's children */
 var getChildren = function getChildren(el, selector) {
     return [].some.call(el.children, function (e) {
         return matches(e, selector);
     });
 };
 
-// Open and close the sidebar
+/* Open and close the sidebar */
 document.querySelector('.sidebar-toggle').addEventListener('click', function (e) {
     document.querySelector('.sidebar').classList.toggle('side-bar-closed');
     return false;
 });
 
-// Open and close the navlinks
+/* Open and close the navlinks */
 var navlinks = document.querySelectorAll('.sidebar ul a');
 navlinks.forEach(function (link) {
-    // Remove links that have children and add the class to the li wrapper
+    /* Remove links that have children and add the class to the li wrapper */
     if (getChildren(link.parentNode, 'ul')) {
         link.parentNode.classList.add('has-children');
         link.setAttribute('tabindex', '-1');
@@ -47,7 +47,7 @@ navlinks.forEach(function (link) {
     });
 });
 
-// Add data-title attribute for relevant items in table after parsing
+/* Add data-title attribute for relevant items in table after parsing */
 var tables = document.querySelectorAll('.markdown table');
 tables.forEach(function (table) {
     var headers = table.querySelectorAll('thead th');
