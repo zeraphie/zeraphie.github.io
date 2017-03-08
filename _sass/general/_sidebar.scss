@@ -122,6 +122,8 @@
             
             > a {
                 background: $sidebarActionColour;
+                opacity: 1;
+                max-height: $touchSize;
             }
             
             > ul > li > a {
