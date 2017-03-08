@@ -2,6 +2,7 @@
 title: Potency
 icon: apps
 category: Personal-Projects
+published: false
 ---
 
 ## FFXIV Potency Calculator
