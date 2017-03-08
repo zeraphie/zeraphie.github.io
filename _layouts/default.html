@@ -28,7 +28,7 @@
                     {% endunless %}
                 {% endfor %}
                 {% for category in site.categories %}
-                    <li {% if page.categories contains category %}class="active"{% endif %}>
+                    <li {% if page.categories contains category[0] %}class="active"{% endif %}>
                         <a href="{{ category | first }}">
                             <i class="material-icons">label</i>
                             {{ category | first }}
