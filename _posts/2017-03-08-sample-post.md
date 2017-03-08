@@ -1,5 +1,6 @@
 ---
 title: Sample Post
+icon: code
 ---
 
 ## Intro
