@@ -1,14 +1,12 @@
 ---
 title: Sample Post
 icon: code
-category: style-guide
+category: Style Guide
 ---
 
 ## Intro
 
-This responsive template uses no libraries! Just some clever ES6 and SCSS and a [markdown parser](https://github.com/showdownjs/showdown) and [code highlighter](https://highlightjs.org/)
-
-Menu items use [google fonts](https://material.io/icons/) so change the icons as needed for better visual grepping while in the inactive view
+This responsive template uses no libraries! Just some clever ES6 and SCSS
 
 This design is inspired by [material design](https://material.io/guidelines/)
 
