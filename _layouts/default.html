@@ -18,11 +18,33 @@
                     </a>
                 </li>
                 {% for post in site.posts %}
+                    {% unless post.category %}
+                        <li>
+                            <a href="{{ post.url }}">
+                                <i class="material-icons">{{ post.icon }}</i>
+                                {{ post.title }}
+                            </a>
+                        </li>
+                    {% endunless%}
+                {% endfor %}
+                {% for category in site.categories %}
                     <li>
-                        <a href="{{ post.url }}">
-                            <i class="material-icons">{{ post.icon }}</i>
-                            {{ post.title }}
+                        <a href="#">
+                            <i class="material-icons">label</i>
+                            {{ category }}
                         </a>
+                        <ul>
+                            {% for posts in category %}
+                                {% for post in posts %}
+                                    <li>
+                                        <a href="{{ post.url }}">
+                                            <i class="material-icons">{{ post.icon }}</i>
+                                            {{ post.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                     </li>
                 {% endfor %}
             </ul>
