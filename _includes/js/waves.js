@@ -13,7 +13,7 @@
     var Waves = Waves || {};
     var $$ = document.querySelectorAll.bind(document);
 
-    // Find exact position of element
+    /* Find exact position of element */
     function isWindow(obj) {
         return obj !== null && obj === obj.window;
     }
@@ -53,42 +53,42 @@
 
     var Effect = {
 
-        // Effect delay
+        /* Effect delay */
         duration: 750,
 
         show: function(e, element) {
 
-            // Disable right click
+            /* Disable right click */
             if (e.button === 2) {
                 return false;
             }
 
             var el = element || this;
 
-            // Create ripple
+            /* Create ripple */
             var ripple = document.createElement('div');
             ripple.className = 'waves-ripple';
             el.appendChild(ripple);
 
-            // Get click coordinate and element witdh
+            /* Get click coordinate and element width */
             var pos         = offset(el);
             var relativeY   = (e.pageY - pos.top);
             var relativeX   = (e.pageX - pos.left);
             var scale       = 'scale('+((el.clientWidth / 100) * 10)+')';
 
-            // Support for touch devices
+            /* Support for touch devices */
             if ('touches' in e) {
               relativeY   = (e.touches[0].pageY - pos.top);
               relativeX   = (e.touches[0].pageX - pos.left);
             }
 
-            // Attach data to element
+            /* Attach data to element */
             ripple.setAttribute('data-hold', Date.now());
             ripple.setAttribute('data-scale', scale);
             ripple.setAttribute('data-x', relativeX);
             ripple.setAttribute('data-y', relativeY);
 
-            // Set ripple position
+            /* Set ripple position */
             var rippleStyle = {
                 'top': relativeY+'px',
                 'left': relativeX+'px'
@@ -98,7 +98,7 @@
             ripple.setAttribute('style', convertStyle(rippleStyle));
             ripple.className = ripple.className.replace('waves-notransition', '');
 
-            // Scale the ripple
+            /* Scale the ripple */
             rippleStyle['-webkit-transform'] = scale;
             rippleStyle['-moz-transform'] = scale;
             rippleStyle['-ms-transform'] = scale;
@@ -125,7 +125,7 @@
             var el = this;
             var width = el.clientWidth * 1.4;
 
-            // Get first ripple
+            /* Get first ripple */
             var ripple = null;
             var ripples = el.getElementsByClassName('waves-ripple');
             if (ripples.length > 0) {
@@ -138,7 +138,7 @@
             var relativeY   = ripple.getAttribute('data-y');
             var scale       = ripple.getAttribute('data-scale');
 
-            // Get delay beetween mousedown and mouse leave
+            /* Get delay beetween mousedown and mouse leave */
             var diff = Date.now() - Number(ripple.getAttribute('data-hold'));
             var delay = 350 - diff;
 
@@ -146,7 +146,7 @@
                 delay = 0;
             }
 
-            // Fade out ripple after delay
+            /* Fade out ripple after delay */
             setTimeout(function() {
                 var style = {
                     'top': relativeY+'px',
@@ -177,7 +177,7 @@
             }, delay);
         },
 
-        // Little hack to make <input> can perform waves effect
+        /* Little hack to make <input> perform waves effect */
         wrapInput: function(elements) {
             for (var a = 0; a < elements.length; a++) {
                 var el = elements[a];
@@ -185,12 +185,12 @@
                 if (el.tagName.toLowerCase() === 'input') {
                     var parent = el.parentNode;
 
-                    // If input already have parent just pass through
+                    /* If input already have parent just pass through */
                     if (parent.tagName.toLowerCase() === 'i' && parent.className.indexOf('waves-effect') !== -1) {
                         continue;
                     }
 
-                    // Put element class and style to the specified parent
+                    /* Put element class and style to the specified parent */
                     var wrapper = document.createElement('i');
                     wrapper.className = el.className + ' waves-input-wrapper';
 
@@ -205,7 +205,7 @@
                     el.className = 'waves-button-input';
                     el.removeAttribute('style');
 
-                    // Put element as child
+                    /* Put element as child */
                     parent.replaceChild(wrapper, el);
                     wrapper.appendChild(el);
                 }
@@ -227,11 +227,11 @@
             var allow = true;
 
             if (e.type === 'touchstart') {
-                TouchHandler.touches += 1; //push
+                TouchHandler.touches += 1;
             } else if (e.type === 'touchend' || e.type === 'touchcancel') {
                 setTimeout(function() {
                     if (TouchHandler.touches > 0) {
-                        TouchHandler.touches -= 1; //pop after 500ms
+                        TouchHandler.touches -= 1;
                     }
                 }, 500);
             } else if (e.type === 'mousedown' && TouchHandler.touches > 0) {
@@ -315,8 +315,8 @@
      * where the user doesn't want a delegated click handler.
      */
     Waves.attach = function(element) {
-        //FUTURE: automatically add waves classes and allow users
-        // to specify them with an options param? Eg. light/classic/button
+        /* FUTURE: automatically add waves classes and allow users
+         * to specify them with an options param? Eg. light/classic/button */
         if (element.tagName.toLowerCase() === 'input') {
             Effect.wrapInput([element]);
             element = element.parentElement;
