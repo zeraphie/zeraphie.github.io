@@ -4,3 +4,11 @@ kramdown:
   syntax_highlighter: rouge
 sass:
   style: compressed
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
+    jsarr:
+    - js/main.js
