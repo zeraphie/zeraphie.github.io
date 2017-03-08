@@ -68,6 +68,11 @@ body {
 
 .cp_embed_wrapper {
     margin-top: 16px;
+    box-shadow: $cardShadow;
+    
+    iframe {
+        display: block;
+    }
 }
 
 @media screen and (max-width: #{$sidebarWidth + 360}) {
