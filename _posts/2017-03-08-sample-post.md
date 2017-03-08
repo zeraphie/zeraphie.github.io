@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Sample Post
-permalink: sample-post
 ---
 
 ## Intro
