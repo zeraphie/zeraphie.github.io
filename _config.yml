@@ -4,6 +4,7 @@ kramdown:
   syntax_highlighter: rouge
 sass:
   style: compressed
+permalink: /:title
 defaults:
   -
     scope:
