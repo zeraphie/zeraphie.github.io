@@ -5,6 +5,8 @@ kramdown:
 sass:
   style: compressed
 permalink: /:title
+include: 
+  - ".htaccess"
 defaults:
   -
     scope:
