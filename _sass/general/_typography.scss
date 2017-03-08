@@ -1,0 +1,96 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 20px 0 0 0;
+    font-weight: 300;
+    transition: font-size 0.3s;
+    will-change: font-size;
+}
+
+h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 12px;
+}
+
+hr {
+    margin: 24px 0 0 0;
+    border: none;
+    height: 2px;
+    background: #ddd;
+}
+
+p {
+    margin: 12px 0 0 0;
+}
+
+.body a {
+    text-decoration: none;
+    color: $mainThemeColour;
+    transition: color 0.3s;
+    
+    &:hover,
+    &:focus {
+        color: lighten($mainThemeColour, 16%);
+    }
+}
+
+blockquote {
+    margin: 24px 0 0 0;
+    padding: 12px 16px;
+    border-left: 4px solid $mainThemeColour;
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: $cardShadow;
+    
+    p:first-child {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: #{$sidebarWidth + 360}) {
+    h1 {
+        font-size: 26px;
+    }
+    
+    h2 {
+        font-size: 23px;
+    }
+    
+    h3 {
+        font-size: 20px;
+    }
+    
+    h4 {
+        font-size: 17px;
+    }
+    
+    h5 {
+        font-size: 14px;
+    }
+    
+    h6 {
+        font-size: 11px;
+    }
+}
