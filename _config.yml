@@ -15,5 +15,6 @@ defaults:
       layout: "default"
       icon: "label"
       jsarr:
+      - js/pjax.js
       - js/waves.js
       - js/main.js
