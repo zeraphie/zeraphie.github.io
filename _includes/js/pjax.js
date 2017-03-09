@@ -40,10 +40,17 @@ var setupPjax = function(callback){
                     pjax(e.target.href, callback);
                     history.pushState(null, null, e.target.href);
                     
-                    pjaxLinks.forEach(function(link){
-                        link.parentNode.classList.remove('active');
-                    });
-                    pjaxLink.parentNode.classList.add('active');
+                    if(pjaxLink.parentNode.tagName.toLowerCase() === 'li'){
+                        pjaxLinks.forEach(function(link){
+                            link.parentNode.classList.remove('active');
+                        });
+                        pjaxLink.parentNode.classList.add('active');
+                    } else {
+                        pjaxLinks.forEach(function(link){
+                            link.classList.remove('active');
+                        });
+                        pjaxLink.classList.add('active');
+                    }
                 }
             });
         });
