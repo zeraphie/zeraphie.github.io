@@ -39,6 +39,11 @@ var setupPjax = function(callback){
                     e.preventDefault();
                     pjax(e.target.href, callback);
                     history.pushState(null, null, e.target.href);
+                    
+                    pjaxLinks.forEach(function(link){
+                        link.classList.remove('active');
+                    });
+                    pjaxLink.classList.add('active');
                 }
             });
         });
