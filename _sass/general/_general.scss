@@ -66,15 +66,11 @@ body {
     will-change: padding;
 }
 
-.cp_embed_wrapper {
+iframe {
     background: #37474F;
     margin-top: 16px;
     box-shadow: $cardShadow;
-    
-    iframe {
-        background: #37474F;
-        display: block;
-    }
+    display: block;
 }
 
 @media screen and (max-width: #{$sidebarWidth + 360}) {
