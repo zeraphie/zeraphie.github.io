@@ -162,6 +162,7 @@
         width: $touchSize;
         line-height: $touchSize;
         text-align: center;
+        pointer-events: none; /* Fix needed for pjax */
     }
     
     .has-children > a:focus {
