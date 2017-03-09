@@ -23,6 +23,7 @@ var getChildren = function getChildren(el, selector) {
 
 /* Open and close the sidebar */
 document.querySelector('.sidebar-toggle').addEventListener('click', function (e) {
+    e.preventDefault();
     document.querySelector('.sidebar').classList.toggle('side-bar-closed');
     return false;
 });
