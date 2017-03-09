@@ -1,4 +1,5 @@
 'use strict';
+
 if (typeof NodeList.prototype.forEach === 'undefined') {
     /* Polyfill for nodelist foreach for ie11 */
     NodeList.prototype.forEach = function (callback, scope) {
@@ -47,16 +48,18 @@ navlinks.forEach(function (link) {
     });
 });
 
-/* Add data-title attribute for relevant items in table after parsing */
-var tables = document.querySelectorAll('.markdown table');
-tables.forEach(function (table) {
-    var headers = table.querySelectorAll('thead th');
-    var rows = table.querySelectorAll('tbody tr');
-    rows.forEach(function (row) {
-        var cells = row.querySelectorAll('td, th');
-        cells.forEach(function (cell, index) {
-            var header = headers[index];
-            cell.setAttribute('data-title', header.innerText);
+fullyLoaded(function(){
+    /* Add data-title attribute for relevant items in table after parsing */
+    var tables = document.querySelectorAll('.markdown table');
+    tables.forEach(function (table) {
+        var headers = table.querySelectorAll('thead th');
+        var rows = table.querySelectorAll('tbody tr');
+        rows.forEach(function (row) {
+            var cells = row.querySelectorAll('td, th');
+            cells.forEach(function (cell, index) {
+                var header = headers[index];
+                cell.setAttribute('data-title', header.innerText);
+            });
         });
     });
 });
