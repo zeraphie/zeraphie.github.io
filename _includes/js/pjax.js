@@ -4,6 +4,10 @@ var fullyLoaded = function(callback){
 };
 
 var pjax = function(url, callback, selector) {
+    var find = function(selector, context) {
+        return (context || document).querySelector(selector);
+    };
+    
     var container = selector || '.body';
     
     var xhr = new XMLHttpRequest();
