@@ -35,9 +35,11 @@ var setupPjax = function(callback){
         var pjaxLinks = document.querySelectorAll('.pjax-link');
         pjaxLinks.forEach(function(pjaxLink){
             pjaxLink.addEventListener('click', function(e){
-                e.preventDefault();
-                pjax(e.target.href, callback);
-                history.pushState(null, null, e.target.href);
+                if(e.target.tagName.toLowerCase() === 'a'){
+                    e.preventDefault();
+                    pjax(e.target.href, callback);
+                    history.pushState(null, null, e.target.href);
+                }
             });
         });
 
