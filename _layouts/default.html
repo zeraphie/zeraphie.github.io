@@ -16,7 +16,7 @@ layout: compress
             <a class="sidebar-toggle waves-effect" href="#">Sidebar Toggle</a>
             <ul class="sidebar-menu custom-scrollbar">
                 <li>
-                    <a href="/">
+                    <a href="/" class="pjax-link waves-effect">
                         <i class="material-icons">dashboard</i>
                         Home
                     </a>
@@ -24,7 +24,7 @@ layout: compress
                 {% for post in site.posts %}
                     {% unless post.category %}
                         <li {% if post.url == page.url %}class="active"{% endif %}>
-                            <a href="{{ post.url }}">
+                            <a href="{{ post.url }}" class="pjax-link waves-effect">
                                 <i class="material-icons">{{ post.icon }}</i>
                                 {{ post.title }}
                             </a>
@@ -33,7 +33,7 @@ layout: compress
                 {% endfor %}
                 {% for category in site.categories %}
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
-                        <a href="{{ category | first }}">
+                        <a href="{{ category | first }}" class="waves-effect">
                             <i class="material-icons">label</i>
                             {{ category | first | replace: '-', ' ' }}
                         </a>
@@ -42,7 +42,7 @@ layout: compress
                                 {% for post in posts %}
                                     {% if post.category %}
                                         <li {% if post.url == page.url %}class="active"{% endif %}>
-                                            <a href="{{ post.url }}">
+                                            <a href="{{ post.url }}" class="pjax-link waves-effect">
                                                 <i class="material-icons">{{ post.icon }}</i>
                                                 {{ post.title }}
                                             </a>
