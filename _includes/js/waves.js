@@ -333,7 +333,7 @@
 
     window.Waves = Waves;
 
-    pjax.onload(function(){
+    window.pjax.onload(function(){
         Waves.displayEffect();
     });
 
