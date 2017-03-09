@@ -41,9 +41,9 @@ var setupPjax = function(callback){
                     history.pushState(null, null, e.target.href);
                     
                     pjaxLinks.forEach(function(link){
-                        link.classList.remove('active');
+                        link.parentNode.classList.remove('active');
                     });
-                    pjaxLink.classList.add('active');
+                    pjaxLink.parentNode.classList.add('active');
                 }
             });
         });
