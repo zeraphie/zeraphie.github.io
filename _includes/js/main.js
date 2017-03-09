@@ -58,7 +58,7 @@ pjax.onload(function(){
                 navlinks.forEach(function(link){
                     link.parentNode.classList.remove('active');
                 });
-                navlinks.parentNode.classList.add('active');
+                link.parentNode.classList.add('active');
             }
         });
     });
