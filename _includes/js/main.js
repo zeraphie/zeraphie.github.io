@@ -1,5 +1,7 @@
 'use strict';
 
+pjax.setup();
+
 if (typeof NodeList.prototype.forEach === 'undefined') {
     /* Polyfill for nodelist foreach for ie11 */
     NodeList.prototype.forEach = function (callback, scope) {
@@ -49,7 +51,7 @@ navlinks.forEach(function (link) {
     });
 });
 
-fullyLoaded(function(){
+pjax.onload(function(){
     /* Add data-title attribute for relevant items in table after parsing */
     var tables = document.querySelectorAll('.markdown table');
     tables.forEach(function (table) {
