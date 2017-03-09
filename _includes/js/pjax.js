@@ -58,15 +58,25 @@ pjax.request = function(url) {
 pjax.onload = function(callback){
     var self = this;
 
-    window.onload = function(){
-        window.onload();
-        callback();
-    }
+    if(typeof callback === 'function'){
+        window.onload = (function(old){
+            function extendFunction(){
+                old();
+                callback();
+            }
+            
+            return extendFunction;
+        })(window.onload);
 
-    self.afterLoad = function(){
-        if(typeof self.afterLoad === 'function'){
-            self.afterLoad();
-        }
-        callback();
+        self.afterLoad = (function(old){
+            function extendFunction(){
+                if(typeof old === 'function'){
+                    old();
+                }
+                callback();
+            }
+            
+            return extendFunction;
+        })(self.afterLoad);
     }
 };
