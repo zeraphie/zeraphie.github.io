@@ -9,7 +9,7 @@
  * Edited by Tony Lopez for compatibility with pjax
  */
 
-;(function(window) {
+(function(window) {
     'use strict';
 
     var Waves = Waves || {};
