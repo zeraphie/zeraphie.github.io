@@ -28,6 +28,8 @@ var pjax = function(url, callback, selector) {
     if(typeof callback === 'function'){
         callback();
     }
+    
+    return false;
 };
 
 var setupPjax = function(callback){
