@@ -61,7 +61,9 @@ pjax.onload = function(callback){
     if(typeof callback === 'function'){
         window.onload = (function(old){
             function extendFunction(){
-                old();
+                if(typeof old === 'function'){
+                    old();
+                }
                 callback();
             }
             
