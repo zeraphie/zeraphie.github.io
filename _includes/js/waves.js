@@ -5,6 +5,8 @@
  * Copyright 2014 Alfiana E. Sibuea and other contributors
  * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE
+ *
+ * Edited by Tony Lopez for compatibility with pjax
  */
 
 ;(function(window) {
@@ -331,8 +333,8 @@
 
     window.Waves = Waves;
 
-    document.addEventListener('DOMContentLoaded', function() {
+    fullyLoaded(function(){
         Waves.displayEffect();
-    }, false);
+    });
 
 })(window);
