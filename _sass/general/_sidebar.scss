@@ -144,6 +144,7 @@
         text-decoration: none;
         will-change: padding;
         
+        &.active,
         &:hover,
         &:focus {
             background: $sidebarActionColour;
