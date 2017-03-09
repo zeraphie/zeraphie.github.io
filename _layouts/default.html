@@ -16,15 +16,15 @@
             <a class="sidebar-toggle waves-effect" href="#">Sidebar Toggle</a>
             <ul class="sidebar-menu custom-scrollbar">
                 <li>
-                    <a href="/" class="pjax-link waves-effect">
+                    <a href="/" class="pjax-link waves-effect{% if '/' == page.url %} active{% endif %}">
                         <i class="material-icons">dashboard</i>
                         Home
                     </a>
                 </li>
                 {% for post in site.posts %}
                     {% unless post.category %}
-                        <li {% if post.url == page.url %}class="active"{% endif %}>
-                            <a href="{{ post.url }}" class="pjax-link waves-effect">
+                        <li>
+                            <a href="{{ post.url }}" class="pjax-link waves-effect{% if post.url == page.url %} active{% endif %}">
                                 <i class="material-icons">{{ post.icon }}</i>
                                 {{ post.title }}
                             </a>
@@ -41,8 +41,8 @@
                             {% for posts in category %}
                                 {% for post in posts %}
                                     {% if post.category %}
-                                        <li {% if post.url == page.url %}class="active"{% endif %}>
-                                            <a href="{{ post.url }}" class="pjax-link waves-effect">
+                                        <li>
+                                            <a href="{{ post.url }}" class="pjax-link waves-effect{% if post.url == page.url %} active{% endif %}">
                                                 <i class="material-icons">{{ post.icon }}</i>
                                                 {{ post.title }}
                                             </a>
