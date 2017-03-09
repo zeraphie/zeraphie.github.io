@@ -56,9 +56,9 @@ pjax.onload(function(){
         link.addEventListener('click', function(e){
             if (!getChildren(link.parentNode, 'ul')) {
                 navlinks.forEach(function(link){
-                    link.parentNode.classList.remove('active');
+                    link.classList.remove('active');
                 });
-                link.parentNode.classList.add('active');
+                link.classList.add('active');
             }
         });
     });
