@@ -1,4 +1,7 @@
-
+/**
+ * This is my own version of pjax, written as a short version of the pjax libraries
+ * in order to understand how it works
+ */
 window.pjax = {};
 
 pjax.find = function(selector, context) {
