@@ -58,7 +58,7 @@ p {
 }
 
 blockquote {
-    margin: 24px 0 0 0;
+    margin: 24px 16px 0 16px;
     padding: 12px 16px;
     border-left: 4px solid $mainThemeColour;
     background: rgba(0, 0, 0, 0.05);
@@ -66,6 +66,10 @@ blockquote {
     
     p:first-child {
         margin-top: 0;
+    }
+    
+    + * {
+        margin-top: 24px;
     }
 }
 
