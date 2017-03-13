@@ -11,12 +11,8 @@ layout: compress
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource">
         <link rel="stylesheet" type="text/css" href="/css/app.css">
         
-        {% if page.customcs.size > 0 %}
-            <style type="text/css">
-                {% for customcss in page.customcss %}
-                    {% include {{ customcss }} %}
-                {% endfor %}
-            </style>
+        {% if page.customcss %}
+            <link rel="stylesheet" type="text/css" href="/css/{{ page.customcss }}">
         {% endif %}
     </head>
     <body>
