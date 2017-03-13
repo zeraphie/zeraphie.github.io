@@ -10,12 +10,6 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet subresource">
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource">
         <link rel="stylesheet" type="text/css" href="/css/app.css">
-        
-        {% if page.customcss.size > 0 %}
-            {% for customcss in page.customcss %}
-                <link rel="stylesheet subresource" type="text/css" href="{{ customcss }}">
-            {% endfor %}
-        {% endif %}
     </head>
     <body>
         <div class="sidebar">
@@ -76,6 +70,11 @@
                 <div class="container">
                     <div class="markdown content-wrapper">{{ content }}</div>
                 </div>
+                {% if page.customcss.size > 0 %}
+                    {% for customcss in page.customcss %}
+                        <link rel="stylesheet subresource" type="text/css" href="{{ customcss }}">
+                    {% endfor %}
+                {% endif %}
                 {% if page.customjs.size > 0 %}
                     <script type="text/javascript">
                         {% for customjs in page.customjs %}
