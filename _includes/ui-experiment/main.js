@@ -15,7 +15,6 @@
         return c;
     };
 
-    // JS Class for transforming an entire section relative to mouse
     var OppositeTrack = Class({
         initialize: function(el, opt) {
             "use strict";
@@ -49,12 +48,9 @@
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
-            // Get mouse position relative to center of screen
             var mx = e.x - this.halfw;
             var my = e.y - this.halfh;
 
-            // Calculate ratio of how far away the mouse is from the center of
-            // the window in accordance with the constant BOUNDS
             var percx = -(mx / this.halfw * this.BOUNDS);
             var percy = -(my / this.halfh * this.BOUNDS);
 
@@ -62,9 +58,7 @@
                 percx = percx - this.rect.width / 2;
                 percy = percy - this.rect.height / 2;
             }
-
-            // Move the tiles with the calculated values, also trick rendering
-            // to be done from gpu instead of cpu thanks to translate3d
+            
             this.el.style.mozTransform = 'translate3d(' + percx + 'px, ' + percy + 'px, 0px)';
             this.el.style.transform = 'translate3d(' + percx + 'px, ' + percy + 'px, 0px)';
         },
@@ -77,7 +71,6 @@
         }
     });
 
-    // Locks css cursor to cursor and gives two states to it
     var CustomCursor = Class({
         initialize: function(cursor, opt) {
             "use strict";
@@ -98,7 +91,6 @@
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
-            // Add hovering style to cursor when hovering a link
             if (e.target.tagName == 'A' || (' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(' hoverable ') > -1) {
                 this.addClass('hovering');
             } else {
@@ -192,39 +184,30 @@
         }
     });
 
-    // Simple onload function
     var onload = function(callback) {
         document.readyState === 'interactive' || document.readyState === 'complete' ? callback : document.addEventListener('DOMContentLoaded', callback);
     };
 
-    // Fire javascript when the page is loaded
     onload(function() {
-        // Constants
         var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
 
-        // Flickity instructions
         var tiles = wrapper.querySelector('.tiles');
         var flkty = new Flickity(tiles, {
-            // autoPlay: 10000, // Is buggy
             cellAlign: 'left',
             wrapAround: true,
             prevNextButtons: false,
             pageDots: false
         });
 
-        // Flickity data
         var fdata = Flickity.data('.tiles');
 
-        // Get the current page
         var current = wrapper.querySelector('.page-number');
         current.innerHTML = fdata.selectedIndex + 1;
 
-        // Change page number on flick
         flkty.on('dragEnd', function() {
             current.innerHTML = fdata.selectedIndex + 1;
         });
 
-        // Move through flickity gallery on arrows
         var left = wrapper.querySelector('.left');
         var right = wrapper.querySelector('.right');
         wrapper.addEventListener(CLICK, function(e) {
@@ -238,28 +221,23 @@
             }
         });
 
-        // Get the total number of pages
         var total = wrapper.querySelector('.total-pages');
         total.innerHTML = fdata.cells.length;
 
-        // Init custom cursor
         var cursor = new CustomCursor(wrapper.getElementById('cursor'), {
-            transformStyle: 'transform3d' // Options are: transform, transform3d, position
+            transformStyle: 'transform3d'
         });
 
         // Init translation
         var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
-            BOUNDS: 50,
-            // CENTERED: true
+            BOUNDS: 50
         });
 
-        // Seems to fix cursor issue on dragging a link but not really?
         var links = wrapper.getElementsByTagName('A');
         links.ondragstart = function() {
             return false;
         };
 
-        // Lock 
         if (window.innerWidth > 768) {
             cursor.attach();
             trans.attach();
