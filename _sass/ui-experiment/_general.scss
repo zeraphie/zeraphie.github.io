@@ -25,14 +25,6 @@ $bg: #111111;
         transition: all 0.3s;
     }
 
-    @media (max-width: 768px) {
-        .ui-experiment *,
-        .ui-experiment *:after,
-        .ui-experiment *:before {
-            cursor: auto !important;
-        }
-    }
-
     /* START CURSOR STYLES */
     $cursor: $main;
     $active: lighten($cursor, 30%);
@@ -170,12 +162,6 @@ $bg: #111111;
         }
     }
 
-    @media (max-width: 768px) {
-        .ui-experiment #cursor {
-            display: none;
-        }
-    }
-
     /* START CONTAINER STYLES */
     .fullWidth {
         position: relative;
@@ -219,30 +205,6 @@ $bg: #111111;
 
         &:hover {
             color: $mainhover;
-        }
-    }
-
-    @media (min-width: 768px) {
-        .ui-experiment .ui-container {
-            width: 750px;
-        }
-    }
-
-    @media (min-width: 992px) {
-        .ui-experiment .ui-container {
-            width: 970px;
-        }
-    }
-
-    @media (min-width: 1200px) {
-        .ui-experiment .ui-container {
-            width: 1170px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .ui-experiment .ui-container {
-            width: 95%;
         }
     }
 
@@ -328,24 +290,6 @@ $bg: #111111;
                     border-right-color: $main;
                 }
             }
-        }
-    }
-
-    @media (min-width: 768px) {
-        .ui-experiment .tile {
-            width: calc(100% / 2 - 20px);
-        }
-    }
-
-    @media (min-width: 992px) {
-        .ui-experiment .tile {
-            width: calc(100% / 3 - 20px);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .ui-experiment .tile {
-            width: calc(100% - 20px);
         }
     }
 
@@ -440,14 +384,70 @@ $bg: #111111;
         }
     }
 
-    @media (max-width: 768px) {
-        .ui-experiment .left,
-        .ui-experiment .right {
-            cursor: pointer !important;
-        }
-    }
-
     /* END GALLERY STYLES */
+}
+
+@media (max-width: 768px) {
+    .ui-experiment *,
+    .ui-experiment *:after,
+    .ui-experiment *:before {
+        cursor: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-experiment #cursor {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .ui-experiment .ui-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .ui-experiment .ui-container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .ui-experiment .ui-container {
+        width: 1170px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-experiment .ui-container {
+        width: 95%;
+    }
+}
+
+@media (min-width: 768px) {
+    .ui-experiment .tile {
+        width: calc(100% / 2 - 20px);
+    }
+}
+
+@media (min-width: 992px) {
+    .ui-experiment .tile {
+        width: calc(100% / 3 - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-experiment .tile {
+        width: calc(100% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-experiment .left,
+    .ui-experiment .right {
+        cursor: pointer !important;
+    }
 }
 
 .container {
