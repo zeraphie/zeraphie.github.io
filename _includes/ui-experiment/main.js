@@ -91,24 +91,26 @@
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
-            if (e.target.tagName == 'A' || (' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(' hoverable ') > -1) {
-                this.addClass('hovering');
-            } else {
-                this.removeClass('hovering');
-            }
+            if(e.target.classList.contains('ui-experiment'){
+                if (e.target.tagName == 'A' || (' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(' hoverable ') > -1) {
+                    this.addClass('hovering');
+                } else {
+                    this.removeClass('hovering');
+                }
 
-            var x = e.offsetX - (this.rect.width / 2);
-            var y = e.offsetY - (this.rect.height / 2);
+                var x = e.offsetX - (this.rect.width / 2);
+                var y = e.offsetY - (this.rect.height / 2);
 
-            if (this.transformStyle == 'transform') {
-                this.cursor.style.mozTransform = 'translate(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ')';
-                this.cursor.style.transform = 'translate(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ')';
-            } else if (this.transformStyle == 'transform3d') {
-                this.cursor.style.mozTransform = 'translate3d(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ',0)';
-                this.cursor.style.transform = 'translate3d(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ',0)';
-            } else if (this.transformStyle == 'position') {
-                this.cursor.style.left = x.toString() + 'px';
-                this.cursor.style.top = y.toString() + 'px';
+                if (this.transformStyle == 'transform') {
+                    this.cursor.style.mozTransform = 'translate(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ')';
+                    this.cursor.style.transform = 'translate(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ')';
+                } else if (this.transformStyle == 'transform3d') {
+                    this.cursor.style.mozTransform = 'translate3d(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ',0)';
+                    this.cursor.style.transform = 'translate3d(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ',0)';
+                } else if (this.transformStyle == 'position') {
+                    this.cursor.style.left = x.toString() + 'px';
+                    this.cursor.style.top = y.toString() + 'px';
+                }
             }
         },
         mousedown: function(e) {
