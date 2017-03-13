@@ -97,8 +97,8 @@
                 this.removeClass('hovering');
             }
 
-            var x = e.x - (this.rect.width / 2);
-            var y = e.y - (this.rect.height / 2);
+            var x = e.offsetX - (this.rect.width / 2);
+            var y = e.offsetY - (this.rect.height / 2);
 
             if (this.transformStyle == 'transform') {
                 this.cursor.style.mozTransform = 'translate(' + x.toString() + 'px' + ',' + y.toString() + 'px' + ')';
