@@ -185,7 +185,7 @@ $bg: #111111;
         transition: none;
     }
 
-    .container {
+    .ui-container {
         position: relative;
         float: left;
         left: 50%;
@@ -223,25 +223,25 @@ $bg: #111111;
     }
 
     @media (min-width: 768px) {
-        .ui-experiment .container {
+        .ui-experiment .ui-container {
             width: 750px;
         }
     }
 
     @media (min-width: 992px) {
-        .ui-experiment .container {
+        .ui-experiment .ui-container {
             width: 970px;
         }
     }
 
     @media (min-width: 1200px) {
-        .ui-experiment .container {
+        .ui-experiment .ui-container {
             width: 1170px;
         }
     }
 
     @media (max-width: 768px) {
-        .ui-experiment .container {
+        .ui-experiment .ui-container {
             width: 95%;
         }
     }
