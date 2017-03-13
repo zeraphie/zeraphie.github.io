@@ -91,7 +91,7 @@
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
-            if(e.target.classList.contains('ui-experiment'){
+            if(e.target.classList.contains('ui-experiment')){
                 if (e.target.tagName == 'A' || (' ' + e.target.className + ' ').replace(/[\n\t]/g, ' ').indexOf(' hoverable ') > -1) {
                     this.addClass('hovering');
                 } else {
