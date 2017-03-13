@@ -110,6 +110,8 @@
                 this.cursor.style.left = x.toString() + 'px';
                 this.cursor.style.top = y.toString() + 'px';
             }
+            
+            this.cursor.style.position = 'fixed';
         },
         mousedown: function(e) {
             this.addClass('active');
@@ -139,7 +141,7 @@
             }
         },
         addCss: function() {
-            var css = '\r.ui-experiment *,.ui-experiment *:before,.ui-experiment *:after {\r\n\tcursor: none !important;\r\n}\r\n.ui-experiment #' + this.cursor.id + ' {\r\n\tposition: fixed;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\t-webkit-transition: none;\r\n\t-ms-transition: none;\r\n\ttransition: none;\r\n\tpointer-events: none;\r\n}\r\n',
+            var css = '\r.ui-experiment *,.ui-experiment *:before,.ui-experiment *:after {\r\n\tcursor: none !important;\r\n}\r\n.ui-experiment #' + this.cursor.id + ' {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\t-webkit-transition: none;\r\n\t-ms-transition: none;\r\n\ttransition: none;\r\n\tpointer-events: none;\r\n}\r\n',
                 style = document.createElement('style');
 
             style.id = this.cssID;
