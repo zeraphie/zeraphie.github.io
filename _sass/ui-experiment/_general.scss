@@ -5,6 +5,8 @@ $lighttext: rgba(255, 255, 255, 0.7);
 $bg: #111111;
 
 .ui-experiment {
+    position: relative;
+    margin-top: 16px;
     padding: 16px;
     background-color: $bg;
     background-image: url(http://cdn.zekken.rocks/img/cubes-faint.svg);
