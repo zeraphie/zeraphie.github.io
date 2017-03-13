@@ -4,7 +4,7 @@ icon: view_quilt
 category: Personal-Projects
 customjs:
   - ui-experiment/main.js
-customcss: "ui-experiment"
+customcss: "ui-experiment.css"
 ---
 
 ## Destiny inspired UI Experiment
