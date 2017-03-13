@@ -12,7 +12,7 @@ layout: compress
         <link rel="stylesheet" type="text/css" href="/css/app.css">
         
         {% if page.customcs.size > 0 %}
-            <style>
+            <style type="text/css">
                 {% for customcss in page.customcss %}
                     {% include {{ customcss }} %}
                 {% endfor %}
