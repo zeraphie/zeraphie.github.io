@@ -1,3 +1,448 @@
-.test {
+$main: #00CC88;
+$mainhover: lighten($main, 20%);
+$text: rgba(255, 255, 255, 0.87);
+$lighttext: rgba(255, 255, 255, 0.7);
+$bg: #111111;
 
+.ui-experiment {
+    background-color: $bg;
+    background-image: url(http://cdn.zekken.rocks/img/cubes-faint.svg);
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 1px;
+    overflow-x: hidden;
+
+    *,
+    *:after,
+    *:before {
+        box-sizing: border-box;
+        // Get invisible transparent blank cur file?
+        cursor: none !important;
+        -webkit-font-smoothing: antialiased !important;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+    @media (max-width: 768px) {
+        .ui-experiment *,
+        .ui-experiment *:after,
+        .ui-experiment *:before {
+            cursor: auto !important;
+        }
+    }
+
+    /* START CURSOR STYLES */
+    $cursor: $main;
+    $active: lighten($cursor, 30%);
+
+    @keyframes arrow-spin {
+        100% {
+            transform: rotate(179deg);
+        }
+    }
+
+    @-webkit-keyframes arrow-spin {
+        100% {
+            -webkit-transform: rotate(179deg);
+        }
+    }
+
+    #cursor {
+        border-radius: 100%;
+        box-shadow: 0 0 22px 3px $cursor;
+        height: 55px;
+        width: 55px;
+        position: fixed;
+        z-index: 99999;
+        top: -100%;
+        left: -100%;
+        -webkit-transition: box-shadow 0.3s;
+        transition: box-shadow 0.3s;
+        pointer-events: none;
+        -webkit-transform: scale(0.7);
+        transform: scale(0.7);
+        -webkit-transform-origin: 0 0 0;
+        transform-origin: 0 0 0;
+
+        .outer {
+            position: absolute;
+            top: -14px;
+            left: -14px;
+            width: calc(100% + 28px);
+            height: calc(100% + 28px);
+            border-radius: 100%;
+            border: 1px solid $cursor;
+            -webkit-transition: border 0.3s;
+            transition: border 0.3s;
+            z-index: -1;
+        }
+
+        .inner {
+            height: calc(100% - 22px);
+            left: 11px;
+            opacity: 0;
+            position: absolute;
+            top: 11px;
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+            width: calc(100% - 22px);
+            -webkit-transition: opacity 0.3s;
+            transition: opacity 0.3s;
+            z-index: -1;
+
+            &:before {
+                border: 2px solid transparent;
+                border-left-color: $cursor;
+                border-right-color: $cursor;
+                border-radius: 100%;
+                content: '';
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+        }
+
+        &.hovering {
+            box-shadow: 0 0 22px 3px $cursor;
+
+            .inner {
+                opacity: 1;
+                animation: arrow-spin 0.85s cubic-bezier(0.2, 0.8, 0.9, 0.1) infinite reverse;
+                -webkit-animation: arrow-spin 0.85s cubic-bezier(0.2, 0.8, 0.9, 0.1) infinite reverse;
+            }
+
+            .outer {
+                border-width: 3px;
+                border-left-color: transparent;
+                border-right-color: transparent;
+                animation: arrow-spin 0.85s cubic-bezier(0.2, 0.8, 0.9, 0.1) infinite reverse;
+                -webkit-animation: arrow-spin 0.85s cubic-bezier(0.2, 0.8, 0.9, 0.1) infinite reverse;
+
+                &:before,
+                &:after {
+                    content: '';
+                    position: absolute;
+                    height: 14px;
+                    width: 3px;
+                    background: $cursor;
+                    -webkit-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                    -webkit-transition: none;
+                    transition: none;
+                }
+
+                &:before {
+                    left: 5px;
+                    top: -2px;
+                }
+
+                &:after {
+                    right: 5px;
+                    bottom: -2px;
+                }
+            }
+        }
+
+        &.active {
+            box-shadow: 0 0 22px 3px $active;
+
+            &:not(.hovering) .outer {
+                border: 1px solid $active;
+            }
+
+            &.hovering .outer {
+                border-color: $active transparent;
+
+                &:before,
+                &:after {
+                    background: $active;
+                }
+            }
+
+            &.hovering .inner:before {
+                border-left-color: $active;
+                border-right-color: $active;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ui-experiment #cursor {
+            display: none;
+        }
+    }
+
+    /* START CONTAINER STYLES */
+    .fullWidth {
+        position: relative;
+        float: left;
+        width: 100%;
+        -webkit-transition: none;
+        transition: none;
+    }
+
+    .container {
+        position: relative;
+        float: left;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+
+    h1 {
+        color: $text;
+    }
+
+    h3 {
+        color: $text;
+        font-size: 20px;
+        font-weight: 400;
+        margin: 0 0 10px 0;
+    }
+
+    p {
+        color: $lighttext;
+        line-height: 20px;
+    }
+
+    p.link {
+        color: $main;
+    }
+
+    a {
+        color: $main;
+        text-decoration: none;
+
+        &:hover {
+            color: $mainhover;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .ui-experiment .container {
+            width: 750px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .ui-experiment .container {
+            width: 970px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .ui-experiment .container {
+            width: 1170px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ui-experiment .container {
+            width: 95%;
+        }
+    }
+
+    /* END CONTAINER STYLES */
+
+    /* START TILES STYLES */
+    .tile-wrap {
+        -webkit-transition: none;
+        transition: none;
+    }
+
+    .tiles {
+        position: relative;
+        float: left;
+        width: 100%;
+        -webkit-transition: none;
+        transition: none;
+
+        .page {
+            position: relative;
+            float: left;
+            width: 100%;
+        }
+
+        .tile {
+            position: relative;
+            float: left;
+            margin: 10px;
+            padding: 30px;
+
+            .link {
+                margin: 0;
+            }
+
+            a {
+                background-color: rgba(255, 255, 255, 0.125);
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+
+                &:focus,
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.175);
+
+                    &:before {
+                        top: 0;
+                        left: 0;
+                        border-top-color: $mainhover;
+                        border-left-color: $mainhover;
+                    }
+
+                    &:after {
+                        bottom: 0;
+                        right: 0;
+                        border-bottom-color: $mainhover;
+                        border-right-color: $mainhover;
+                    }
+                }
+
+                &:before,
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid transparent;
+                }
+
+                &:before {
+                    top: 15px;
+                    left: 15px;
+                    border-top-color: $main;
+                    border-left-color: $main;
+                }
+
+                &:after {
+                    bottom: 15px;
+                    right: 15px;
+                    border-bottom-color: $main;
+                    border-right-color: $main;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .ui-experiment .tile {
+            width: calc(100% / 2 - 20px);
+        }
+    }
+
+    @media (min-width: 992px) {
+        .ui-experiment .tile {
+            width: calc(100% / 3 - 20px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ui-experiment .tile {
+            width: calc(100% - 20px);
+        }
+    }
+
+    /* END TILES STYLES */
+
+    /* START GALLERY STYLES */
+    .flickity-slider,
+    .page {
+        -webkit-transition: none;
+        transition: none;
+    }
+
+    $arrows: #444444;
+
+    .arrows {
+        position: relative;
+        float: left;
+        width: 100%;
+
+        h2 {
+            position: relative;
+            float: left;
+            font-size: 25px;
+            font-weight: 400;
+            color: $text;
+            margin: 5px 0 0 0;
+            width: calc(100% - 120px);
+        }
+
+        p {
+            position: relative;
+            float: left;
+            margin: 10px 0 0 0;
+            width: calc(100% - 120px);
+        }
+
+        .left,
+        .right {
+            position: relative;
+            float: right;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.7);
+            margin: -10px 10px 10px 10px;
+            border: 2px solid #444444;
+
+            &:hover {
+                background: rgba(255, 255, 255, 1);
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                height: 20px;
+                width: 20px;
+                border: 3px solid #444444;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                pointer-events: none;
+            }
+        }
+
+        .left:before {
+            border-right-color: transparent;
+            border-top-color: transparent;
+            left: 14px;
+        }
+
+        .right:before {
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            right: 14px;
+        }
+    }
+
+    .rule {
+        position: relative;
+        float: left;
+        width: 100%;
+        color: $text;
+
+        &:before {
+            content: '';
+            position: relative;
+            float: left;
+            margin-top: 9px;
+            margin-right: 10px;
+            width: calc(100% - 41px);
+            height: 3px;
+            background: $lighttext;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ui-experiment .left,
+        .ui-experiment .right {
+            cursor: pointer !important;
+        }
+    }
+
+    /* END GALLERY STYLES */
 }
