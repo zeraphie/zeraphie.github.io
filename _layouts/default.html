@@ -73,10 +73,12 @@ layout: compress
             </div>
         </div>
 
-        <script type="text/javascript">
-            {% for js in page.jsarr %}
-                {% include {{ js }} %}
-            {% endfor %}
-        </script>
+        {% if page.jsarr.size > 0 %}
+            <script type="text/javascript">
+                {% for js in page.jsarr %}
+                    {% include {{ js }} %}
+                {% endfor %}
+            </script>
+        {% endif %}
     </body>
 </html>
