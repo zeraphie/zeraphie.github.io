@@ -154,11 +154,11 @@
             wrapper.appendChild(style);
         },
         removeCss: function() {
-            var el = wrapper.getElementById(this.cssID);
+            var el = document.getElementById(this.cssID);
             wrapper.removeChild(el);
         },
         attach: function() {
-            if (!wrapper.getElementById(this.cssID)) {
+            if (!document.getElementById(this.cssID)) {
                 this.addCss();
             }
             this.cursor.style.pointerEvents = 'none';
@@ -167,7 +167,7 @@
             wrapper.addEventListener('mouseup', this);
         },
         detach: function() {
-            if (wrapper.getElementById(this.cssID)) {
+            if (document.getElementById(this.cssID)) {
                 this.removeCss();
             }
             this.cursor.style.pointerEvents = '';
@@ -224,7 +224,7 @@
         var total = wrapper.querySelector('.total-pages');
         total.innerHTML = fdata.cells.length;
 
-        var cursor = new CustomCursor(wrapper.getElementById('cursor'), {
+        var cursor = new CustomCursor(document.getElementById('cursor'), {
             transformStyle: 'transform3d'
         });
 
