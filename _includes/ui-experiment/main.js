@@ -237,7 +237,7 @@
             BOUNDS: 50
         });
         
-        console.log(trans);
+        // console.log(trans);
 
         var links = wrapper.getElementsByTagName('A');
         links.ondragstart = function() {
