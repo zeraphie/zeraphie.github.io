@@ -18,3 +18,5 @@ defaults:
       - js/pjax.js
       - js/waves.js
       - js/main.js
+gems:
+  - jekyll-sitemap
