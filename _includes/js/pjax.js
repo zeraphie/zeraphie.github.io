@@ -43,7 +43,7 @@ pjax.request = function(url) {
 
     xhr.onload = function() {
         self.find('title').textContent = self.find('title', this.response).textContent;
-        self.find('meta[name="description"]').setAttribute('content') = self.find('meta[name="description"]', this.response).getAttribute('content');
+        self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', this.response).getAttribute('content'));
 
         var newPage = self.find(self.container, this.response);
         var currentPage = self.find(self.container);
