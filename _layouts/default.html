@@ -33,7 +33,7 @@ layout: compress
                 {% endfor %}
                 {% for category in site.categories %}
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
-                        <a href="/{{ category | first }}" class="waves-effect">
+                        <a href="#" class="waves-effect">
                             <i class="material-icons">label</i>
                             {{ category | first | replace: '-', ' ' }}
                         </a>
