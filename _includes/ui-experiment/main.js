@@ -31,13 +31,11 @@
                 this.CENTERED = false;
             }
 
-            // Elements
             this.el = el;
             this.rect = this.el.getBoundingClientRect();
             
             var wrapRect = wrapper.getBoundingClientRect();
 
-            // Half width and height of window
             this.halfw = wrapRect.width / 2;
             this.halfh = wrapRect.height / 2;
 
@@ -232,12 +230,9 @@
             transformStyle: 'transform3d'
         });
 
-        // Init translation
         var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
             BOUNDS: 50
         });
-        
-        // console.log(trans);
 
         var links = wrapper.getElementsByTagName('A');
         links.ondragstart = function() {
