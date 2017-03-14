@@ -34,14 +34,16 @@
             // Elements
             this.el = el;
             this.rect = this.el.getBoundingClientRect();
+            
+            var wrapRect = wrapper.getBoundingClientRect();
 
             // Half width and height of window
-            this.halfw = wrapper.innerWidth / 2;
-            this.halfh = wrapper.innerHeight / 2;
+            this.halfw = wrapRect.width / 2;
+            this.halfh = wrapRect.height / 2;
 
             window.onresize = function() {
-                this.halfw = wrapper.innerWidth / 2;
-                this.halfh = wrapper.innerHeight / 2;
+                this.halfw = wrapRect.width / 2;
+                this.halfh = wrapRect.height / 2;
             }
         },
         handleEvent: function(e) {
@@ -242,7 +244,7 @@
             return false;
         };
 
-        if (wrapper.innerWidth > 768) {
+        if (window.innerWidth > 768) {
             cursor.attach();
             trans.attach();
         } else {
