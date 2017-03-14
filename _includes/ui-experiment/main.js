@@ -234,13 +234,15 @@
         var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
             BOUNDS: 50
         });
+        
+        console.log(trans);
 
         var links = wrapper.getElementsByTagName('A');
         links.ondragstart = function() {
             return false;
         };
 
-        if (window.innerWidth > 768) {
+        if (wrapper.innerWidth > 768) {
             cursor.attach();
             trans.attach();
         } else {
