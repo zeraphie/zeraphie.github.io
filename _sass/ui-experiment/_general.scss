@@ -243,6 +243,7 @@ $bg: #111111;
                 left: 0;
                 height: 100%;
                 width: 100%;
+                pointer-events: none; /* Only here to stop accidental navigation */
 
                 &:focus,
                 &:hover {
@@ -383,20 +384,6 @@ $bg: #111111;
     /* END GALLERY STYLES */
 }
 
-@media (max-width: 768px) {
-    .ui-experiment *,
-    .ui-experiment *:after,
-    .ui-experiment *:before {
-        cursor: auto !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .ui-experiment #cursor {
-        display: none;
-    }
-}
-
 @media (min-width: 768px) {
     .ui-experiment .tile {
         width: calc(100% / 2 - 20px);
@@ -410,12 +397,20 @@ $bg: #111111;
 }
 
 @media (max-width: 768px) {
+    .ui-experiment *,
+    .ui-experiment *:after,
+    .ui-experiment *:before {
+        cursor: auto !important;
+    }
+    
+    .ui-experiment #cursor {
+        display: none;
+    }
+    
     .ui-experiment .tile {
         width: calc(100% - 20px);
     }
-}
-
-@media (max-width: 768px) {
+    
     .ui-experiment .left,
     .ui-experiment .right {
         cursor: pointer !important;
