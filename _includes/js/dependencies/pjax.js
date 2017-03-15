@@ -80,5 +80,6 @@ pjax.onload = function(callback){
     
     console.log(self.funQueue);
 
-    window.onload = self.afterLoad = self.execQueue();
+    window.onload = self.execQueue();
+    self.afterLoad = self.execQueue();
 };
