@@ -48,6 +48,7 @@ pjax.onload('ui-experiment', function() {
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
+            console.log(e, wrapper.getBoundingClientRect(), this.el.getBoundingClientRect());
             var mx = e.clientX - this.halfw;
             var my = e.clientY - this.halfh;
 
