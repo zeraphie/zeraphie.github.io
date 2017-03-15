@@ -48,9 +48,9 @@ pjax.onload('ui-experiment', function() {
             return this[e.type] && this[e.type](e);
         },
         mousemove: function(e) {
-            console.log(e, wrapper.getBoundingClientRect(), this.el.getBoundingClientRect());
-            var mx = e.clientX - this.halfw;
-            var my = e.clientY - this.halfh;
+            var rect = wrapper.getBoundingClientRect();
+            var mx = e.clientX - this.halfw - rect.left;
+            var my = e.clientY - this.halfh - rect.top;
 
             var percx = -(mx / this.halfw * this.BOUNDS);
             var percy = -(my / this.halfh * this.BOUNDS);
