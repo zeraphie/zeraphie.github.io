@@ -51,7 +51,7 @@ pjax.request = function(url) {
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
-        console.log(this.response, self.find('.body script', this.response);
+        console.log(this.response, self.find('.body script', this.response));
         scripts.forEach(function(code){
             var script = document.createElement('script');
             script.text = code.textContent;
