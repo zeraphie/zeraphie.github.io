@@ -18,6 +18,18 @@ header {
     }
 }
 
+
+@media screen and (max-height: 768px) {
+    header {
+        max-height: $touchSize / 2 * 3;
+        
+        .header-title h1 {
+            line-height: $touchSize / 2 * 3;
+            font-size: 20px;
+        }
+    }
+}
+
 @media screen and (max-width: #{$sidebarWidth + 360}) {
     header {
         max-height: $touchSize / 2 * 3;
