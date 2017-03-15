@@ -1,4 +1,4 @@
-(function(){
+fullyLoaded(function(){
     var wrapper = document.querySelector('.ui-experiment');
 
     var Class = function(methods) {
@@ -261,4 +261,4 @@
             }, 400);
         }
     });
-})();
+});
