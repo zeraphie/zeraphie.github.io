@@ -191,7 +191,7 @@ pjax.onload('ui-experiment', function() {
         loadScript('https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.pkgd.min.js', function(){
             var links = wrapper.querySelectorAll('a');
             links.forEach(function(link){
-                link.addEventListener(function(e){
+                link.addEventListener('click', function(e){
                     e.preventDefault();
                     return false;
                 });
