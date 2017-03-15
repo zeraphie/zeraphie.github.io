@@ -66,7 +66,7 @@ pjax.execQueue = function(){
     for(var i = 0, len = self.funQueue.length; i < len; i++){
         if(typeof self.funQueue[i] === 'function'){
             try {
-                self.funQueue[i].call();
+                self.funQueue[i]();
             } catch(e) {
                 console.log(e);
             }
@@ -78,8 +78,6 @@ pjax.onload = function(callback){
     var self = this;
     
     self.funQueue.push(callback);
-    
-    console.log(self.funQueue);
 
     window.onload = self.execQueue();
     self.afterLoad = self.execQueue();
