@@ -186,7 +186,7 @@
         }
     });
 
-    pjax.onload(function() {
+    pjax.onload('ui-experiment', function() {
         if(window.location.pathname.indexOf('ui-experiment') > -1){
             loadScript('https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.pkgd.min.js', function(){
                 var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
