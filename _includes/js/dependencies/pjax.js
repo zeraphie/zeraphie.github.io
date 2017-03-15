@@ -1,3 +1,5 @@
+console.log('success start');
+
 /**
  * This is my own version of pjax, written as a short version of the pjax libraries
  * in order to understand how it works
@@ -100,3 +102,5 @@ pjax.onload = function(callback, func){
     
     return this;
 };
+
+console.log('success end');
