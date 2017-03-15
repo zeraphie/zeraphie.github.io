@@ -59,6 +59,8 @@ pjax.onload('ui-experiment', function() {
                 percy = percy - this.rect.height / 2;
             }
             
+            this.el.style.left = '50%';
+            this.el.style.top = '50%';
             this.el.style.mozTransform = 'translate3d(' + percx + 'px, ' + percy + 'px, 0px)';
             this.el.style.transform = 'translate3d(' + percx + 'px, ' + percy + 'px, 0px)';
         },
