@@ -59,30 +59,26 @@ pjax.request = function(url) {
     return this;
 };
 
+pjax.funQueue = [];
+
 pjax.onload = function(callback){
     var self = this;
+    
+    self.funQueue.push(callback);
 
-    if(typeof callback === 'function'){
-        window.onload = (function(old){
-            function extendFunction(){
-                if(typeof old === 'function'){
-                    old();
-                }
-                callback();
+    window.onload = function(){
+        for(var i = 0, len = self.funQueue.length; i < len; i++){
+            if(typeof self.funQueue[i] === 'function'){
+                self.funQueue[i]();
             }
-            
-            return extendFunction;
-        })(window.onload);
+        }
+    };
 
-        self.afterLoad = (function(old){
-            function extendFunction(){
-                if(typeof old === 'function'){
-                    old();
-                }
-                callback();
+    self.afterLoad = function(){
+        for(var i = 0, len = self.funQueue.length; i < len; i++){
+            if(typeof self.funQueue[i] === 'function'){
+                self.funQueue[i]();
             }
-            
-            return extendFunction;
-        })(self.afterLoad);
-    }
+        }
+    };
 };
