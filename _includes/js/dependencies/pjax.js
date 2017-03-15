@@ -65,6 +65,8 @@ pjax.onload = function(callback){
     var self = this;
     
     self.funQueue.push(callback);
+    
+    console.log(self.funQueue);
 
     window.onload = function(){
         for(var i = 0, len = self.funQueue.length; i < len; i++){
