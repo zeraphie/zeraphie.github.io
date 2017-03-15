@@ -47,7 +47,6 @@ pjax.request = function(url) {
         self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', this.response).getAttribute('content'));
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
-        console.log(this.response, self.find('.body script', this.response));
         
         var newPage = self.find(self.container, this.response);
         var currentPage = self.find(self.container);
@@ -57,7 +56,6 @@ pjax.request = function(url) {
             var script = document.createElement('script');
             script.text = code.textContent;
             document.head.appendChild(script).parentNode.removeChild(script);
-            console.log(script);
         });
         
         if(typeof self.afterLoad === 'function'){
