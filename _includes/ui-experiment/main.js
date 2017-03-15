@@ -51,8 +51,8 @@ pjax.onload('ui-experiment', function() {
             var mx = e.x - this.halfw;
             var my = e.y - this.halfh;
 
-            var percx = -(mx / (this.halfw * 2) * this.BOUNDS);
-            var percy = -(my / (this.halfh * 2) * this.BOUNDS);
+            var percx = -(mx / this.halfw * this.BOUNDS);
+            var percy = -(my / this.halfh * this.BOUNDS);
 
             if (this.CENTERED) {
                 percx = percx - this.rect.width / 2;
