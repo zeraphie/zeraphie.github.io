@@ -243,7 +243,6 @@ $bg: #111111;
                 left: 0;
                 height: 100%;
                 width: 100%;
-                pointer-events: none; /* Only here to stop accidental navigation */
 
                 &:focus,
                 &:hover {
