@@ -9,7 +9,7 @@ pjax.find = function(selector, context) {
 };
 
 pjax.container = '.body';
-pjax.funQueue = [];
+pjax.funQueue = {};
 
 pjax.setup = function(){
     var self = this;
@@ -61,14 +61,16 @@ pjax.request = function(url) {
 };
 
 pjax.execQueue = function(){
-    var queue = pjax.funQueue.reverse();
+    var queue = pjax.funQueue;
     
     for(var funcName in queue){
-        if(typeof queue[funcName] === 'function'){
-            try {
-                queue[funcName]();
-            } catch(e) {
-                console.log(e);
+        if(queue.hasOwnProperty(funcName)){
+            if(typeof queue[funcName] === 'function'){
+                try {
+                    queue[funcName]();
+                } catch(e) {
+                    console.log(e);
+                }
             }
         }
     }
