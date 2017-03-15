@@ -61,6 +61,8 @@ pjax.request = function(url) {
 };
 
 pjax.execQueue = function(){
+    var self = this;
+    
     for(var i = 0, len = self.funQueue.length; i < len; i++){
         if(typeof self.funQueue[i] === 'function'){
             try {
