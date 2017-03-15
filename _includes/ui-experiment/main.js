@@ -1,4 +1,4 @@
-pjax.onload(function(){
+(function(){
     var wrapper = document.querySelector('.ui-experiment');
 
     var Class = function(methods) {
@@ -186,11 +186,7 @@ pjax.onload(function(){
         }
     });
 
-    var onload = function(callback) {
-        document.readyState === 'interactive' || document.readyState === 'complete' ? callback : document.addEventListener('DOMContentLoaded', callback);
-    };
-
-    onload(function() {
+    pjax.onload(function() {
         var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
 
         var tiles = wrapper.querySelector('.tiles');
@@ -261,4 +257,4 @@ pjax.onload(function(){
             }, 400);
         }
     });
-});
+})();
