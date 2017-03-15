@@ -80,7 +80,7 @@ pjax.execQueue = function(){
 
 pjax.onload = function(callback, func){
     if(typeof callback === 'function'){
-        pjax.funQueue[pjax.funQueue.length.toString()] = callback;
+        pjax.funQueue[Object.keys(pjax.funQueue).length.toString()] = callback;
     }
 
     if((typeof callback === 'number' || typeof callback === 'string') && typeof func === 'function'){
