@@ -51,10 +51,12 @@ pjax.request = function(url) {
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
+        console.log(scripts);
         scripts.forEach(function(code){
             var script = document.createElement('script');
             script.text = code.textContent;
             document.head.appendChild(script).parentNode.removeChild(script);
+            console.log(script);
         });
         
         if(typeof self.afterLoad === 'function'){
