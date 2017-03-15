@@ -62,7 +62,6 @@ pjax.request = function(url) {
 
 pjax.execQueue = function(){
     var self = this, queue = self.funQueue.reverse();
-    console.log(queue);
     
     for(var i = 0, len = queue.length; i < len; i++){
         if(typeof queue[i] === 'function'){
@@ -79,6 +78,7 @@ pjax.onload = function(callback){
     var self = this;
     
     self.funQueue.push(callback);
+    console.log(self.funQueue);
 
     window.onload = self.execQueue();
     self.afterLoad = self.execQueue();
