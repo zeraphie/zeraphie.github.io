@@ -187,7 +187,6 @@
     });
 
     pjax.onload(function() {
-        console.log(Class, CustomCursor, OppositeTrack, Flickity)
         var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
 
         var tiles = wrapper.querySelector('.tiles');
