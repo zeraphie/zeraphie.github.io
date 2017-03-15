@@ -397,23 +397,36 @@ $bg: #111111;
 }
 
 @media (max-width: 768px) {
-    .ui-experiment *,
-    .ui-experiment *:after,
-    .ui-experiment *:before {
-        cursor: auto !important;
-    }
-    
-    .ui-experiment #cursor {
-        display: none;
-    }
-    
-    .ui-experiment .tile {
-        width: calc(100% - 20px);
-    }
-    
-    .ui-experiment .left,
-    .ui-experiment .right {
-        cursor: pointer !important;
+    .ui-experiment {
+        *,
+        *:after,
+        *:before {
+            cursor: auto !important;
+        }
+
+        #cursor {
+            display: none;
+        }
+
+        .tile {
+            width: calc(100% - 20px);
+        }
+
+        .left,
+        .right {
+            cursor: pointer !important;
+        }
+
+        .arrows {
+            h2, p {
+                width: 100%;
+            }
+
+            .left,
+            .right {
+                margin-top: 10px;
+            }
+        }
     }
 }
 
