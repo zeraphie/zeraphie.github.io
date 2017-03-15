@@ -63,7 +63,7 @@ pjax.request = function(url) {
 };
 
 pjax.execQueue = function(){
-    console.log(this.funQueue);
+    console.log(pjax.funQueue, 'execQueue');
     var queue = this.funQueue.reverse();
     
     for(var i = 0, len = queue.length; i < len; i++){
@@ -80,6 +80,7 @@ pjax.execQueue = function(){
 }
 
 pjax.onload = function(callback){
+    console.log(pjax.funQueue, 'onload');
     if(typeof callback === 'function'){
         this.funQueue.push(callback);
     }
