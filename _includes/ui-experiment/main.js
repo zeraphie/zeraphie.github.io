@@ -1,4 +1,4 @@
-fullyLoaded(function(){
+pjax.onload(function(){
     var wrapper = document.querySelector('.ui-experiment');
 
     var Class = function(methods) {
