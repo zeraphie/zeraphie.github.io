@@ -66,6 +66,7 @@ pjax.execQueue = function(){
     for(var i = 0, len = self.funQueue.length; i < len; i++){
         if(typeof self.funQueue[i] === 'function'){
             try {
+                console.log(self.funQueue[i]);
                 self.funQueue[i]();
             } catch(e) {
                 console.log(e);
