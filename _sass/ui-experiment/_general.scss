@@ -173,10 +173,6 @@ $bg: #111111;
 
     .ui-container {
         position: relative;
-        float: left;
-        left: 50%;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%);
     }
 
     h1 {
@@ -398,30 +394,6 @@ $bg: #111111;
 @media (max-width: 768px) {
     .ui-experiment #cursor {
         display: none;
-    }
-}
-
-@media (min-width: 768px) {
-    .ui-experiment .ui-container {
-        width: 750px;
-    }
-}
-
-@media (min-width: 992px) {
-    .ui-experiment .ui-container {
-        width: 970px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .ui-experiment .ui-container {
-        width: 1170px;
-    }
-}
-
-@media (max-width: 768px) {
-    .ui-experiment .ui-container {
-        width: 95%;
     }
 }
 
