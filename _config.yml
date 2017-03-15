@@ -14,9 +14,10 @@ defaults:
     values:
       layout: "default"
       icon: "label"
+      jsd:
+        - js/dependencies/pjax.js
       jsarr:
-      - js/pjax.js
-      - js/waves.js
-      - js/main.js
+        - js/waves.js
+        - js/main.js
 gems:
   - jekyll-sitemap
