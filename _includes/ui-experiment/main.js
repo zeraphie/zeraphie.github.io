@@ -188,75 +188,77 @@
 
     pjax.onload(function() {
         if(window.location.pathname.indexOf('ui-experiment') > -1){
-            var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
+            loadScript('https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.pkgd.min.js', function(){
+                var CLICK = (navigator.userAgent.match(/iPad/i)) ? 'touchstart' : 'click';
 
-            var tiles = wrapper.querySelector('.tiles');
-            var flkty = new Flickity(tiles, {
-                cellAlign: 'left',
-                wrapAround: true,
-                prevNextButtons: false,
-                pageDots: false
-            });
+                var tiles = wrapper.querySelector('.tiles');
+                var flkty = new Flickity(tiles, {
+                    cellAlign: 'left',
+                    wrapAround: true,
+                    prevNextButtons: false,
+                    pageDots: false
+                });
 
-            var fdata = Flickity.data('.tiles');
+                var fdata = Flickity.data('.tiles');
 
-            var current = wrapper.querySelector('.page-number');
-            current.innerHTML = fdata.selectedIndex + 1;
-
-            flkty.on('dragEnd', function() {
+                var current = wrapper.querySelector('.page-number');
                 current.innerHTML = fdata.selectedIndex + 1;
-            });
 
-            var left = wrapper.querySelector('.left');
-            var right = wrapper.querySelector('.right');
-            wrapper.addEventListener(CLICK, function(e) {
-                if (e.target == left) {
-                    flkty.previous(true);
+                flkty.on('dragEnd', function() {
                     current.innerHTML = fdata.selectedIndex + 1;
-                }
-                if (e.target == right) {
-                    flkty.next(true);
-                    current.innerHTML = fdata.selectedIndex + 1;
-                }
-            });
+                });
 
-            var total = wrapper.querySelector('.total-pages');
-            total.innerHTML = fdata.cells.length;
-
-            var cursor = new CustomCursor(document.getElementById('cursor'), {
-                transformStyle: 'transform3d'
-            });
-
-            var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
-                BOUNDS: 50
-            });
-
-            var links = wrapper.getElementsByTagName('A');
-            links.ondragstart = function() {
-                return false;
-            };
-
-            if (window.innerWidth > 768) {
-                cursor.attach();
-                trans.attach();
-            } else {
-                cursor.detach();
-                trans.detach();
-            }
-
-            var t;
-            window.onresize = function() {
-                clearTimeout(t);
-                t = setTimeout(function() {
-                    if (window.innerWidth > 768) {
-                        cursor.attach();
-                        trans.attach();
-                    } else {
-                        cursor.detach();
-                        trans.detach();
+                var left = wrapper.querySelector('.left');
+                var right = wrapper.querySelector('.right');
+                wrapper.addEventListener(CLICK, function(e) {
+                    if (e.target == left) {
+                        flkty.previous(true);
+                        current.innerHTML = fdata.selectedIndex + 1;
                     }
-                }, 400);
-            }
+                    if (e.target == right) {
+                        flkty.next(true);
+                        current.innerHTML = fdata.selectedIndex + 1;
+                    }
+                });
+
+                var total = wrapper.querySelector('.total-pages');
+                total.innerHTML = fdata.cells.length;
+
+                var cursor = new CustomCursor(document.getElementById('cursor'), {
+                    transformStyle: 'transform3d'
+                });
+
+                var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
+                    BOUNDS: 50
+                });
+
+                var links = wrapper.getElementsByTagName('A');
+                links.ondragstart = function() {
+                    return false;
+                };
+
+                if (window.innerWidth > 768) {
+                    cursor.attach();
+                    trans.attach();
+                } else {
+                    cursor.detach();
+                    trans.detach();
+                }
+
+                var t;
+                window.onresize = function() {
+                    clearTimeout(t);
+                    t = setTimeout(function() {
+                        if (window.innerWidth > 768) {
+                            cursor.attach();
+                            trans.attach();
+                        } else {
+                            cursor.detach();
+                            trans.detach();
+                        }
+                    }, 400);
+                } 
+            });
         }
     });
 })();
