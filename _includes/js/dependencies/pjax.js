@@ -46,12 +46,13 @@ pjax.request = function(url) {
         self.find('title').textContent = self.find('title', this.response).textContent;
         self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', this.response).getAttribute('content'));
 
+        var scripts = this.response.querySelectorAll(self.container + ' script');
+        console.log(this.response, self.find('.body script', this.response));
+        
         var newPage = self.find(self.container, this.response);
         var currentPage = self.find(self.container);
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
-        var scripts = this.response.querySelectorAll(self.container + ' script');
-        console.log(this.response, self.find('.body script', this.response));
         scripts.forEach(function(code){
             var script = document.createElement('script');
             script.text = code.textContent;
