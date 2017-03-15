@@ -1,5 +1,3 @@
-console.log('loadScript start');
-
 window.loadScript = function(url, callback){
     var head = document.querySelector('head');
     var script = document.createElement('script');
@@ -11,5 +9,3 @@ window.loadScript = function(url, callback){
 
     head.appendChild(script);
 };
-
-console.log('loadScript end');
