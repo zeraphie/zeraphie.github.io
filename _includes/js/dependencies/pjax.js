@@ -84,7 +84,7 @@ pjax.execQueue = function(){
     }
     
     return this;
-}
+};
 
 pjax.onload = function(callback, func){
     if(typeof callback === 'function'){
