@@ -1,15 +1,6 @@
 (function(){
     'use strict';
 
-    if (typeof NodeList.prototype.forEach === 'undefined') {
-        /* Polyfill for nodelist foreach for ie11 */
-        NodeList.prototype.forEach = function (callback, scope) {
-            for (var i = 0; i < this.length; i++) {
-                callback.call(scope, this[i], i); /* passes back stuff we need */
-            }
-        };
-    }
-
     /* Cross browser friendly matches */
     var matches = function matches(el, selector) {
         return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
