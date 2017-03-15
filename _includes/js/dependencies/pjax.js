@@ -9,6 +9,7 @@ pjax.find = function(selector, context) {
 };
 
 pjax.container = '.body';
+pjax.funQueue = [];
 
 pjax.setup = function(){
     var self = this;
@@ -58,8 +59,6 @@ pjax.request = function(url) {
 
     return this;
 };
-
-pjax.funQueue = [];
 
 pjax.execQueue = function(){
     for(var i = 0, len = self.funQueue.length; i < len; i++){
