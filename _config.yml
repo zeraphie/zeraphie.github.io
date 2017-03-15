@@ -15,6 +15,7 @@ defaults:
       layout: "default"
       icon: "label"
       jsd:
+        - js/dependencies/load-script.js
         - js/dependencies/pjax.js
       jsarr:
         - js/waves.js
