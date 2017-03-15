@@ -55,8 +55,8 @@ pjax.onload('ui-experiment', function() {
             var percy = -(my / this.halfh * this.BOUNDS);
 
             if (this.CENTERED) {
-                percx = percx + this.rect.width / 2;
-                percy = percy + this.rect.height / 2;
+                percx = percx + this.rect.width / 4;
+                percy = percy + this.rect.height / 4;
             }
             
             this.el.style.mozTransform = 'translate3d(' + percx + 'px, ' + percy + 'px, 0px)';
