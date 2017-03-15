@@ -63,10 +63,10 @@ pjax.request = function(url) {
 pjax.execQueue = function(){
     var queue = pjax.funQueue.reverse();
     
-    for(var i = 0, len = queue.length; i < len; i++){
-        if(typeof queue[i] === 'function'){
+    for(var funcName in queue){
+        if(typeof queue[funcName] === 'function'){
             try {
-                queue[i]();
+                queue[funcName]();
             } catch(e) {
                 console.log(e);
             }
