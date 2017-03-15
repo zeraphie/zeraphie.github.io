@@ -43,8 +43,6 @@ pjax.request = function(url) {
     xhr.responseType = 'document';
     
     xhr.addEventListener('load', function(e){
-        console.log('PJAX Finished');
-        
         self.find('title').textContent = self.find('title', this.response).textContent;
         self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', this.response).getAttribute('content'));
 
@@ -74,6 +72,8 @@ pjax.execQueue = function(){
             }
         }
     }
+    
+    console.log('pjax.execQueue called', queue);
     
     return this;
 }
