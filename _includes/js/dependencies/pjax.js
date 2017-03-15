@@ -77,7 +77,10 @@ pjax.execQueue = function(){
 pjax.onload = function(callback){
     var self = this;
     
-    self.funQueue.push(callback);
+    if(typeof callback === 'function'){
+        self.funQueue.push(callback);
+    }
+        
     console.log(self.funQueue);
 
     window.onload = self.execQueue();
