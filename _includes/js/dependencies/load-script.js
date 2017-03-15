@@ -8,4 +8,4 @@ window.loadScript = function(url, callback){
     script.onload = callback;
 
     head.appendChild(script);
-}
+};
