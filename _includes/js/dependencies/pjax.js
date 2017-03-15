@@ -4,10 +4,6 @@
  */
 window.pjax = {};
 
-pjax.find = function(selector, context) {
-    return (context || document).querySelector(selector);
-};
-
 pjax.container = '.body';
 pjax.funQueue = {};
 
@@ -43,13 +39,16 @@ pjax.request = function(url) {
     xhr.responseType = 'document';
     
     xhr.addEventListener('load', function(e){
-        self.find('title').textContent = self.find('title', this.response).textContent;
-        self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', this.response).getAttribute('content'));
+        document.querySelector('title').textContent = this.response.querySelector('title').textContent;
+        document.querySelector('meta[name="description"]').setAttribute(
+            'content',
+            this.response.querySelector('meta[name="description"]').getAttribute('content')
+        );
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
         
-        var newPage = self.find(self.container, this.response);
-        var currentPage = self.find(self.container);
+        var newPage = this.response.querySelector(self.container);
+        var currentPage = document.querySelector(self.container);
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
         scripts.forEach(function(code){
