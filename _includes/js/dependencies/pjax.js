@@ -44,6 +44,7 @@ pjax.request = function(url) {
     
     xhr.addEventListener('load', function(e){
         var response = this.response;
+        console.log(response);
         
         self.find('title').textContent = self.find('title', response).textContent;
         self.find('meta[name="description"]').setAttribute('content', self.find('meta[name="description"]', response).getAttribute('content'));
@@ -52,7 +53,7 @@ pjax.request = function(url) {
         var currentPage = self.find(self.container);
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
-        var scripts = response.querySelectorAll('script');
+        var scripts = response.querySelectorAll(self.container + ' script');
         scripts.forEach(function(code){
             var script = document.createElement('script');
             script.text = code.textContent;
