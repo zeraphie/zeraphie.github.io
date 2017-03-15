@@ -73,8 +73,6 @@ pjax.execQueue = function(){
         }
     }
     
-    console.log('pjax.execQueue called', queue);
-    
     return this;
 }
 
