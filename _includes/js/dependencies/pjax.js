@@ -63,7 +63,7 @@ pjax.request = function(url) {
 };
 
 pjax.execQueue = function(){
-    var self = this, queue = this.funQueue.reverse();
+    var queue = this.funQueue.reverse();
     
     for(var i = 0, len = queue.length; i < len; i++){
         if(typeof queue[i] === 'function'){
@@ -74,6 +74,8 @@ pjax.execQueue = function(){
             }
         }
     }
+    
+    return this;
 }
 
 pjax.onload = function(callback){
@@ -83,4 +85,6 @@ pjax.onload = function(callback){
 
     window.onload = this.execQueue;
     this.afterLoad = this.execQueue;
+    
+    return this;
 };
