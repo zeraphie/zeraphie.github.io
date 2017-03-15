@@ -63,6 +63,7 @@ pjax.request = function(url) {
 };
 
 pjax.execQueue = function(){
+    console.log(this.funQueue);
     var queue = this.funQueue.reverse();
     
     for(var i = 0, len = queue.length; i < len; i++){
