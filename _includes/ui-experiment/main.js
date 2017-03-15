@@ -1,5 +1,4 @@
 pjax.onload('ui-experiment', function() {
-    console.log('loaded ui-experiment script');
     var wrapper = document.querySelector('.ui-experiment');
 
     var Class = function(methods) {
