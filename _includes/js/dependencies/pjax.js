@@ -61,6 +61,18 @@ pjax.request = function(url) {
 
 pjax.funQueue = [];
 
+pjax.execQueue = function(){
+    for(var i = 0, len = self.funQueue.length; i < len; i++){
+        if(typeof self.funQueue[i] === 'function'){
+            try {
+                self.funQueue[i].call();
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    }
+}
+
 pjax.onload = function(callback){
     var self = this;
     
@@ -68,19 +80,5 @@ pjax.onload = function(callback){
     
     console.log(self.funQueue);
 
-    window.onload = function(){
-        for(var i = 0, len = self.funQueue.length; i < len; i++){
-            if(typeof self.funQueue[i] === 'function'){
-                self.funQueue[i]();
-            }
-        }
-    };
-
-    self.afterLoad = function(){
-        for(var i = 0, len = self.funQueue.length; i < len; i++){
-            if(typeof self.funQueue[i] === 'function'){
-                self.funQueue[i]();
-            }
-        }
-    };
+    window.onload = self.afterLoad = self.execQueue();
 };
