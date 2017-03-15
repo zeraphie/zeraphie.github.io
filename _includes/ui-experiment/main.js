@@ -228,7 +228,6 @@ pjax.onload('ui-experiment', function() {
                 });
 
                 var trans = new OppositeTrack(wrapper.querySelector('.fullWidth'), {
-                    CENTERED: true,
                     BOUNDS: 50
                 });
 
