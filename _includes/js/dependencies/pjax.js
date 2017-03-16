@@ -39,12 +39,15 @@ pjax.request = function(url) {
     xhr.responseType = 'document';
     
     xhr.addEventListener('load', function(e){
+        var response = this.response;
+        
         var attrs = [
             {
                 selector: 'meta[name$="description"]',
                 attribute: 'content'
             }
         ];
+        
         var selectors = [
             'title',
             '.header-title h1'
@@ -53,7 +56,7 @@ pjax.request = function(url) {
         for(var i = 0, len = selectors.length; i < len; i++){
             var els = document.querySelectorAll(selectors[i]);
             els.forEach(function(el, key){
-                el.textContent = this.response.querySelectorAll(selectors[i])[key].textContent;
+                el.textContent = response.querySelectorAll(selectors[i])[key].textContent;
             });
         }
 
@@ -62,14 +65,14 @@ pjax.request = function(url) {
             els.forEach(function(el, key){
                 el.setAttribute(
                     attrs[i].attribute,
-                    this.response.querySelectorAll(attrs[i].selector)[key].getAttribute(attrs[i].attribute)
+                    response.querySelectorAll(attrs[i].selector)[key].getAttribute(attrs[i].attribute)
                 );
             });
         }
 
-        var scripts = this.response.querySelectorAll(self.container + ' script');
+        var scripts = response.querySelectorAll(self.container + ' script');
         
-        var newPage = this.response.querySelector(self.container);
+        var newPage = response.querySelector(self.container);
         var currentPage = document.querySelector(self.container);
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
