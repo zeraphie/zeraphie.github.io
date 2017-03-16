@@ -9,8 +9,6 @@ customcss:
   - /css/ui-experiment.css
 ---
 
-## Destiny inspired UI Experiment
-
 When I used to play [Destiny](https://www.destinythegame.com/uk/en/home), I got inspired by their menus and decided to make UI concept based on it *(interactive example below)*
 
 The experiment uses a two main pieces of interactivity for this, with a third for navigation
