@@ -44,6 +44,7 @@ pjax.request = function(url) {
             'content',
             this.response.querySelector('meta[name="description"]').getAttribute('content')
         );
+        document.querySelector('.header-title h1').textContent = this.response.querySelector('.header-title h1').textContent;
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
         
