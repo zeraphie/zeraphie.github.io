@@ -46,8 +46,6 @@ pjax.setup = function(){
 pjax.addLinkEvent = function(pjaxLinks){
     var self = this;
     
-    console.log(pjaxLinks);
-    
     pjaxLinks.forEach(function(pjaxLink){
         pjaxLink.addEventListener('click', function(e){
             if(e.target.tagName.toLowerCase() === 'a'){
