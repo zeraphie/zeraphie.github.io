@@ -39,12 +39,33 @@ pjax.request = function(url) {
     xhr.responseType = 'document';
     
     xhr.addEventListener('load', function(e){
-        document.querySelector('title').textContent = this.response.querySelector('title').textContent;
-        document.querySelector('meta[name="description"]').setAttribute(
-            'content',
-            this.response.querySelector('meta[name="description"]').getAttribute('content')
-        );
-        document.querySelector('.header-title h1').textContent = this.response.querySelector('.header-title h1').textContent;
+        var attrs = [
+            {
+                selector: 'meta[name$="description"]',
+                attribute: 'content'
+            }
+        ];
+        var selectors = [
+            'title',
+            '.header-title h1'
+        ];
+        
+        for(var i = 0, len = selectors.length; i < len; i++){
+            var els = document.querySelectorAll(selectors[i]);
+            els.forEach(function(el, key){
+                el.textContent = this.response.querySelectorAll(selectors[i])[key].textContent;
+            });
+        }
+
+        for(var i = 0, len = attrs.length; i < len; i++){
+            var els = document.querySelectorAll(attrs[i].selector);
+            els.forEach(function(el, key){
+                el.setAttribute(
+                    attrs[i].attribute,
+                    this.response.querySelectorAll(attrs[i].selector)[key].getAttribute(attrs[i].attribute)
+                );
+            }
+        }
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
         
