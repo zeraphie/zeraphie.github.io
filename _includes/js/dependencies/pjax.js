@@ -65,12 +65,12 @@ pjax.request = function(url) {
             });
         }
 
-        for(var i = 0, len = self.replace.attributes.length; i < len; i++){
-            var els = document.querySelectorAll(self.replace.attributes[i].selector);
+        for(var i = 0, len = self.replace.attribute.length; i < len; i++){
+            var els = document.querySelectorAll(self.replace.attribute[i].selector);
             els.forEach(function(el, key){
                 el.setAttribute(
-                    pjax.replace.attributes[i].attribute,
-                    response.querySelectorAll(self.replace.attributes[i].selector)[key].getAttribute(self.replace.attributes[i].attribute)
+                    pjax.replace.attribute[i].attribute,
+                    response.querySelectorAll(self.replace.attribute[i].selector)[key].getAttribute(self.replace.attribute[i].attribute)
                 );
             });
         }
