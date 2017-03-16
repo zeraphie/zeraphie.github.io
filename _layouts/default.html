@@ -34,16 +34,6 @@ layout: compress
                         Home
                     </a>
                 </li>
-                {% for post in site.posts %}
-                    {% unless post.category %}
-                        <li>
-                            <a href="{{ post.url }}" class="pjax-link waves-effect{% if post.url == page.url %} active{% endif %}">
-                                <i class="material-icons">{{ post.icon }}</i>
-                                {{ post.title }}
-                            </a>
-                        </li>
-                    {% endunless %}
-                {% endfor %}
                 {% for category in site.categories %}
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
                         <a href="#" class="waves-effect">
@@ -65,6 +55,16 @@ layout: compress
                             {% endfor %}
                         </ul>
                     </li>
+                {% endfor %}
+                {% for post in site.posts %}
+                    {% unless post.category %}
+                        <li>
+                            <a href="{{ post.url }}" class="pjax-link waves-effect{% if post.url == page.url %} active{% endif %}">
+                                <i class="material-icons">{{ post.icon }}</i>
+                                {{ post.title }}
+                            </a>
+                        </li>
+                    {% endunless %}
                 {% endfor %}
             </ul>
         </div>
