@@ -5,6 +5,7 @@
 window.pjax = {};
 
 pjax.container = '.body';
+pjax.links = '.pjax-link';
 pjax.replace = {
     textContent: [
         'title',
@@ -32,22 +33,32 @@ pjax.setup = function(){
     var self = this;
 
     if (history && history.pushState) {
-        var pjaxLinks = document.querySelectorAll('.pjax-link');
-        pjaxLinks.forEach(function(pjaxLink){
-            pjaxLink.addEventListener('click', function(e){
-                if(e.target.tagName.toLowerCase() === 'a'){
-                    e.preventDefault();
-                    self.request(e.target.href);
-                    history.pushState(null, null, e.target.href);
-                }
-            });
-        });
+        self.addLinkEvent();
 
         window.onpopstate = function() {
             self.request(window.location.href);
         };
     }
 
+    return this;
+};
+
+pjax.addLinkEvent(links){
+    var self = this;
+    
+    links = links || pjax.links;
+    
+    var pjaxLinks = document.querySelectorAll(self.links);
+    pjaxLinks.forEach(function(pjaxLink){
+        pjaxLink.addEventListener('click', function(e){
+            if(e.target.tagName.toLowerCase() === 'a'){
+                e.preventDefault();
+                self.request(e.target.href);
+                history.pushState(null, null, e.target.href);
+            }
+        });
+    });
+    
     return this;
 };
 
@@ -94,6 +105,8 @@ pjax.request = function(url) {
         if(typeof self.afterLoad === 'function'){
             self.afterLoad();
         }
+        
+        self.addLinkEvent(self.container + ' ' + self.links);
     });
 
     xhr.send();
