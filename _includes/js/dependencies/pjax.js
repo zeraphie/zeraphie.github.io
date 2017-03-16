@@ -33,7 +33,7 @@ pjax.setup = function(){
     var self = this;
 
     if (history && history.pushState) {
-        self.addLinkEvent();
+        self.addLinkEvent(document.querySelectorAll(self.links));
 
         window.onpopstate = function() {
             self.request(window.location.href);
@@ -43,14 +43,9 @@ pjax.setup = function(){
     return this;
 };
 
-pjax.addLinkEvent = function(links){
+pjax.addLinkEvent = function(pjaxLinks){
     var self = this;
     
-    links = links || pjax.links;
-    
-    console.log(links);
-    
-    var pjaxLinks = document.querySelectorAll(self.links);
     pjaxLinks.forEach(function(pjaxLink){
         pjaxLink.addEventListener('click', function(e){
             if(e.target.tagName.toLowerCase() === 'a'){
@@ -108,7 +103,7 @@ pjax.request = function(url) {
             self.afterLoad();
         }
         
-        self.addLinkEvent(self.container + ' ' + self.links);
+        self.addLinkEvent(currentPage.querySelectorAll(self.links));
     });
 
     xhr.send();
