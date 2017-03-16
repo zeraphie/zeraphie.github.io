@@ -4,8 +4,6 @@ icon: security
 category: Personal-Projects
 ---
 
-## Intro
-
 After using laravel, I wanted to create a cryptographically secure password generator in order to add to projects, which is when I made [this](https://github.com/lopeax/passwordGen)
 
 ---
