@@ -50,15 +50,13 @@ pjax.addLinkEvent = function(links){
     
     var pjaxLinks = document.querySelectorAll(self.links);
     pjaxLinks.forEach(function(pjaxLink){
-        if(typeof pjaxLink.onclick !== 'function'){
-            pjaxLink.onlick = function(e){
-                if(e.target.tagName.toLowerCase() === 'a'){
-                    e.preventDefault();
-                    self.request(e.target.href);
-                    history.pushState(null, null, e.target.href);
-                }
-            };
-        }
+        pjaxLink.onlick = function(e){
+            if(e.target.tagName.toLowerCase() === 'a'){
+                e.preventDefault();
+                self.request(e.target.href);
+                history.pushState(null, null, e.target.href);
+            }
+        };
     });
     
     return this;
