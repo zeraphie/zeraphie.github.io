@@ -43,6 +43,10 @@ pjax.request = function(url) {
         
         var attrs = [
             {
+                selector: 'meta[name$="title"]',
+                attribute: 'content'
+            },
+            {
                 selector: 'meta[name$="description"]',
                 attribute: 'content'
             }
