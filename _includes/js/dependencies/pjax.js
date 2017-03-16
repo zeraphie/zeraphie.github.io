@@ -64,7 +64,7 @@ pjax.request = function(url) {
                     attrs[i].attribute,
                     this.response.querySelectorAll(attrs[i].selector)[key].getAttribute(attrs[i].attribute)
                 );
-            }
+            });
         }
 
         var scripts = this.response.querySelectorAll(self.container + ' script');
