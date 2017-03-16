@@ -18,6 +18,10 @@ pjax.replace = {
         {
             selector: 'meta[name$="description"]',
             attribute: 'content'
+        },
+        {
+            selector: 'link[rel="canonical"]',
+            attribute: 'href'
         }
     ]
 };
