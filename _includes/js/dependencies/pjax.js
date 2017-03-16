@@ -108,7 +108,7 @@ pjax.request = function(url) {
             self.afterLoad();
         }
         
-        /self.addLinkEvent(self.container + ' ' + self.links);
+        self.addLinkEvent(self.container + ' ' + self.links);
     });
 
     xhr.send();
