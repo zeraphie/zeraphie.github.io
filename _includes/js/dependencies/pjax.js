@@ -94,6 +94,8 @@ pjax.request = function(url) {
         if(typeof self.afterLoad === 'function'){
             self.afterLoad();
         }
+        
+        self.setup();
     });
 
     xhr.send();
