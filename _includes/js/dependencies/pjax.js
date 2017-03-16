@@ -50,13 +50,13 @@ pjax.addLinkEvent = function(links){
     
     var pjaxLinks = document.querySelectorAll(self.links);
     pjaxLinks.forEach(function(pjaxLink){
-        pjaxLink.onlick = function(e){
+        pjaxLink.addEventListener('click', function(e){
             if(e.target.tagName.toLowerCase() === 'a'){
                 e.preventDefault();
                 self.request(e.target.href);
                 history.pushState(null, null, e.target.href);
             }
-        };
+        });
     });
     
     return this;
@@ -106,7 +106,7 @@ pjax.request = function(url) {
             self.afterLoad();
         }
         
-        self.addLinkEvent(self.container + ' ' + self.links);
+        /* self.addLinkEvent(self.container + ' ' + self.links); */
     });
 
     xhr.send();
