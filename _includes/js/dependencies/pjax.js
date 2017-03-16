@@ -5,6 +5,23 @@
 window.pjax = {};
 
 pjax.container = '.body';
+pjax.replace = {
+    textContent: [
+        'title',
+        '.header-title h1'
+    ],
+    attribute: [
+        {
+            selector: 'meta[name$="title"]',
+            attribute: 'content'
+        },
+        {
+            selector: 'meta[name$="description"]',
+            attribute: 'content'
+        }
+    ]
+};
+
 pjax.funQueue = {};
 
 pjax.setup = function(){
@@ -40,36 +57,20 @@ pjax.request = function(url) {
     
     xhr.addEventListener('load', function(e){
         var response = this.response;
-        
-        var attrs = [
-            {
-                selector: 'meta[name$="title"]',
-                attribute: 'content'
-            },
-            {
-                selector: 'meta[name$="description"]',
-                attribute: 'content'
-            }
-        ];
-        
-        var selectors = [
-            'title',
-            '.header-title h1'
-        ];
-        
-        for(var i = 0, len = selectors.length; i < len; i++){
-            var els = document.querySelectorAll(selectors[i]);
+                
+        for(var i = 0, len = self.replace.textContent.length; i < len; i++){
+            var els = document.querySelectorAll(self.replace.textContent[i]);
             els.forEach(function(el, key){
-                el.textContent = response.querySelectorAll(selectors[i])[key].textContent;
+                el.textContent = response.querySelectorAll(self.replace.textContent[i])[key].textContent;
             });
         }
 
-        for(var i = 0, len = attrs.length; i < len; i++){
-            var els = document.querySelectorAll(attrs[i].selector);
+        for(var i = 0, len = self.replace.attributes.length; i < len; i++){
+            var els = document.querySelectorAll(self.replace.attributes[i].selector);
             els.forEach(function(el, key){
                 el.setAttribute(
-                    attrs[i].attribute,
-                    response.querySelectorAll(attrs[i].selector)[key].getAttribute(attrs[i].attribute)
+                    pjax.replace.attributes[i].attribute,
+                    response.querySelectorAll(self.replace.attributes[i].selector)[key].getAttribute(self.replace.attributes[i].attribute)
                 );
             });
         }
