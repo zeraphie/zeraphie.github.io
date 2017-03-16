@@ -57,7 +57,7 @@ pjax.addLinkEvent = function(links){
                     self.request(e.target.href);
                     history.pushState(null, null, e.target.href);
                 }
-            });
+            };
         }
     });
     
