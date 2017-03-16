@@ -43,7 +43,7 @@ pjax.setup = function(){
     return this;
 };
 
-pjax.addLinkEvent(links){
+pjax.addLinkEvent = function(links){
     var self = this;
     
     links = links || pjax.links;
