@@ -5,9 +5,21 @@ layout: compress
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Site Meta -->
         <title>{{ page.title }}</title>
         <meta name="description" content="{{ page.content | markdownify | strip_html | truncate: 156 }}">
+        
+        <!-- Social Meta -->
+        <meta name="og:title" content="{{ page.title }}">
+        <meta name="og:description" content="{{ page.content | markdownify | strip_html | truncate: 156 }}">
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        
+        <!-- Viewport -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Assets -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet subresource">
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource">
         <link rel="stylesheet" type="text/css" href="/css/app.css">
@@ -20,6 +32,7 @@ layout: compress
             </script>
         {% endif %}
 
+        <!-- Google Analytics -->
         <script type="text/javascript">
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-53879208-2', 'auto');ga('send', 'pageview');
         </script>
