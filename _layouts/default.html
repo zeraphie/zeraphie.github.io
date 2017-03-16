@@ -8,6 +8,7 @@ layout: compress
         <!-- Site Meta -->
         <title>{{ page.title }}</title>
         <meta name="description" content="{{ page.content | markdownify | strip_html | truncate: 156 }}">
+        <link href="{{ page.url }}" rel="canonical" />
         
         <!-- Social Meta -->
         <meta name="og:title" content="{{ page.title }}">
