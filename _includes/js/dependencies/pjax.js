@@ -46,6 +46,8 @@ pjax.setup = function(){
 pjax.addLinkEvent = function(pjaxLinks){
     var self = this;
     
+    console.log(pjaxLinks);
+    
     pjaxLinks.forEach(function(pjaxLink){
         pjaxLink.addEventListener('click', function(e){
             if(e.target.tagName.toLowerCase() === 'a'){
@@ -88,8 +90,10 @@ pjax.request = function(url) {
         }
 
         var scripts = response.querySelectorAll(self.container + ' script');
+        self.addLinkEvent(response.querySelectorAll(self.container + ' ' + self.links));
         
         var newPage = response.querySelector(self.container);
+        
         var currentPage = document.querySelector(self.container);
         currentPage.parentNode.replaceChild(newPage, currentPage);
 
@@ -102,8 +106,6 @@ pjax.request = function(url) {
         if(typeof self.afterLoad === 'function'){
             self.afterLoad();
         }
-        
-        self.addLinkEvent(currentPage.querySelectorAll(self.links));
     });
 
     xhr.send();
