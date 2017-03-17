@@ -21,6 +21,14 @@ pjax.replace = {
             attribute: 'content'
         },
         {
+            selector: 'meta[property^="og:"]',
+            attribute: 'content'
+        },
+        {
+            selector: 'meta[property^="article:"]',
+            attribute: 'content'
+        },
+        {
             selector: 'link[rel="canonical"]',
             attribute: 'href'
         }
