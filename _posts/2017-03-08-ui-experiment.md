@@ -2,10 +2,11 @@
 title: UI Experiment
 icon: view_quilt
 category: Personal-Projects
+description: A fancy UI experiment and proof of concept for gravitating content towards the mouse
 customjs:
   - ui-experiment/main.js
 customcss:
-  - //cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.min.css
+  - https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.min.css
   - /css/ui-experiment.css
 ---
 
