@@ -7,12 +7,12 @@ layout: compress
     <head>
         <!-- Site Meta -->
         <title>{{ page.title }}</title>
-        <meta name="description" content="{{ page.content | markdownify | strip_html | truncate: 156 }}">
+        <meta name="description" content="{{ page.description }}">
         <link rel="canonical" href="{{ site.url }}{{ page.url | replace:'index.html',''}}/">
         
         <!-- Social Meta -->
         <meta property="og:title" content="{{ page.title }}">
-        <meta property="og:description" content="{{ page.content | markdownify | strip_html | truncate: 156 }}">
+        <meta property="og:description" content="{{ page.description }}">
         <meta property="og:type" content="article">
         <meta property="og:url" content="{{ site.url }}{{ page.url | replace:'index.html',''}}/">
         <meta property="og:locale" content="en_UK">
