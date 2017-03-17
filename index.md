@@ -1,5 +1,6 @@
 ---
 title: Home
+description: Just another developer writing about their projects and research
 ---
 
 This is a static jekyll site built with a very simple theme and as such uses markdown (and as such could potentially be used to generate documentation pages) to generate the pages! There are no libraries, just some clever JS and SCSS. Here's the [github source](https://github.com/lopeax/lopeax.github.io) if you so wish to see how it's been built
