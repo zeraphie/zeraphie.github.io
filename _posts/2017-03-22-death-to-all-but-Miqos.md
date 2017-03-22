@@ -11,7 +11,7 @@ After having listened to [Steel Panther](https://en.wikipedia.org/wiki/Steel_Pan
 
 *Disclaimer: These are just parodies and just having a little fun! Don't take them seriously :)*
 
-## The song
+## The song - Death to all but Miqos!
 
 *Note: I've used blockquotes to separate the verses from the chorusses*
 
