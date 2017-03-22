@@ -13,7 +13,7 @@ After having listened to [Steel Panther](https://en.wikipedia.org/wiki/Steel_Pan
 
 ## The song
 
-*Note: I've used blockquotes to separate the verses from the chorusses
+*Note: I've used blockquotes to separate the verses from the chorusses*
 
 > I exploded seventeen times in a row last night and ten of them gave me crits 
 >
