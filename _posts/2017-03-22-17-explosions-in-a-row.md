@@ -2,7 +2,7 @@
 title: 17 Explosions in a row
 icon: music_note
 category: Parody-Lyrics
-description: A light hearted parody of 17 girls in a row by Steel Panther
+description: A light hearted parody of 17 girls in a row by Steel Panther based on Black Mages
 ---
 
 ## Parodying the Steel Panther song
