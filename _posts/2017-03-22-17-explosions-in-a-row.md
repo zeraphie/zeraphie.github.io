@@ -1,8 +1,8 @@
 ---
-title: 17 Explosions in a row
+title: Explosions
 icon: music_note
 category: Parody-Lyrics
-description: A light hearted parody of 17 girls in a row by Steel Panther based on Black Mages
+description: A light hearted parody of 17 girls in a row by Steel Panther based on Black Mages in FFXIV
 ---
 
 ## Parodying the Steel Panther song
@@ -11,7 +11,7 @@ After having listened to [Steel Panther](https://en.wikipedia.org/wiki/Steel_Pan
 
 *Disclaimer: These are just parodies and just having a little fun! Don't take them seriously :)*
 
-## The song
+## The song - 17 Explosions in a row
 
 *Note: I've used blockquotes to separate the verses from the chorusses*
 
@@ -73,4 +73,4 @@ After having listened to [Steel Panther](https://en.wikipedia.org/wiki/Steel_Pan
 
 Here's the original for this song :)
 
-https://www.youtube.com/watch?v=NH7ogQldm14
+https://www.youtube.com/watch?v=yfB7vF7nCdA
