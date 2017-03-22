@@ -49,7 +49,7 @@ After having listened to [Steel Panther](https://en.wikipedia.org/wiki/Steel_Pan
 >
 > When I was done, they were begging for more
 
-> I exploded seventeen girls in the savage raid down in Alexander 'n' Bahamut
+> I exploded seventeen times in the savage raid down in Alexander 'n' Bahamut
 >
 > I whipped out my boomstick and they got on their knees, like they were all getting ready to pray
 >
