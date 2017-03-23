@@ -8,7 +8,7 @@ description: Just another developer writing about their projects and research
 
 I'm a web developer situated in Oxford, having started with WordPress sites I started with PHP and JavaScript in the beginning, but I've lately moved onto developing applications using the PHP framework [Laravel](https://laravel.com/) which feels oh so much better!
 
-I'm also a gamer, and sometimes that's reflected in the methods I use in my development, and the focal point of some projects :)
+I'm also a gamer, and sometimes that's reflected in the methods I use in my development, and the focal point of some of my personal projects :) (Looking at you [parody lyrics](/parody-lyrics/17-explosions-in-a-row)!)
 
 ## About the site
 
