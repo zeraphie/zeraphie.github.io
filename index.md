@@ -12,7 +12,7 @@ I'm also a gamer, and sometimes that's reflected in the methods I use in my deve
 
 ## About the site
 
-This is a static jekyll site built with a very simple theme and as such uses markdown (and as such could potentially be used to generate documentation pages) to generate the pages! There are no libraries, just some clever JS and SCSS. Here's the [github source](https://github.com/lopeax/lopeax.github.io) if you so wish to see how it's been built
+This is a static jekyll site built with a very simple theme and as such uses markdown (and as such could potentially be used to generate documentation pages) to generate the pages! There are no libraries, just some clever JS and SCSS. Here's the [github source](https://github.com/zeraphie/zeraphie.github.io) if you so wish to see how it's been built
 
 This design is inspired by [material design](https://material.io/guidelines/)
 
