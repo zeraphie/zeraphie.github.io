@@ -1,7 +1,7 @@
 ---
 title: About Me
 date: 2017-04-10 00:00:00 +0000
-description: Here's a lil about myself, like reasons behind the github user rename, plans for the future and more!
+description: Here's a little about myself, like reasons behind the github user rename, plans for the future and more!
 ---
 
 ## Renaming my GitHub Username
