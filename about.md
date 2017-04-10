@@ -26,7 +26,7 @@ I've had a lot of questions about myself after coming out to everybody, and I've
 
 5. **Moving:** I am planning on moving later on in the year, and when I move I will be living full time as a girl. I know this will be strange for those around me (and myself!) to start off with, but I do ask for some patience with me in this regard. I will also be working from home so that's a huge bonus. So far, a date hasn't been set in stone about this, but I'm thinking around august/september
 
-6. **Sexuality:** I thought for a while that I was bi but... because of a certain event I can say for certain I'm only into girls :)
+6. **Sexuality:** I only fancy women, sorry guys ;)
 
 ## The route taken
 I'm well aware that it isn't a small change to make, and it has been a bit of a pain for it (such as having to setup a new package in packagist for my [passwordGen](https://github.com/zeraphie/passwordGen) package. However there were a number of steps taken in order to do this, which may be useful for others to know :)
