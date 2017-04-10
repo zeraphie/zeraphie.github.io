@@ -44,4 +44,4 @@ I'm well aware that it isn't a small change to make, and it has been a bit of a 
     6. Delete and redo the packagist service (I'm not 100% sure why, but this fixed the auto-update problem)
 
 ## Anything else
-I will be keeping an eye on the issues for this [repo](https://github.com/lopeax/info) if people have questions :) I'm rather open about it and I promise I don't bite!
+I will be keeping an eye on the issues for this [repo](https://github.com/lopeax/info/issues) if people have questions :) I'm rather open about it and I promise I don't bite!
