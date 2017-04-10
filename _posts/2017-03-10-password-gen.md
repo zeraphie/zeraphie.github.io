@@ -5,7 +5,7 @@ category: Personal-Projects
 description: A PHP project to create a cryptographically secure password generator (also has a JS port)
 ---
 
-After using laravel, I wanted to create a cryptographically secure password generator in order to add to projects, which is when I made [this](https://github.com/lopeax/passwordGen)
+After using laravel, I wanted to create a cryptographically secure password generator in order to add to projects, which is when I made [this](https://github.com/zeraphie/passwordGen)
 
 ---
 
