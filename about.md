@@ -31,10 +31,10 @@ I've had a lot of questions about myself after coming out to everybody, and I've
 I'm well aware that it isn't a small change to make, and it has been a bit of a pain for it (such as having to setup a new package in packagist for my [passwordGen](https://github.com/zeraphie/passwordGen) package. However there were a number of steps taken in order to do this, which may be useful for others to know :)
 
 1. **Renaming my GitHub account:** It's relatively simple to rename a github account, it's just in the settings, however, there are a few things that cascade
-    - Repos under that username get automatically redirected to the new username
-        - Except to something like Packagist! (That's explained below)
-    - The old user becomes available again (So I just remade it to make sure noone misuses my old username!)
-        - If someone takes the old user, and then releases a repo of the same name, it won't redirect!
+    1. Repos under that username get automatically redirected to the new username
+        1. Except to something like Packagist! (That's explained below)
+    2. The old user becomes available again (So I just remade it to make sure noone misuses my old username!)
+        1. If someone takes the old user, and then releases a repo of the same name, it won't redirect!
 2. **Renaming my Packagist account:** Again this isn't too hard to do on it's own, however, it is a little bit of a pain to update packages for the new name
     1. Update the name of the package in your `composer.json`
     2. Update the email and add it to the GitHub user account (this was specific for me as I had a change in email as well!)
