@@ -77,6 +77,12 @@ layout: compress
                         Home
                     </a>
                 </li>
+                <li>
+                    <a href="/about" class="pjax-link waves-effect{% if '/about' == page.url %} active{% endif %}">
+                        <i class="material-icons">sentiment_very_satisfied</i>
+                        About Me
+                    </a>
+                </li>
                 {% for category in site.categories %}
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
                         <a href="#" class="waves-effect">
