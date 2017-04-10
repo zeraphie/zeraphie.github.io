@@ -1,5 +1,6 @@
 ---
 title: Zeraphie
+icon: dashboard
 date: 2017-03-07 00:00:00 +0000
 description: Just another developer writing about their projects and research
 ---
