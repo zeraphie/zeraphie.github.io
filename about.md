@@ -1,6 +1,6 @@
 ---
 title: About Me
-date: 2017-03-07 00:00:00 +0000
+date: 2017-04-10 00:00:00 +0000
 description: Here's a lil about myself, like reasons behind the github user rename, plans for the future and more!
 ---
 
