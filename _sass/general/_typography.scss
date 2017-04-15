@@ -73,7 +73,7 @@ blockquote {
     }
 }
 
-@media screen and (max-width: #{$sidebarWidth + 360}) {
+@media screen and (max-width: $breakWidth) {
     h1 {
         font-size: 26px;
     }
