@@ -209,14 +209,14 @@
     }
 }
 
-@media screen and (max-height: 500px) {
+@media screen and (max-height: $breakHeight) {
     .sidebar .sidebar-menu {
         top: $touchSize / 2 * 3;
         height: calc(100vh - #{$touchSize / 2 * 3});
     }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: $breakHeight) {
     .sidebar {
         width: $touchSize;
         
