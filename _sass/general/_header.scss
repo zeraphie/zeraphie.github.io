@@ -19,7 +19,7 @@ header {
 }
 
 
-@media screen and (max-height: 500px) {
+@media screen and (max-height: $breakHeight) {
     header {
         max-height: $touchSize / 2 * 3;
         
@@ -30,7 +30,7 @@ header {
     }
 }
 
-@media screen and (max-width: #{$sidebarWidth + 360}) {
+@media screen and (max-width: $breakWidth) {
     header {
         max-height: $touchSize / 2 * 3;
         
