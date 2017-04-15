@@ -15,7 +15,7 @@
     overflow: auto;
 }
 
-@media screen and (max-width: #{$sidebarWidth + 360}) {
+@media screen and (max-width: $breakWidth) {
     .markdown {
         padding-top: 20px;
         padding-bottom: 40px;
