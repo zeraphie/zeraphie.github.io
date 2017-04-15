@@ -216,7 +216,7 @@
     }
 }
 
-@media screen and (max-width: $breakHeight) {
+@media screen and (max-width: $breakWidth) {
     .sidebar {
         width: $touchSize;
         
