@@ -37,7 +37,7 @@ table {
     }
 }
 
-@media screen and (max-width: $breakWidth}) {
+@media screen and (max-width: $breakWidth) {
     table {
         box-shadow: none;
         background: none;
