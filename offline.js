@@ -12,6 +12,20 @@ let prefix = '';
 let filesToCache = [
     `${prefix}/`,
     `${prefix}/css/app.css`,
+ 
+    // Cache all the pages on the site
+    `${prefix}/about`,
+    `${prefix}/style-guide/text`,
+    `${prefix}/style-guide/tables`,
+    `${prefix}/style-guide/lists`,
+    `${prefix}/style-guide/code`,
+    `${prefix}/personal-projects/pjax`,
+    `${prefix}/personal-projects/password-gen`,
+    `${prefix}/personal-projects/ui-experiment`,
+    `${prefix}/parody-lyrics/gloriole`,
+    `${prefix}/parody-lyrics/death-to-all-but-miqos`,
+    `${prefix}/parody-lyrics/17-explosions-in-a-row`,
+    `${prefix}/ffxiv-guides/ff14-overview`,
 ];
 
 /*==============================================================================
