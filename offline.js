@@ -12,6 +12,7 @@ let prefix = '';
 let filesToCache = [
     `${prefix}/`,
     `${prefix}/css/app.css`,
+    `${prefix}/css/ui-experiment.css`,
  
     // Cache all the pages on the site
     `${prefix}/about`,
