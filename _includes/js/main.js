@@ -1,5 +1,13 @@
 (function(){
     'use strict';
+    
+    if('serviceWorker' in navigator){
+        navigator.serviceWorker
+            .register(`/offline.js`)
+            .then(function () {
+                console.log('Service Worker Registered');
+            });
+    }
 
     /* Cross browser friendly matches */
     var matches = function matches(el, selector) {
