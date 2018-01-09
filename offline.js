@@ -11,8 +11,7 @@ let prefix = '';
 
 let filesToCache = [
     `${prefix}/`,
-    `${prefix}/build/js/master.js`,
-    `${prefix}/build/styles/master.css`,
+    `${prefix}/css/app.css`,
 ];
 
 /*==============================================================================
