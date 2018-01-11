@@ -45,7 +45,7 @@ var SitemapParser = function () {
             var _this = this;
 
             return this.fetchSitemap().then(function (sitemap) {
-                var parsed = new window.DOMParser().parseFromString(sitemap, 'text/xml');
+                var parsed = new DOMParser().parseFromString(sitemap, 'text/xml');
 
                 return _this.constructor.xmlToJson(parsed);
             });
@@ -168,7 +168,7 @@ var SitemapParser = function () {
         value: function xmlToJson(xml) {
             var jsonData = {};
 
-            if (xml.nodeType == 1) {
+            if (xml.nodeType === 1) {
                 if (xml.attributes.length > 0) {
                     jsonData["@attributes"] = {};
 
@@ -177,7 +177,7 @@ var SitemapParser = function () {
                         jsonData["@attributes"][attribute.nodeName] = attribute.nodeValue;
                     }
                 }
-            } else if (xml.nodeType == 3) {
+            } else if (xml.nodeType === 3) {
                 jsonData = xml.nodeValue;
             }
 
@@ -186,10 +186,10 @@ var SitemapParser = function () {
                     var item = xml.childNodes.item(i);
                     var nodeName = item.nodeName;
 
-                    if (typeof jsonData[nodeName] == "undefined") {
+                    if (typeof jsonData[nodeName] === "undefined") {
                         jsonData[nodeName] = this.xmlToJson(item);
                     } else {
-                        if (typeof jsonData[nodeName].push == "undefined") {
+                        if (typeof jsonData[nodeName].push === "undefined") {
                             var old = jsonData[nodeName];
                             jsonData[nodeName] = [];
                             jsonData[nodeName].push(old);
@@ -219,23 +219,8 @@ const dataCacheName = `data-${cacheName}`;
 let prefix = '';
 
 let filesToCache = [
-//     `${prefix}/`,
     `${prefix}/css/app.css`,
     `${prefix}/css/ui-experiment.css`,
- 
-    // Cache all the pages on the site
-//     `${prefix}/about`,
-//     `${prefix}/style-guide/text`,
-//     `${prefix}/style-guide/tables`,
-//     `${prefix}/style-guide/lists`,
-//     `${prefix}/style-guide/code`,
-//     `${prefix}/personal-projects/pjax`,
-//     `${prefix}/personal-projects/password-gen`,
-//     `${prefix}/personal-projects/ui-experiment`,
-//     `${prefix}/parody-lyrics/gloriole`,
-//     `${prefix}/parody-lyrics/death-to-all-but-miqos`,
-//     `${prefix}/parody-lyrics/17-explosions-in-a-row`,
-//     `${prefix}/ffxiv-guides/ff14-overview`,
 ];
 
 /*==============================================================================
@@ -254,7 +239,7 @@ self.addEventListener('install', e => {
             return sitemap.getLinks().then(links => {
                 console.log(links);
                 
-                return cache.addAll([filesToCache, ...links]);
+                return cache.addAll([...filesToCache, ...links]);
             });
         })
     );
