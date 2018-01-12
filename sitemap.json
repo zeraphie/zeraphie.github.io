@@ -1,0 +1,24 @@
+---
+layout: null
+---
+
+{
+    "siteurls": [
+        "/",
+        "/about",
+        {% for category in site.categories %}
+            {% for posts in category %}
+                {% for post in posts %}
+                    {% if post.category %}
+                        {{ post.url | jsonify }},
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        {% for post in site.posts %}
+            {% unless post.category or post.url == page.url %}
+                {{ post.url | jsonify }}{% if forloop.last == false %}, {% endif %}
+            {% endunless %}
+        {% endfor %}
+    ]
+}
