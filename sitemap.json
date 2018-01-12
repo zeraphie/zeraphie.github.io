@@ -6,7 +6,8 @@ sitemap: false
 {
   "siteurls": [
     "/",
-    "/about",    
+    "/about",
+    "/sitemap",
     {% for post in site.posts %}{{ post.url | jsonify }}{% if forloop.last == false %},
     {% endif %}{% endfor %}
   ]
