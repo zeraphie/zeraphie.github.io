@@ -28,7 +28,7 @@ self.addEventListener('install', e => {
                 .then(links => {
                     console.log(links);
 
-                    return cache.addAll([...filesToCache, ...links]);
+                    return cache.addAll([...filesToCache, ...links.siteurls]);
                 });
         })
     );
