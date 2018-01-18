@@ -221,6 +221,8 @@ class PJAX {
      * @returns {PJAX}
      */
     execQueue(){
+        console.log(this.queue);
+        
         this.queue.forEach(func => {
             if(typeof func === 'function'){
                 try {
@@ -254,7 +256,6 @@ class PJAX {
     }
 }
 
-window.PJAX = PJAX;
 window.pjax = new PJAX();
 
 pjax.replace.textContent.push('h1');
