@@ -149,8 +149,6 @@ class PJAX {
     }
     
     execQueue(){
-        console.log(this.queue);
-        
         if(!this.queue){
             return this;
         }
