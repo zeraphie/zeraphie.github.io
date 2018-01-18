@@ -149,7 +149,7 @@ class PJAX {
     }
     
     execQueue(){
-        if(!this.queue){
+        if(!(this.queue instanceof Array) || !this.queue.length){
             return this;
         }
         
