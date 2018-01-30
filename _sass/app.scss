@@ -1,14 +1,16 @@
-@import "variables/_general";
+.wf-active {
+    @import "variables/_general";
 
-@import "lib/_waves";
+    @import "lib/_waves";
 
-@import "general/_general";
-@import "general/_header";
-@import "general/_sidebar";
-@import "general/_typography";
-@import "general/_lists";
-@import "general/_checkbox";
-@import "general/_tables";
+    @import "general/_general";
+    @import "general/_header";
+    @import "general/_sidebar";
+    @import "general/_typography";
+    @import "general/_lists";
+    @import "general/_checkbox";
+    @import "general/_tables";
 
-@import "markdown/_syntax";
-@import "markdown/_wrapper";
+    @import "markdown/_syntax";
+    @import "markdown/_wrapper";
+}
