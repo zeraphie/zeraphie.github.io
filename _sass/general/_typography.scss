@@ -49,9 +49,6 @@ p {
 .body a {
     text-decoration: none;
     transition: color 0.3s;
-}
-
-.wf-active .body a {
     color: $mainThemeColour;
     
     &:hover,
