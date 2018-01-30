@@ -1,4 +1,26 @@
-// check the style tag before the css is loaded
 .body {
     opacity: 1;
+}
+
+.custom-scrollbar, .highlight {
+    &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        transition: background 0.3s;
+        &:hover {
+            background: rgba(0, 0, 0, 0.45);
+        }
+    }
+}
+
+iframe {
+    background: #37474F;
+    margin-top: 16px;
+    box-shadow: $cardShadow;
+    display: block;
 }
