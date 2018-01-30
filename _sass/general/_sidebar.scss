@@ -120,7 +120,6 @@
         height: $touchSize;
         line-height: $touchSize;
         padding: 0 16px 0 0;
-        color: $sidebarFontColour;
         text-decoration: none;
         will-change: padding;
         
@@ -187,6 +186,10 @@
     .has-children.active > ul:before {
         transform: rotate(180deg);
     }
+}
+
+.wf-active .sidebar a {
+    color: $sidebarFontColour;
 }
 
 @media screen and (max-height: $breakHeight) {
