@@ -191,33 +191,3 @@
 .wf-active .sidebar a {
     color: $sidebarFontColour;
 }
-
-@media screen and (max-height: $breakHeight) {
-    .sidebar .sidebar-menu {
-        top: $touchSize / 2 * 3;
-        height: calc(100vh - #{$touchSize / 2 * 3});
-    }
-}
-
-@media screen and (max-width: $breakWidth) {
-    .sidebar {
-        width: $touchSize;
-        
-        .sidebar-toggle {
-            display: none;
-        }
-        
-        + .wrapper {
-            width: calc(100% - #{$touchSize});
-        }
-        
-        .sidebar-menu {
-            top: $touchSize / 2 * 3;
-            height: calc(100vh - #{$touchSize / 2 * 3});
-        }
-        
-        ul li a {
-            padding-left: 0 !important;
-        }
-    }
-}
