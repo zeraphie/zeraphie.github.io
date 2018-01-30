@@ -100,6 +100,17 @@ layout: compress
             
             .sidebar {
                 background: #37474F;
+                position: relative;
+                float: left;
+                overflow-y: auto;
+                overflow-x: hidden;
+                width: 225px;
+                height: 100vh;
+                z-index: 9001;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+                padding-top: 42px;
+                will-change: width;
+                transition: width 0.3s, background 0.3s;
             }
             
             .sidebar a {
