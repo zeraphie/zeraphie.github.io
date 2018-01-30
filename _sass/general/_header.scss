@@ -3,10 +3,8 @@ header {
     height: $touchSize * 2;
     max-height: $touchSize * 2;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
-    background: $headerBackground;
     color: $headerFontColour;
     z-index: 9002;
-    transition: max-height 0.3s $bezier;
     overflow: hidden;
     
     .header-title h1 {
