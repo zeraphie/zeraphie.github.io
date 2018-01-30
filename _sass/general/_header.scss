@@ -1,11 +1,5 @@
 header {
-    position: relative;
-    height: $touchSize * 2;
-    max-height: $touchSize * 2;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
     color: $headerFontColour;
-    z-index: 9002;
-    overflow: hidden;
     
     .header-title h1 {
         margin: 0;
