@@ -10,6 +10,9 @@ header {
     }
 }
 
+.wf-active header {
+    color: $headerFontColour;
+}
 
 @media screen and (max-height: $breakHeight) {
     header {
