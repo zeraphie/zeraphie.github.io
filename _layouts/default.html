@@ -49,8 +49,107 @@ layout: compress
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Assets -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet subresource">
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource">
+        <!-- Asynchronously load all the fonts -->
+        <script>
+            WebFontConfig = {
+                google: {
+                    families: ['Roboto:100,300,400,500,700', 'Material Icons']
+                }
+            };
+
+            (function(d) {
+                var wf = d.createElement('script'), s = d.scripts[0];
+                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+                wf.async = true;
+                s.parentNode.insertBefore(wf, s);
+            })(document);
+        </script>
+        <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet subresource"> -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet subresource"> -->
+        <!-- TODO: Async load this -->
+        <style>
+            body {
+                margin: 0;
+                overflow-x: hidden;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: greyscale;
+                text-rendering: optimizeLegibility;
+                font-family: 'Raleway', 'Arial', sans-serif;
+                line-height: 1.5;
+                color: #333333;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar, .highlight::-webkit-scrollbar {
+                width: 7px;
+                height: 7px;
+            }
+            
+            .custom-scrollbar::-webkit-scrollbar-thumb, .highlight::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.3);
+                border-radius: 3px;
+                transition: background 0.3s;
+            }
+            
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover, .highlight::-webkit-scrollbar-thumb:hover {
+                background: rgba(0, 0, 0, 0.45);
+            }
+
+            .wrapper {
+                position: relative;
+                float: left;
+                width: 100%;
+                height: calc(100vh - 84px);
+            }
+
+            .body {
+                position: relative;
+                overflow: auto;
+                height: 100vh;
+                max-height: calc(100vh - 84px);
+                background: #FFFFFF;
+                transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .container {
+                position: relative;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 900px;
+            }
+            .container:before, .container:after {
+                content: '';
+                display: table-cell;
+                clear: both;
+            }
+
+            .content-wrapper {
+                margin: 0;
+                padding: 0 32px;
+                transition: padding 0.3s;
+                will-change: padding;
+            }
+
+            iframe {
+                background: #37474F;
+                margin-top: 16px;
+                box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+                display: block;
+            }
+
+            @media screen and (max-width: 700px) {
+                .body {
+                    max-height: calc(100vh - 63px);
+                }
+
+                .content-wrapper {
+                    padding: 0 20px;
+                }
+            }
+        </style>
         <link rel="stylesheet" type="text/css" href="/css/app.css">
 
         <!-- Google Analytics -->
