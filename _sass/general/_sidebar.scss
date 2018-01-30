@@ -1,22 +1,4 @@
-.sidebar {
-    position: relative;
-    float: left;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: $sidebarWidth;
-    height: 100vh;
-    z-index: 9001;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    padding-top: $touchSize;
-    will-change: width;
-    transition: width 0.3s, background 0.3s;
-    
-    + .wrapper {
-        width: calc(100% - #{$sidebarWidth});
-        will-change: width;
-        transition: width 0.3s;
-    }
-    
+.sidebar {    
     &.side-bar-closed {
         width: $touchSize;
         + .wrapper {
