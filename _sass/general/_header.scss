@@ -1,4 +1,6 @@
 header {
+    color: $headerFontColour;
+    
     .header-title h1 {
         margin: 0;
         line-height: $touchSize * 2;
@@ -6,8 +8,4 @@ header {
         transition: line-height 0.3s, font-size 0.3s;
         will-change: line-height, font-size;
     }
-}
-
-.wf-active header {
-    color: $headerFontColour;
 }
