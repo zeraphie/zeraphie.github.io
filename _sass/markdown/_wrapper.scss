@@ -1,8 +1,4 @@
 .markdown {
-    position: relative;
-    padding-top: 32px;
-    padding-bottom: 64px;
-    
     > *:first-child {
         margin-top: 0;
     }
@@ -13,11 +9,4 @@
     box-shadow: $cardShadow;
     padding: 16px;
     overflow: auto;
-}
-
-@media screen and (max-width: $breakWidth) {
-    .markdown {
-        padding-top: 20px;
-        padding-bottom: 40px;
-    }
 }
