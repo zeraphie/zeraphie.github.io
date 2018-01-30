@@ -11,25 +11,3 @@ header {
 .wf-active header {
     color: $headerFontColour;
 }
-
-@media screen and (max-height: $breakHeight) {
-    header {
-        max-height: $touchSize / 2 * 3;
-        
-        .header-title h1 {
-            line-height: $touchSize / 2 * 3;
-            font-size: 20px;
-        }
-    }
-}
-
-@media screen and (max-width: $breakWidth) {
-    header {
-        max-height: $touchSize / 2 * 3;
-        
-        .header-title h1 {
-            line-height: $touchSize / 2 * 3;
-            font-size: 20px;
-        }
-    }
-}
