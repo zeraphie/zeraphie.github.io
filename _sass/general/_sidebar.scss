@@ -140,7 +140,6 @@
         line-height: $touchSize;
         padding: 0 16px 0 0;
         color: $sidebarFontColour;
-        transition: background 0.3s, padding 0.3s $bezier, max-height 0.3s, opacity 0.3s;
         text-decoration: none;
         will-change: padding;
         
