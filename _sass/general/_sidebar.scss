@@ -49,16 +49,6 @@
         }
     }
     
-    .sidebar-menu {
-        position: absolute;
-        top: $touchSize * 2;
-        height: calc(100vh - #{$touchSize * 2});
-        border-top: 2px solid $sidebarActionColour;
-        overflow: auto;
-        transition: height 0.3s, top 0.3s;
-        will-change: height, top;
-    }
-    
     ul {
         position: relative;
         list-style: none;
