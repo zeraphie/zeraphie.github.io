@@ -76,30 +76,48 @@ layout: compress
                 text-rendering: optimizeLegibility;
                 font-family: 'Raleway', sans-serif;
                 line-height: 1.5;
-                color: rgba(0, 0, 0, 0);
-            }
-            
-            .wf-active body {
                 color: #333333;
             }
 
             * {
                 box-sizing: border-box;
             }
+            
+            header {
+                background: #08c;
+                color: rgba(0, 0, 0, 0);
+                transition: color 0.1s, max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                height: 84px;
+                max-height: 84px;
+                box-shadow: 0 3px 5px rgba(0,0,0,0.5);
+                z-index: 9002;
+                overflow: hidden;
+            }
+            
+            header .header-title h1 {
+                margin: 0;
+                line-height: 84px;
+                font-size: 28px;
+                transition: line-height 0.3s, font-size 0.3s;
+                will-change: line-height, font-size;
+            }
 
-            .custom-scrollbar::-webkit-scrollbar, .highlight::-webkit-scrollbar {
-                width: 7px;
-                height: 7px;
+            .wrapper {
+                position: relative;
+                float: left;
+                width: 100%;
+                height: calc(100vh - 84px);
             }
-            
-            .custom-scrollbar::-webkit-scrollbar-thumb, .highlight::-webkit-scrollbar-thumb {
-                background: rgba(0, 0, 0, 0.3);
-                border-radius: 3px;
-                transition: background 0.3s;
-            }
-            
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover, .highlight::-webkit-scrollbar-thumb:hover {
-                background: rgba(0, 0, 0, 0.45);
+
+            .body {
+                position: relative;
+                overflow: auto;
+                height: 100vh;
+                max-height: calc(100vh - 84px);
+                background: #FFFFFF;
+                transition: opacity 0.1s, max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                opacity: 0;
             }
             
             .sidebar {
@@ -128,39 +146,6 @@ layout: compress
                 transition: background 0.3s, color 0.1s, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.3s, opacity 0.3s;
             }
 
-            .wrapper {
-                position: relative;
-                float: left;
-                width: 100%;
-                height: calc(100vh - 84px);
-            }
-
-            .body {
-                position: relative;
-                overflow: auto;
-                height: 100vh;
-                max-height: calc(100vh - 84px);
-                background: #FFFFFF;
-                transition: opacity 0.1s, max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                opacity: 0;
-            }
-            
-            .body a {
-                color: rgba(0, 0, 0, 0);
-            }
-            
-            header {
-                background: #08c;
-                color: rgba(0, 0, 0, 0);
-                transition: color 0.1s, max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                height: 84px;
-                max-height: 84px;
-                box-shadow: 0 3px 5px rgba(0,0,0,0.5);
-                z-index: 9002;
-                overflow: hidden;
-            }
-
             .container {
                 position: relative;
                 margin: 0 auto;
@@ -187,13 +172,6 @@ layout: compress
                 padding-bottom: 64px;
             }
 
-            iframe {
-                background: #37474F;
-                margin-top: 16px;
-                box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
-                display: block;
-            }
-
             @media screen and (max-height: 500px) {
                 header {
                     max-height: 63px;
@@ -211,19 +189,6 @@ layout: compress
             }
             
             @media screen and (max-width: 700px) {
-                .body {
-                    max-height: calc(100vh - 63px);
-                }
-                
-                .markdown {
-                    padding-top: 20px;
-                    padding-bottom: 40px;
-                }
-
-                .content-wrapper {
-                    padding: 0 20px;
-                }
-                
                 header {
                     max-height: 63px;
                 }
@@ -231,6 +196,10 @@ layout: compress
                 header .header-title h1 {
                     line-height: 63px;
                     font-size: 20px;
+                }
+                
+                .body {
+                    max-height: calc(100vh - 63px);
                 }
                 
                 .sidebar {
@@ -252,6 +221,15 @@ layout: compress
                 
                 .sidebar ul li a {
                     padding-left: 0 !important;
+                }
+                
+                .markdown {
+                    padding-top: 20px;
+                    padding-bottom: 40px;
+                }
+
+                .content-wrapper {
+                    padding: 0 20px;
                 }
             }
         </style>
