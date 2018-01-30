@@ -113,6 +113,12 @@ layout: compress
                 transition: width 0.3s, background 0.3s;
             }
             
+            .sidebar + .wrapper {
+                width: calc(100% - 225px);
+                will-change: width;
+                transition: width 0.3s;
+            }
+            
             .sidebar a {
                 color: rgba(0, 0, 0, 0);
                 transition: background 0.3s, color 0.3s, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.3s, opacity 0.3s;
@@ -139,6 +145,13 @@ layout: compress
                 background: #08c;
                 color: rgba(0, 0, 0, 0);
                 transition: color 0.3s, max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                height: 84px;
+                max-height: 84px;
+                box-shadow: 0 3px 5px rgba(0,0,0,0.5);
+                color: #fff;
+                z-index: 9002;
+                overflow: hidden;
             }
 
             .container {
