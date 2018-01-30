@@ -116,6 +116,7 @@
     
     a {
         display: block;
+        color: $sidebarFontColour;
         width: $sidebarWidth;
         height: $touchSize;
         line-height: $touchSize;
@@ -186,8 +187,4 @@
     .has-children.active > ul:before {
         transform: rotate(180deg);
     }
-}
-
-.wf-active .sidebar a {
-    color: $sidebarFontColour;
 }
