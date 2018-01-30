@@ -145,6 +145,16 @@ layout: compress
                 color: rgba(0, 0, 0, 0);
                 transition: background 0.3s, color 0.1s, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-height 0.3s, opacity 0.3s;
             }
+            
+            .sidebar .sidebar-menu {
+                position: absolute;
+                top: 84px;
+                height: calc(100vh - 84px);
+                border-top: 2px solid rgba(255,255,255,0.05);
+                overflow: auto;
+                transition: height 0.3s, top 0.3s;
+                will-change: height, top;
+            }
 
             .container {
                 position: relative;
