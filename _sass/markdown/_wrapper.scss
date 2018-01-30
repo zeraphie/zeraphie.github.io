@@ -9,4 +9,11 @@
     box-shadow: $cardShadow;
     padding: 16px;
     overflow: auto;
+    
+    .highlight {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        overflow: initial;
+    }
 }
