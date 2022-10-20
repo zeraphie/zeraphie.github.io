@@ -329,7 +329,10 @@ layout: compress
                 <div class="container">
                     <div class="header-content content-wrapper">
                     <div class="header-title">
-                        <h1>{{ page.title }}</h1> <span class="header-date">{{ page.date }}</span>
+                        <h1>{{ page.title }}</h1>
+                        {% if page.date and page.title != "Zeraphie" %}
+                            <span class="header-date">{{ page.date | '%B %d, %Y' }}</span>
+                        {% endif %}
                     </div>
                     </div>
                 </div>
