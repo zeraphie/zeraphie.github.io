@@ -206,3 +206,4 @@ class PJAX {
 
 window.pjax = new PJAX();
 pjax.replace.textContent.push('h1');
+pjax.replace.textContent.push('.header-date');
