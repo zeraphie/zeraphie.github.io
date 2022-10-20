@@ -14,7 +14,7 @@ date: 2022-10-20
 > 
 > A sorcerer may utilise the magic in their blood to create unique spells that can't be copied, in order to cast the spell, the Sorcerer takes 1d4 slashing or piercing damage, which takes the place of all the spell components. Spells created in this way do not count towards your spells known/prepared, but you may only create a spell when you gain an ASI or Feat.
 
-### Monk:
+### Monk
 > **Additional Ki**
 > 
 > Starting at lvl 1, you gain an additional amount of Ki points equal to your Wisdom Modifier
@@ -33,23 +33,22 @@ date: 2022-10-20
 ## Feats
 > **Spell Sniper (from One D&D)**
 >
->   *Prerequisite*: Spellcasting or Pact Magic Feature
+> *Prerequisite*: Spellcasting or Pact Magic Feature
 >
->     *Repeatable*: No
+> *Repeatable*: No
 >
->     You have learned techniques to enhance your attacks with certain kinds of spells, gaining the following benefits:
+> You have learned techniques to enhance your attacks with certain kinds of spells, gaining the following benefits:
 >
->       - *Ability Score Increase.* Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20.
+> - *Ability Score Increase.* Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20.
 >
->       - *Bypass Cover.* Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover.
+> - *Bypass Cover.* Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover.
 >
->       - *Casting in Melee.* Being within 5 feet of an enemy doesn't impose Disadvantage on your Attack Rolls with Spells.
+> - *Casting in Melee.* Being within 5 feet of an enemy doesn't impose Disadvantage on your Attack Rolls with Spells.
 >
->       - *Increased Range.* When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet.
+> - *Increased Range.* When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet.
 
 ## General Play
-### Light Weapon Property
-> Beat Parry (this is in testing)
+> Light Weapon Property: Beat Parry (this is in testing)
 >
 > When a creature targets you with a successful melee attack, make a contested attack roll with your offhand weapon that has the Light property in return, if you beat their roll, this attack and further attacks made as part of a multiattack are made with a -5 penalty to the attack roll, and the next attack you make on that creature has advantage.
 
