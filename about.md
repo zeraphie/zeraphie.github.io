@@ -3,6 +3,7 @@ title: About Me
 icon: sentiment_very_satisfied
 date: 2022-10-20
 description: Here's a little about myself, like reasons behind the github user rename, plans for the future and more!
+published: false
 ---
 
 ## Renaming my GitHub Username
