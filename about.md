@@ -6,7 +6,7 @@ description: Here's a little about myself, like reasons behind the github user r
 ---
 
 ## Renaming my GitHub Username
-I've recently renamed my github account to [@zeraphie](https://github.com/zeraphie/) from [@lopeax](https://github.com/lopeax/) and wanted to have a small explanation as to the reason for the change
+A long while ago, I renamed my github account to [@zeraphie](https://github.com/zeraphie/) from [@lopeax](https://github.com/lopeax/) and wanted to have a small explanation as to the reason for the change
 
 ## Reasons
 I am transgender and I felt that my username was too male and I wanted to update it to better reflect myself as well as it would help in having a new start. It was also one of the mental blocks that I had in reference to actually transitioning, and I've been working really hard to remove those mental blocks :) - They're all gone now! It's just finances I need to care about :)
