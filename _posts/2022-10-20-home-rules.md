@@ -45,11 +45,11 @@ Warlock go eldritch blast. This make warlock do more than eldritch blast
 I try to experience everything at least once, but there's only so many games to play in, and some classes & subclasses look very uninterested when compared to the other options. So lets change that!
 
 ### Warlock
-I very much dislike the lack of spell variety that warlocks have in actual usage, having insanely limited spell slots. I think a warlock would be more fun if they had a pool of mana to cast spells from instead, letting them use things like lvl 1 spells
+I very much dislike the lack of spell variety that warlocks have in actual usage, having insanely limited spell slots. I think a warlock would be more fun if they had a pool of mana to cast spells from instead, letting them use things more lower level spells instead of solely relying on eldritch blast
 
 > **Mana Pool**
 > 
-> Warlocks have a pool of mana that they can cast spells with, each spell costs the same amount of Mana Points as the spell level casted at. The amount of Mana Points that a Warlock has is equal to their Warlock level plus half their Proficiency modifier, and Spells cast this way may only be cast up to 5th level
+> Warlocks have a pool of mana that they can cast spells with, each spell costs the same amount of Mana Points as the spell level casted at. The amount of Mana Points that a Warlock has is equal to their Warlock level plus half their Proficiency modifier. Spells cast using Mana Points may only be cast up to half your Warlock levels rounded up, up to 5th level spells. You regain all expended Mana Points when you finish a short or long rest
 
 ---
 
