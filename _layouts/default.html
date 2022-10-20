@@ -108,6 +108,11 @@ layout: compress
                 will-change: line-height, font-size;
             }
 
+            .header-category {
+                display: inline-block;
+                opacity: 0.65;
+            }
+
             .header-date {
                 display: inline-block;
                 opacity: 0.65;
@@ -225,6 +230,14 @@ layout: compress
                     line-height: 63px;
                     font-size: 20px;
                 }
+
+                .header-category {
+                    display: none;
+                }
+
+                .header-date {
+                    display: none;
+                }
                 
                 .body {
                     max-height: calc(100vh - 63px);
@@ -323,7 +336,7 @@ layout: compress
                 <div class="container">
                     <div class="header-content content-wrapper">
                     <div class="header-title">
-                        <h1>{% if page.category %}{{ page.category | replace: '-', ' ' }} > {% endif %}{{ page.title }}</h1>
+                        <h1>{% if page.category %}<span class="header-category">{{ page.category | replace: '-', ' ' }} ></span> {% endif %}{{ page.title }}</h1>
                         <span class="header-date">{{ page.date | date: '%B %d, %Y' }}</span>
                     </div>
                     </div>
