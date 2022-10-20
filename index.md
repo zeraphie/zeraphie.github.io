@@ -1,15 +1,15 @@
 ---
 title: Zeraphie
 icon: dashboard
-date: 2017-03-07 00:00:00 +0000
+date: 2022-10-20
 description: Just another developer writing about their projects and research
 ---
 
 ## A small intro
 
-I'm a web developer situated in Oxford, having started with WordPress sites I started with PHP and JavaScript in the beginning, but I've lately moved onto developing applications using the PHP framework [Laravel](https://laravel.com/) which feels oh so much better!
+My name's Izzy and I made this site way back when I first started development, back in the days of making themes for WordPress and applications with Laravel, but have now moved on to newer technologies, like Reactjs and Nextjs, and dabbling in some Go instead of PHP.
 
-I'm also a gamer, and sometimes that's reflected in the methods I use in my development, and the focal point of some of my personal projects :) (Looking at you [parody lyrics](/parody-lyrics/17-explosions-in-a-row)!)
+I'm also an avid user of Discord and play quite a bit of D&D so I tend to make a bunch of useful tools that I use throughout the day, like this handy [discord date formatter](https://zeraphie.github.io/discord-date-formatter/) because a bunch of my friends come from all sorts of timezones, as well as a new [stat roller for D&D 5th edition](https://codepen.io/chrysokitty/full/jOzgeMz).
 
 ## About the site
 
