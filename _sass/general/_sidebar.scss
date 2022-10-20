@@ -134,10 +134,12 @@
     i {
         position: relative;
         float: left;
-        width: $touchSize;
+        max-width: $touchSize;
         line-height: $touchSize;
         text-align: center;
         pointer-events: none; /* Fix needed for pjax */
+        padding-left: 9px;
+        padding-right: 9px;
     }
     
     .has-children > a:focus {
