@@ -6,7 +6,7 @@ description: Here's a little about myself, like reasons behind the github user r
 ---
 
 ## Renaming my GitHub Username
-A long while ago, I renamed my github account to [@zeraphie](https://github.com/zeraphie/) from [@lopeax](https://github.com/lopeax/) and wanted to have a small explanation as to the reason for the change
+A long while ago, I renamed my github account to [@zeraphie](https://github.com/zeraphie/) and wanted to have a small explanation as to the reason for the change
 
 ## Reasons
 I am transgender and I felt that my username was too male and I wanted to update it to better reflect myself as well as it would help in having a new start. It was also one of the mental blocks that I had in reference to actually transitioning, and I've been working really hard to remove those mental blocks :) - They're all gone now! It's just finances I need to care about :)
@@ -35,6 +35,3 @@ I'm well aware that renaming my GitHub isn't a small change to make, and it has 
     4. Resubmit the package to packagist
     5. Set the old package to abandoned in packagist, then reference the new one in the abandon message
     6. Delete and redo the packagist service (I'm not 100% sure why, but this fixed the auto-update problem)
-
-## Anything else
-I will be keeping an eye on the issues for this [repo](https://github.com/lopeax/info/issues) if people have questions :) I'm rather open about it and I promise I don't bite... much ;)!
