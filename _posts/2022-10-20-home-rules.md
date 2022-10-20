@@ -13,6 +13,8 @@ Over time and experience, I've amassed a set of house rules that I implement tha
 > 
 > If something is suggested or happens that would make the game more interesting, roll for it! This may even be known as a bullshit roll.
 
+---
+
 ## Class Optional Features
 These are some optional class features that you can add to augment some of the weaknesses in the classes that I've felt through playing them
 
@@ -37,6 +39,8 @@ Warlock go eldritch blast. This make warlock do more than eldritch blast.
 > 
 > When taking an eldritch invocation that modifies the usage of Eldritch blast, you may apply that modification to any other cantrip using a Spell Attack Roll
 
+---
+
 ## Class Changes
 I try to experience everything at least once, but there's only so many games to play in, and some classes & subclasses look very uninterested when compared to the other options. So lets change that!
 
@@ -46,6 +50,8 @@ I very much dislike the lack of spell variety that warlocks have in actual usage
 > **Mana Pool**
 > 
 > Warlocks have a pool of mana that they can cast spells with, each spell costs the same amount of Mana Points as the spell level casted at. The amount of Mana Points that a Warlock has is equal to their Warlock level plus half their Proficiency modifier, and Spells cast this way may only be cast up to 5th level.
+
+---
 
 ## Feats
 Some feats are better or more interesting than others
@@ -67,6 +73,8 @@ Some feats are better or more interesting than others
 >
 > *Increased Range.* When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet.
 
+---
+
 ## General Play
 I like making things matter, and letting cool things happen
 
@@ -82,6 +90,8 @@ I like making things matter, and letting cool things happen
 - **Resting**: Long rests are usually once per day only, in special circumstances can do two
 - **Resurrection and Death**: Matt Mercer's resurrection rules apply <https://twitter.com/matthewmercer/status/824054305355247616?lang=en>
 
+---
+
 ## Combat
 Positioning does something!
 
@@ -91,6 +101,8 @@ Positioning does something!
 - **Vicious Mockery**: Targets of vicious mockery don't get to save if it's a really good insult/joke
 - **Non-lethal Damage**: Declaring non-lethal damage is only applicable if you describe how it's non-lethal (also if something is described in a way that's non-lethal, it will be non-lethal)
 - **Ammo**: No need to track ammo unless special circumstances
+
+---
 
 ## Character Creation
 I like making characters. I like others making characters. I like making characters liking characters. I like characters.
