@@ -111,14 +111,12 @@ layout: compress
             .header-category {
                 display: inline-block;
                 opacity: 0.65;
-                margin-right: 16px;
+                margin-right: 8px;
                 font-size: 24px;
             }
 
-            .header-date {
-                display: inline-block;
+            .content-date {
                 opacity: 0.65;
-                margin-left: 16px;
                 font-size: 14px;
             }
 
@@ -236,10 +234,6 @@ layout: compress
                 .header-category {
                     display: none;
                 }
-
-                .header-date {
-                    display: none;
-                }
                 
                 .body {
                     max-height: calc(100vh - 63px);
@@ -340,7 +334,6 @@ layout: compress
                     <div class="header-title">
                         {% if page.category %}<span class="header-category">{{ page.category | replace: '-', ' ' }} ></span> {% endif %}
                         <h1>{{ page.title }}</h1>
-                        <span class="header-date">{{ page.date | date: '%B %d, %Y' }}</span>
                     </div>
                     </div>
                 </div>
@@ -352,7 +345,10 @@ layout: compress
                     {% endfor %}
                 {% endif %}
                 <div class="container">
-                    <div class="markdown content-wrapper">{{ content }}</div>
+                    <div class="markdown content-wrapper">
+                        <div class="content-date">by Izzy - {{ page.date | date: '%B %d, %Y' }}</div>
+                        {{ content }}
+                    </div>
                 </div>
                 {% if page.customjs.size > 0 %}
                     <script type="text/javascript">
