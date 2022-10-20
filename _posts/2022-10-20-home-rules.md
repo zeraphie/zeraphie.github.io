@@ -49,7 +49,7 @@ I very much dislike the lack of spell variety that warlocks have in actual usage
 
 > **Mana Pool**
 > 
-> Warlocks have a pool of mana that they can cast spells with, each spell costs the same amount of Mana Points as the spell level casted at. The amount of Mana Points that a Warlock has is equal to their Warlock level plus half their Proficiency modifier. Spells cast using Mana Points may only be cast up to half your Warlock levels rounded up, up to 5th level spells (See table below). You regain all expended Mana Points when you finish a short or long rest
+> Warlocks have a pool of mana that they can cast spells with, each spell costs the same amount of Mana Points as the spell level casted at. The amount of Mana Points that a Warlock has is equal to their Warlock level plus half their Proficiency modifier rounded up. Spells cast using Mana Points may only be cast up to half your Warlock levels rounded up, up to 5th level spells (See table below). You regain all expended Mana Points when you finish a short or long rest
 >
 > | Warlock Level | Highest Spell Level |
 > |---------------|---------------------|
