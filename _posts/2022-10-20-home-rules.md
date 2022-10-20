@@ -49,7 +49,7 @@ date: 2022-10-20
 > *Increased Range.* When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet.
 
 ## General Play
-> Light Weapon Property: Beat Parry (this is in testing)
+> **Light Weapon Property: Beat Parry** *(this is in testing)*
 >
 > When a creature targets you with a successful melee attack, make a contested attack roll with your offhand weapon that has the Light property in return, if you beat their roll, this attack and further attacks made as part of a multiattack are made with a -5 penalty to the attack roll, and the next attack you make on that creature has advantage.
 
