@@ -13,9 +13,6 @@ A useful collection of links for this site
     <li>
         <a href="/" class="pjax-link waves-effect">Home</a>
     </li>
-    <li>
-        <a href="/about" class="pjax-link waves-effect">About Me</a>
-    </li>
     {% for category in site.categories %}
         <li>
             <span>{{ category | first | replace: '-', ' ' }}</span>
