@@ -333,7 +333,7 @@ layout: compress
                 <div class="container">
                     <div class="header-content content-wrapper">
                     <div class="header-title">
-                        <span class="header-category">{{ page.category | replace: '-', ' ' }} ></span>
+                        <span class="header-category">{% if page.category %}{{ page.category | replace: '-', ' ' }} >{% endif %}</span>
                         <h1>{{ page.title }}</h1>
                     </div>
                     </div>
