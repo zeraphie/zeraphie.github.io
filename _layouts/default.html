@@ -329,7 +329,7 @@ layout: compress
                 <div class="container">
                     <div class="header-content content-wrapper">
                     <div class="header-title">
-                        <h1>{{ page.category | replace: '-', ' ' }} > {{ page.title }}</h1>
+                        <h1>{% if page.category %}{{ page.category | replace: '-', ' ' }} > {% endif %}{{ page.title }}</h1>
                         <span class="header-date">{{ page.date | date: '%B %d, %Y' }}</span>
                     </div>
                     </div>
