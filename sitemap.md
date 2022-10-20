@@ -1,7 +1,7 @@
 ---
 title: Sitemap
 icon: line_style
-date: 2022-10-22 00:00:00 +0000
+date: 2022-10-22
 description: Contains the sitemap for the site for users to use
 ---
 
