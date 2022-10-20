@@ -4,6 +4,7 @@ icon: apps
 category: Personal-Projects
 description: A potency calculator for Final Fantasy XIV based on the patch 3.4 weightings
 published: false
+date: 2017-03-08
 ---
 
 ## FFXIV Potency Calculator

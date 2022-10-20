@@ -3,6 +3,8 @@ title: Miqo'te
 icon: music_note
 category: Parody-Lyrics
 description: A light hearted parody of Death to all but metal by Steel Panther based on the Miqo'te race in FFXIV
+published: false
+date: 2017-03-22
 ---
 
 ## Parodying the Steel Panther song

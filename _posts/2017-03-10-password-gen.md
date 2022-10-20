@@ -3,6 +3,7 @@ title: PasswordGen
 icon: security
 category: Personal-Projects
 description: A PHP project to create a cryptographically secure password generator (also has a JS port)
+date: 2017-03-10
 ---
 
 After using laravel, I wanted to create a cryptographically secure password generator in order to add to projects, which is when I made [this](https://github.com/zeraphie/passwordGen)

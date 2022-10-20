@@ -8,6 +8,8 @@ customjs:
 customcss:
   - https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.1/flickity.min.css
   - /css/ui-experiment.css
+published: false
+date: 2017-03-08
 ---
 
 When I used to play [Destiny](https://www.destinythegame.com/uk/en/home), I got inspired by their menus and decided to make UI concept based on it *(interactive example below)*
