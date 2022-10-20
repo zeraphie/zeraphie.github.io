@@ -88,7 +88,7 @@ I like making things matter, and letting cool things happen
 - **Helping skill checks**: When making skill checks, unless stated otherwise, up to two people can roll, or one person can roll with advantage (if the one giving Help is proficient in the skill)
 - **Encumbrance**: No encumbrance within reason
 - **Resting**: Long rests are usually once per day only, in special circumstances can do two
-- **Resurrection and Death**: Matt Mercer's resurrection rules apply <https://twitter.com/matthewmercer/status/824054305355247616?lang=en>
+- **Resurrection and Death**: [Matt Mercer's resurrection rules](https://twitter.com/matthewmercer/status/824054305355247616?lang=en) apply, this makes death a meaningful thing to recover from for the party and the character as well
 
 ---
 
@@ -108,7 +108,7 @@ Positioning does something!
 I like making characters. I like others making characters. I like making characters liking characters. I like characters :)
 
 - **Session 0**: Takes place during Session 0 as all party members should know each other (even if it's by just proxy/just meeting them) before the campaign (one shots exclude this)
-- **Stat Rolling**: Rolling for stats, roll 4d6 drop the lowest 6 times, with at least one stat being an 18, or use this <https://codepen.io/chrysokitty/full/jOzgeMz>
+- **Stat Rolling**: Rolling for stats, roll 4d6 drop the lowest 6 times, with at least one stat being an 18, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
 - **Rolling for Health**: When rolling for health, players can't roll lower than their average (before modifiers), this includes rolling hit dice during a short rest
 - **Intelligence**: If a character has a positive Intelligence modifier, they gain additional tool proficiencies equal to half their intelligence modifier (rounded up)
 - **Multiclassing**: No initial multi-classing, during the course of the campaign multi-classing may become available, but only one other class and must be roleplayed
