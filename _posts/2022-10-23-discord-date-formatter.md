@@ -36,6 +36,18 @@ Having been primarily a Reactjs developer for a number of years I ended up using
 
 Later on, I used [chronojs](https://github.com/wanasit/chrono) to make an input field that a user could type in colloquially and have that automatically transformed, like a user could say `8pm` and it would return the next 8pm timestamp, it's just generally an easier way to use it for non technical minded users :)
 
+> **chronojs**
+>
+> A natural language date parser in Javascript. It is designed to handle most date/time format and extract information from any given text.
+
+Wanting to not link everybody a codepen, I then investigated methods by which I could make it on a static site like this one, and thus [the repo](https://github.com/zeraphie/discord-date-formatter) was made. However, Reactjs works best with a transpiler, such as babel, but on a quick project like this, I wanted to make it usable in a way that I didn't have to use a transpiler. JSX is the main issue with Reactjs and using it without a transpiler, so I started using [htm](https://github.com/developit/htm).
+
+> **htm**
+>
+> A JSX-like syntax in plain JavaScript
+
+However, it uses slightly different syntax, specifically around using js within properties, so some of the tool needed to be re-written, though this is the version I'd end up sending everywhere!
+
 ## In usage
 The tool's been available for usage since March 2022, and a lot of my friends and groups I'm in have started using it for announcements and general get togethers as well, and it's been a massive godsend, no more need to ask "when is 8pm?" which sounds like a stupid question, but is very different when you have a group where there's multiple timezones involved, especially with the amount of different labels that americans have for timezones (if I hear PST or PDT or whichever one more time...).
 
