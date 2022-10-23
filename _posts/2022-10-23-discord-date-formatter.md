@@ -21,13 +21,13 @@ However, the amount of people who'll be able to get that timestamp is comparitiv
 > The format is as follows: `<t:${Math.floor(Date.now() / 1000)}:flag>` where `Date.now()` is the timestamp wanted, and `flag` is a preset set of formats to transform into:
 > 
 > | Flag | Format |
-> | t | Short Time (i.e. `22:23 pm`) |
-> | T | Long Time (i.e. `22:23:00 pm`) |
-> | d | Short Date (i.e. `23/10/2022`) |
-> | D | Long Date (i.e. `23 October 2022`) |
-> | f | Short Date/Time (i.e. `October 23, 2022 22:23`) |
-> | F | Long Date/Time (i.e. `Sunday, October 23, 2022 22:23 pm`) |
-> | R | Relative Time (i.e. `10 minutes ago`) |
+> | `t` | Short Time (i.e. `22:23 pm`) |
+> | `T` | Long Time (i.e. `22:23:00 pm`) |
+> | `d` | Short Date (i.e. `23/10/2022`) |
+> | `D` | Long Date (i.e. `23 October 2022`) |
+> | `f` | Short Date/Time (i.e. `October 23, 2022 22:23`) |
+> | `F` | Long Date/Time (i.e. `Sunday, October 23, 2022 22:23 pm`) |
+> | `R` | Relative Time (i.e. `10 minutes ago`) |
 >
 > Note: The format of the date is somewhat dictated by local settings in discord and your device, an easy way to check what kind of format you have is hover over the timestamp of one of a message.
 
