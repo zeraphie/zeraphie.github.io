@@ -13,6 +13,12 @@ Over time and experience, I've amassed a set of house rules that I implement tha
 > 
 > If something is suggested or happens that would make the game more interesting, roll for it! This may even be known as a bullshit roll
 
+Going on from that, this is usually known by players, but to reiterate
+
+> **DMs have the final say**
+>
+> In matters where discussions are happening, at the end of the day, whatever the DM decides is what should be followed, if more conversation is needed, have it after the session. This might resolve in some "retconning" of things that happened, or adjustments to how the game will be played in the future, but to keep things moving, the DM has the final say.
+
 ---
 
 ## Class Optional Features
@@ -45,7 +51,7 @@ Warlock go eldritch blast. This make warlock do more than eldritch blast
 I try to experience everything at least once, but there's only so many games to play in, and some classes & subclasses look very uninterested when compared to the other options. So lets change that!
 
 ### Warlock
-I very much dislike the lack of spell variety that warlocks have in actual usage, having insanely limited spell slots. I think a warlock would be more fun if they had a pool of mana to cast spells from instead, letting them use things more lower level spells instead of solely relying on eldritch blast
+I very much dislike the lack of spell variety that warlocks have in actual usage, having insanely limited spell slots. I think a warlock would be more fun if they had a pool of mana to cast spells from instead, letting them use things more lower level spells instead of solely relying on eldritch blast. This would be an optional change that a Warlock may use to replace their Spellcasting Rules
 
 > **Mana Pool**
 > 
