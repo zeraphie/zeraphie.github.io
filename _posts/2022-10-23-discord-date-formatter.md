@@ -12,11 +12,13 @@ However, the amount of people who'll be able to get that timestamp is comparitiv
 
 ## The Format
 
+[This reddit post](https://www.reddit.com/r/discordapp/comments/ob2h2l/discord_added_new_timestamp_formatting/) describes the addition of localised dates.
+
 > **Discord Date Format**
 > 
-> An example of the timestamp is this: `<t:1666556580:F>` which would result in `Sunday, October 23, 2022 22:23 pm` being the time in the GMT+2 timezone
+> An example of the timestamp is this: `<t:1666556580:F>` which would result in `Sunday, October 23, 2022 22:23 pm` being the time in the GMT+2 timezone.
 >
-> The format is as follows: `<t:${Math.floor(Date.now() / 1000)}:flag>` where `Date.now()` is the timestamp wanted, and `flag` is a preset set of formats to transform into
+> The format is as follows: `<t:${Math.floor(Date.now() / 1000)}:flag>` where `Date.now()` is the timestamp wanted, and `flag` is a preset set of formats to transform into:
 > 
 > | Flag | Format |
 > | t | Short Time (i.e. `22:23 pm`) |
@@ -27,7 +29,7 @@ However, the amount of people who'll be able to get that timestamp is comparitiv
 > | F | Long Date/Time (i.e. `Sunday, October 23, 2022 22:23 pm`) |
 > | R | Relative Time (i.e. `10 minutes ago`) |
 >
-> Note: The format of the date is somewhat dictated by local settings in discord and your device, an easy way to check what kind of format you have is hover over the timestamp of one of a message
+> Note: The format of the date is somewhat dictated by local settings in discord and your device, an easy way to check what kind of format you have is hover over the timestamp of one of a message.
 
 ## The Technologies
 Having been primarily a Reactjs developer for a number of years I ended up using that lib for this, alongside the now deprecated Momentjs for date handling, you can see the code over on my [codepen](https://codepen.io/chrysokitty/pen/YzrBEQv) for the project. The first iteration used the base date and time inputs, as well as a select for the different formats of the date that I could find. Then it would highlight the timestamp in an easily selectable element, and show a version of what it would look like from inside a discord message.
