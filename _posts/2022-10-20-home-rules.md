@@ -6,7 +6,6 @@ description: A set of home rules that I apply to Dungeons and Dragons 5th Editio
 date: 2022-10-20
 ---
 
-# House Rules
 Over time and experience, I've amassed a set of house rules that I implement that supercede the ruleset of D&D. I tend to favour the Rule of Cool as a thing and am also not a fan of rules lawyering
 
 > **Rule of Cool**
