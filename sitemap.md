@@ -13,7 +13,8 @@ A useful collection of links for this site
     <li>
         <a href="/" class="pjax-link waves-effect">Home</a>
     </li>
-    {% for category in site.categories %}
+    {% assign sorted_categories = site.categories | sort %}
+    {% for category in sorted_categories %}
         <li>
             <span>{{ category | first | replace: '-', ' ' }}</span>
             <ul>
