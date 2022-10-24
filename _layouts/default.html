@@ -287,8 +287,8 @@ layout: compress
                         Home
                     </a>
                 </li>
-                {% assign site_categories = site.categories | sort: "category" %}
-                {% for category in site_categories %}
+                {% assign sorted_categories = site.categories | sort %}
+                {% for category in sorted_categories %}
                     <li {% if page.categories contains category[0] %}class="active"{% endif %}>
                         <a href="#" class="waves-effect">
                             <i class="material-icons">label</i>
