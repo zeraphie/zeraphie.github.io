@@ -43,23 +43,13 @@ navlinks.forEach(function (link) {
                 active.classList.toggle('active');
             });
             link.parentNode.classList.toggle('active');
+            console.log(link, 'test');
             return false;
         }
     });
 });
 
 pjax.onload(function(){
-    // navlinks.forEach(function(link){
-    //     link.addEventListener('click', function(e){
-    //         if (!getChildren(link.parentNode, 'ul')) {
-    //             navlinks.forEach(function(link){
-    //                 link.classList.remove('active');
-    //             });
-    //             link.classList.add('active');
-    //         }
-    //     });
-    // });
-
     /* Add data-title attribute for relevant items in table after parsing */
     var tables = document.querySelectorAll('.markdown table');
     tables.forEach(function (table) {
