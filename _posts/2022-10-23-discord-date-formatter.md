@@ -1,5 +1,5 @@
 ---
-title: Discord Date Formatter
+title: Discord Dates
 icon: today_outlined
 category: Personal-Projects
 description: A walkthrough of how the discord date formatter was made, a tool that gives an easy to use interface to send localised datetimes in discord.
