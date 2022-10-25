@@ -133,9 +133,9 @@ I like making characters. I like others making characters. I like making charact
 ### Rolling for stats
 Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest of the rolls (3 dice per stat) as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
 
-> **Example Stat rolling**
+> **Example for stat rolling**
 >
-> Roll 20d6, get the results of `4, 4, 3, 1, 6, 5, 1, 6, 4, 6, 4, 4, 3, 2, 4, 2, 2, 5, 4, 4` drop the lowest 5 rolls
+> Roll 20d6 -> `4, 4, 3, 1, 6, 5, 1, 6, 4, 6, 4, 4, 3, 2, 4, 2, 2, 5, 4, 4` then drop the lowest 5 rolls
 >
 > The rolls you distribute are `6, 6, 6, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3`. Below is an example of how you could distribute these rolls as stats
 > 
