@@ -66,7 +66,6 @@ I very much dislike the lack of spell variety that warlocks have in actual usage
 > |      7-8      |          4          |
 > |      9+       |          5          |
 
-
 ---
 
 ## Feats
