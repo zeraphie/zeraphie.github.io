@@ -29,6 +29,8 @@ Sorcerers feel a bit strange in play, even though they're my favourite magic bas
 > **Spell Creation**
 > 
 > A sorcerer may utilise the magic in their blood to create unique spells that can't be copied, in order to cast the spell, the Sorcerer takes 1d4 slashing or piercing damage, which takes the place of all the spell components. Spells created in this way do not count towards your spells known/prepared, but you may only create a spell when you gain an ASI or Feat
+>
+> Typically, a spell created in this manner is discussed with the DM, and is only able to be casted by the sorcerer, this can have a myriad of results, some may be more powerful than the average spell as well.
 
 ### Monk
 Monks generally feel unfun to play because there's so many different things that require Ki, and even though you restore them on a short rest, adding at most 5 I think makes it more fun
@@ -122,8 +124,9 @@ Positioning does something!
 I like making characters. I like others making characters. I like making characters liking characters. I like characters :)
 
 - **Session 0**: Takes place during Session 0 as all party members should know each other (even if it's by just proxy/just meeting them) before the campaign (one shots exclude this)
-- **Stat Rolling**: Rolling for stats, roll 4d6 drop the lowest 6 times, with at least one stat being an 18, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz). Also, if a player wants a negative, but doesn't get one, I'm happy to allow the player to take the hit :)
+- **Stat Rolling**: Take one stat at 18, then roll 18d6, drop the lowest 5, then distribute the rest of the rolls as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
 - **Rolling for Health**: When rolling for health, players can't roll lower than their average (before modifiers), this includes rolling hit dice during a short rest
 - **Intelligence**: If a character has a positive Intelligence modifier, they gain additional tool proficiencies equal to half their intelligence modifier (rounded up)
 - **Multiclassing**: No initial multi-classing, during the course of the campaign multi-classing may become available, but only one other class and must be roleplayed
+- **Races**: All official races are fine to be used, legacy races and homebrew as well, just ask first
 - **Homebrew**: Generally homebrew classes/races/spells are preferably not to be used, but ask regardless (if it's to be considered, it must fit with the setting)
