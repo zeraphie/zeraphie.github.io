@@ -124,9 +124,25 @@ Positioning does something!
 I like making characters. I like others making characters. I like making characters liking characters. I like characters :)
 
 - **Session 0**: Takes place during Session 0 as all party members should know each other (even if it's by just proxy/just meeting them) before the campaign (one shots exclude this)
-- **Stat Rolling**: Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest of the rolls as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
 - **Rolling for Health**: When rolling for health, players can't roll lower than their average (before modifiers), this includes rolling hit dice during a short rest
 - **Intelligence**: If a character has a positive Intelligence modifier, they gain additional tool proficiencies equal to half their intelligence modifier (rounded up)
 - **Multiclassing**: No initial multi-classing, during the course of the campaign multi-classing may become available, but only one other class and must be roleplayed
 - **Races**: All official races are fine to be used, legacy races and homebrew as well, just ask first
 - **Homebrew**: Generally homebrew classes/races/spells are preferably not to be used, but ask regardless (if it's to be considered, it must fit with the setting)
+
+### Rolling for stats
+Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest of the rolls (3 dice per stat) as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
+
+> **Example Stat rolling**
+>
+> Roll 20d6, get the results of `4, 4, 3, 1, 6, 5, 1, 6, 4, 6, 4, 4, 3, 2, 4, 2, 2, 5, 4, 4` drop the lowest 5 rolls
+>
+> The rolls you distribute are `6, 6, 6, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3`. Below is an example of how you could distribute these rolls as stats
+> 
+> | Stat | Rolls | Total |
+> | Str | 4, 3, 3 | 10 |
+> | Dex | 6, 6, 6 | 18 |
+> | Con | 5, 4, 4 | 13 |
+> | Int | 4, 4, 4 | 12 |
+> | Wis | 4, 4, 4 | 12 |
+> | Cha | 5, 4, 4 | 13 |
