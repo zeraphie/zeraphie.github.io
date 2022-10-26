@@ -141,7 +141,7 @@ Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest
 > | Stat | Rolls | Total |
 > | Str | 4, 3, 3 | 10 |
 > | Dex | 6, 6, 6 | 18 |
-> | Con | 5, 4, 4 | 13 |
-> | Int | 4, 4, 4 | 12 |
+> | Con | max | 18 |
+> | Int | 5, 4, 4 | 12 |
 > | Wis | 4, 4, 4 | 12 |
 > | Cha | 5, 4, 4 | 13 |
