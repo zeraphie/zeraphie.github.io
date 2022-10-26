@@ -130,7 +130,9 @@ I like making characters. I like others making characters. I like making charact
 - **Homebrew**: Generally homebrew classes/races/spells are preferably not to be used, but ask regardless (if it's to be considered, it must fit with the setting)
 
 ### Rolling for stats
-Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest of the rolls (3 dice per stat) as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6, or use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz)
+Take one stat at 18, then roll 20d6, drop the lowest 5, then distribute the rest of the rolls (3 dice per stat) as you wish to your stats. If you then have no negative stats, and wish to have one, you may decrease one of those stats to at the lowest a 6
+
+Or you may use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzgeMz) (making sure there's at least 1 18)
 
 > **Example for stat rolling**
 >
