@@ -12,7 +12,16 @@ Over time and experience, I've amassed a set of house rules that I implement tha
 > 
 > If something is suggested or happens that would make the game more interesting, roll for it! This may even be known as a bullshit roll
 
-Going on from that, this is usually known by players, but to reiterate
+## Game Etiquette
+D&D can be played in many ways, with lots of different directions that can be followed. The games I run, are more RP heavy with player creativity being the focus. That being said, the most important thing in a game is for everyone at the table to have fun, and I favour games that don't abuse the mechanics of D&D, focussing more on player creativity and thinking outside the normal rules. Below are some groundrules that I expect players to follow, if for some reason you don't agree with these, my apologies, but my games aren't for you
+
+- **Turn up on time to sessions.** I get that there can be external factors that may make sessions unmakeable, but I expect there to be at least a day's notice, preferably a week's so the session can be rescheduled. If a player doesn't turn up the day of, the session will happen without them, and repeated occurences will result in the player being written out of the campaign
+- **Be respectful of other player's choices.** Sometimes players choose to do something that may not be seen as "optimal", usually because there's in character reasons to do so. This does not mean it's ok to berate the player for that decision, and it will usually result in additional RP to find out why something happened. Don't backseat game
+- **Be respectful of players being uncomfortable.** During a Session 0, we will outline some matters that players don't want in the game, or are uncomfortable being around. This means that some of these subjects will not happen in game
+- **Pay attention.** I expect players to be present in session, most of the game will be theatre of the mind, but combat will also happen. I understand that turns can go quite slowly, but I also expect for players to think about their turn in advance, although you can't plan for every eventuality, which is why it's important to pay attention
+- **Break time.** During sessions, it's perfectly fine for a player to be right back, just tell the group, and the game will continue unless the player is needed. Preferably however, have a headset so you can at least listen to what's going on. There will also usually be a 15 minute break at generally the halfway point of a session's allotted time, and potentially a second break if there's something special happening and the players want to continue. The game will continue only once everyone is back in this case
+
+Going on from these, this is usually known by players, but to reiterate
 
 > **DMs have the final say**
 >
