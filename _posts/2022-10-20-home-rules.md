@@ -91,15 +91,11 @@ Some feats are better or more interesting than others
 > *Repeatable*: No
 >
 > You have learned techniques to enhance your attacks with certain kinds of spells, gaining the following benefits:
->
-> 
-> *Ability Score Increase.* Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20
->
-> *Bypass Cover.* Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover
->
-> *Casting in Melee.* Being within 5 feet of an enemy doesn't impose Disadvantage on your Attack Rolls with Spells
->
-> *Increased Range.* When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet
+> |---------|---------|
+> | *Ability Score Increase.* | Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20 |
+> | *Bypass Cover.* | Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover |
+> | *Casting in Melee.* | Being within 5 feet of an enemy doesn't impose Disadvantage on your Attack Rolls with Spells |
+> | *Increased Range.* | When you cast a spell that has a range of at least 10 feet and that requires you to make an Attack Roll, you can increase the Spell's range by 60 feet |
 
 ---
 
