@@ -91,6 +91,7 @@ Some feats are better or more interesting than others
 > *Repeatable*: No
 >
 > You have learned techniques to enhance your attacks with certain kinds of spells, gaining the following benefits:
+> 
 > |---------|---------|
 > | **Ability Score Increase.** | Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20 |
 > | **Bypass Cover.** | Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover |
