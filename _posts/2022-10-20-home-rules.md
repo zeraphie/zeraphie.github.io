@@ -3,7 +3,7 @@ title: My Home Rules
 icon: comment_outlined
 category: D&D
 description: A set of home rules that I apply to Dungeons and Dragons 5th Edition games I run
-date: 2022-10-27
+date: 2022-11-03
 ---
 
 Over time and experience, I've amassed a set of house rules that I implement that supercede the ruleset of D&D. I tend to favour the Rule of Cool as a thing and am also not a fan of rules lawyering
@@ -78,6 +78,43 @@ I very much dislike the lack of spell variety that warlocks have in actual usage
 > |      5-6      |          3          |
 > |      7-8      |          4          |
 > |      9+       |          5          |
+
+---
+
+## Spells
+Spells can be complicated to get into, here's some general changes that I think will make things easier to keep track of
+
+For spells that have a duration of 8 hours, and aren't already rituals and concentration, I've found is super easy to forget whether or not they've been used, so I decided to add either the Ritual Spell tag or change their duration to 24 hours so you don't need to keep track of time and just cast at the start of the day, easy!
+
+> **The following spells now can be cast as Ritual Spells and have a 24 hour duration**
+>
+> |---------------|
+> | Distort Value |
+> | Gift of Alacrity |
+> | Mage Armor |
+> | Snare |
+> | Darkvision |
+> | Tiny Servant |
+
+> **The following spells now have a 24 hour duration**
+>
+> |-----------------|
+> | Encode Thoughts |
+> | Aid |
+> | Nondetection |
+> | Death Ward |
+> | Faithful Hound/Mordenkainen's Faithful Hound |
+> | Seeming |
+> | Soul Cage |
+> | Etherealness |
+> | Foresight |
+> | Wind Walk |
+
+> **The following spells now can be cast as Ritual Spells**
+>
+> |-------------------|
+> | Guardian of Faith |
+> | Dream |
 
 ---
 
