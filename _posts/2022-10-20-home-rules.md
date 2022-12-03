@@ -191,6 +191,6 @@ Or you may use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzg
 > | Str | 4, 3, 3 | 10 |
 > | Dex | 6, 6, 6 | 18 |
 > | Con | max | 18 |
-> | Int | 5, 4, 4 | 12 |
+> | Int | 5, 4, 4 | 13 |
 > | Wis | 4, 4, 4 | 12 |
 > | Cha | 5, 4, 4 | 13 |
