@@ -15,8 +15,11 @@ Starting when you choose this archetype at 3rd level, you gain proficiency with 
 
 Once per turn, you may apparate 2 gunblades, or 1 waraxe. These weapons can be thrown (20/60ft range), but dissipate after the attack.
 
-Gunblade - Light - 1d10 Slashing melee damage, 1d8 Piercing damage 20/60ft range
-Waraxe - Versatile - 2h 2d6 Slashing melee damage, 1h 1d10 Slashing melee damage
+| Name | Damage | Properties |
+|------|--------|------------|
+| Gunblade | 1d10 slashing | Firearm (1d8 piercing) ([Range](https://www.dndbeyond.com/sources/dnd/free-rules/equipment#Range) 30/90) |
+| Waraxe | 1d10 slashing | [Versatile](https://www.dndbeyond.com/sources/dnd/free-rules/equipment#Versatile) (2d6) |
+
 ## Thunderhunt
 *3rd level Merlin's Claw feature*
 
