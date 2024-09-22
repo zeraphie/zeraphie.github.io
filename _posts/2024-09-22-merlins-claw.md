@@ -15,8 +15,8 @@ Starting when you choose this archetype at 3rd level, you gain proficiency with 
 
 Once per turn, you may apparate 2 gunblades, or 1 waraxe. These weapons can be thrown (20/60ft range), but dissipate after the attack.
 
-| Name | Damage | Properties |
-|------|--------|------------|
+| Weapon | Damage | Properties |
+|--------|--------|------------|
 | Gunblade | 1d10 slashing | Firearm (1d8 piercing) ([Range](https://www.dndbeyond.com/sources/dnd/free-rules/equipment#Range) 30/90) |
 | Waraxe | 1d10 slashing | [Versatile](https://www.dndbeyond.com/sources/dnd/free-rules/equipment#Versatile) (2d6) |
 
@@ -33,8 +33,11 @@ You may replace one instance of an attack action with a ranged attack, throwing 
 
 Each of the weapons in the Master of Arms feature are now imbued with the power of the elements, also counting as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.
 
-Gunblade - 1d6 Fire
-Axe - 1d6 Lightning
+| Weapon | Elemental damage |
+|--------|------------------|
+| Gunblade | 1d6 Fire |
+| Axe | 1d6 Lightning |
+
 ## Stormborn
 *10th level Merlin's Claw Feature*
 
