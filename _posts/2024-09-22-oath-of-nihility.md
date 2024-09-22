@@ -12,7 +12,7 @@ Acheron is my favourite character from both a character standpoint as well as a 
 *3rd-level Oath of Nihility feature*
 
 You gain oath spells at the paladin levels listed in the Oath of Nihility Spells table. See the Sacred Oath class feature for how oath spells work.
-##### Oath of Nihility Spells
+### Oath of Nihility Spells
 
 | Paladin Level | Spells |
 |---------------|--------|
@@ -33,8 +33,8 @@ The following spells may only be cast by Paladins following the Oath of Nihility
 >_1st level evocation spell_
 > 
 >As an action, make a melee spell attack to a target within range. On a successful hit, the target takes 2d8 lightning damage and each creature within 10 feet of the target takes 1d6 lightning damage. All creatures damaged in this way detonate any Void Mark Stacks on them, dealing 1d8 lightning damage per Void Mark Stack.
-> 
->_**At higher levels.**_ Each spell slot above 1st level used to cast this spell increases the initial lightning damage by 1d8.
+
+_**At higher levels.**_ Each spell slot above 1st level used to cast this spell increases the initial lightning damage by 1d8.
 ## Channel Divinity
 _3rd-level Oath of Nihility feature_
 
