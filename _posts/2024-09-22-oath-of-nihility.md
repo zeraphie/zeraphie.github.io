@@ -13,6 +13,7 @@ Acheron is my favourite character from both a character standpoint as well as a 
 
 You gain oath spells at the paladin levels listed in the Oath of Nihility Spells table. See the Sacred Oath class feature for how oath spells work.
 ##### Oath of Nihility Spells
+
 | Paladin Level | Spells |
 |---------------|--------|
 | 3rd | void mark, oblivion |
