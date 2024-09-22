@@ -1,10 +1,12 @@
 ---
-title: Merlin's Claw - Fighter Subclass
+title: Merlin's Claw
 icon: comment_outlined
 category: D&D
 description: "A Fighter Subclass suited for 5th edition D&D inspired by Feixiao from Honkai: Star Rail"
 date: 2024-09-22
 ---
+
+I really enjoy how Feixiao plays in Honkai: Star Rail, and think that it could provide some unique mechanics to spice up playing a **Fighter Subclass**, so I made this subclass working with something like a follow up attack, as well as making it have a lot of co-operative synergy.
 
 ## Master of Arms
 *3rd level Merlin's Claw feature*

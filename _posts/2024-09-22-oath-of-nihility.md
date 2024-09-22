@@ -1,10 +1,12 @@
 ---
-title: Oath of Nihility - Paladin Subclass
+title: Oath of Nihility
 icon: comment_outlined
 category: D&D
 description: "A Paladin Subclass suited for 5th edition D&D inspired by Acheron from Honkai: Star Rail"
 date: 2024-09-22
 ---
+
+Acheron is my favourite character from both a character standpoint as well as a gameplay standpoint in Honkai: Star Rail. I saw it as an opportunity to make a morally grey **Paladin Subclass** that encouraged a more co-operative playstyle with void mark as a core mechanic of it.
 
 ## Oath Spells
 *3rd-level Oath of Nihility feature*
