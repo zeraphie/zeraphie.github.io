@@ -13,14 +13,13 @@ Acheron is my favourite character from both a character standpoint as well as a 
 
 You gain oath spells at the paladin levels listed in the Oath of Nihility Spells table. See the Sacred Oath class feature for how oath spells work.
 ##### Oath of Nihility Spells
+| Paladin Level | Spells |
+| 3rd | void mark, oblivion |
+| 5th | [mirror image](https://www.dndbeyond.com/spells/2193-mirror-image), [misty step](https://www.dndbeyond.com/spells/2195-misty-step) |
+| 9th | [lightning bolt](https://www.dndbeyond.com/spells/2167-lightning-bolt), [dispel magic](https://www.dndbeyond.com/spells/2072-dispel-magic) |
+| 13th | [greater invisibility](https://www.dndbeyond.com/spells/2128-greater-invisibility), [dimension door](https://www.dndbeyond.com/spells/2068-dimension-door) |
+| 17th | [modify memory](https://www.dndbeyond.com/spells/2196-modify-memory), [destructive wave](https://www.dndbeyond.com/spells/2355-destructive-wave) |
 
-| Paladin Level | Spells                                                                                                                                                     |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 3rd           | void mark, oblivion                                                                                                                                        |
-| 5th           | [mirror image](https://www.dndbeyond.com/spells/2193-mirror-image), [misty step](https://www.dndbeyond.com/spells/2195-misty-step)                         |
-| 9th           | [lightning bolt](https://www.dndbeyond.com/spells/2167-lightning-bolt), [dispel magic](https://www.dndbeyond.com/spells/2072-dispel-magic)                 |
-| 13th          | [greater invisibility](https://www.dndbeyond.com/spells/2128-greater-invisibility), [dimension door](https://www.dndbeyond.com/spells/2068-dimension-door) |
-| 17th          | [modify memory](https://www.dndbeyond.com/spells/2196-modify-memory), [destructive wave](https://www.dndbeyond.com/spells/2355-destructive-wave)           |
 The following spells may only be cast by Paladins following the Oath of Nihility:
 
 >**Void Mark**
