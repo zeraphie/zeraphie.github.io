@@ -10,7 +10,7 @@
     "check": "astro check && astro build"
   },
   "dependencies": {
-    "@hexpunk/core": "github:zeraphie/hexpunk#9645422ae96379e80ca149e3738b2133c376fd5f",
+    "@hexpunk/core": "github:zeraphie/hexpunk#v0.3.1",
     "astro": "^5.18.0"
   },
   "devDependencies": {
