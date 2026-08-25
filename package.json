@@ -1,0 +1,23 @@
+{
+  "name": "izelya.me",
+  "private": true,
+  "description": "Izzy's personal site — the hp-grid world.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && astro build"
+  },
+  "dependencies": {
+    "@hexpunk/core": "github:zeraphie/hexpunk#9645422ae96379e80ca149e3738b2133c376fd5f",
+    "astro": "^5.18.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "typescript": "^5.6.0"
+  },
+  "trustedDependencies": [
+    "@hexpunk/core"
+  ]
+}
