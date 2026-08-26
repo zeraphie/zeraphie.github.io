@@ -524,6 +524,7 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
       let worldHideTimer = 0;
       let currentCard: HTMLElement | null = null;
       let currentMain: HTMLElement | null = null;
+      let current: Route = {};
 
       function pageHtml(item: Item): string {
         const sections = item.subs
@@ -753,7 +754,6 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
       function go(path: string): void {
         location.hash = path;
       }
-      let current: Route = {};
       let suppressSurfaceSync = false;
 
       function clusterById(id?: string): Cluster | undefined {

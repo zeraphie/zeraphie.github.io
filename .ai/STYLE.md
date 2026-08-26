@@ -45,7 +45,9 @@ library code, hexpunk wins — this file governs site code).
 
 ## Tooling
 
-- `check` = `astro check && astro build` — types and a real build
-  gate every step.
+- `check` = format:check + lint + typecheck (`astro check`) +
+  tests + a real build — the full gate runs every step.
+- oxfmt formats code, not content: `src/content/` is excluded
+  (`.prettierignore`) so ported posts stay byte-faithful.
 - Bun only. The hexpunk dependency is trusted
   (`trustedDependencies`) so its `prepare` build runs on install.

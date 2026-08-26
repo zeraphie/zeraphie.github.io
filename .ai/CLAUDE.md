@@ -1,26 +1,35 @@
 # izelya.me — CLAUDE.md
 
 Izzy's personal site: the hp-grid spatial world IS the site, not
-decoration on pages. Astro 6 + Bun, consuming hexpunk
-(`@hexpunk/core`) as a git dependency pinned to a tag/SHA — this
-repo is hexpunk's second consumer and its dogfooding pressure.
-Deploys to GitHub Pages from Actions at https://izelya.me.
+decoration on pages. Astro 7 + Bun, consuming hexpunk
+(`@hexpunk/core`) as a git dependency pinned to a release tag —
+this repo is hexpunk's second consumer and its dogfooding
+pressure. **Local-only:** no remote, no deploys; the site
+iterates locally and goes live only when Izzy explicitly says so
+— never create a GitHub repo, push, or configure any deployment
+unprompted.
 
 ## Workflow
 
 Research → design doc → plan → execute, step by step.
 
-1. Substantial work starts as research/discussion and lands in
-   `.plan/PLAN.site-redesign.md` (the ADR carried over from the
-   pre-repo era; local-only, gitignored).
-2. Plans derive from it as checkbox steps. Execute one step at a
-   time. After each step: run `bun run check`, commit, **explain
-   what was implemented, how it works, and why this approach over
-   alternatives**, then stop and wait for review.
+1. Substantial work starts as research/discussion and lands in a
+   `.plan/` ADR (local-only, gitignored): `PLAN.site-redesign.md`
+   is the site roadmap, `PLAN.<topic>.md` per focused rework
+   (e.g. `PLAN.longform-journal.md`).
+2. Plans derive from those as checkbox steps. Execute one step at
+   a time. After each step: run `bun run check`, commit,
+   **explain what was implemented, how it works, and why this
+   approach over alternatives**, then stop and wait for review.
 3. Never auto-advance. Commit when a step lands or when asked;
    never push unprompted.
 4. Open design decisions are surfaced as questions with options —
    never "I'd lean toward X" and ship.
+
+## Style
+
+See [STYLE.md](STYLE.md). Formatting is oxfmt's job, linting is
+oxlint's — style review is about what tools can't check.
 
 ## House rules
 
@@ -33,14 +42,19 @@ Research → design doc → plan → execute, step by step.
 - Lit elements are client-only custom elements in Astro templates
   (no SSR'd shadow DOM); wip elements import from
   `@hexpunk/core/wip` — instability is opted into by name.
+- Content collections are the content source of truth; ported
+  posts stay byte-faithful (oxfmt ignores `src/content/`).
 - Commits: `type(scope): short description`, subject-only, no
   trailers.
 
 ## Key paths
 
-- `.plan/` — local-only ADR + roadmap (gitignored)
+- `.plan/` — local-only ADRs + roadmap (gitignored)
 - `src/pages/` — routes; `index.astro` is the flow (seed → bloom
   → flight → dive → track)
+- `src/content/` — content collections (`dnd`, `projects`,
+  `lyrics`, `guides`, `about`); schema in `src/content.config.ts`
 - `public/fonts/` — self-hosted faces vendored from hexpunk's
   assets; regenerate from hexpunk when they change
-- `.github/workflows/deploy.yml` — build + Pages deploy
+- `.github/workflows/ci.yml` — checks only; deploy is added
+  deliberately at go-live, never before
