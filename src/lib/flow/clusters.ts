@@ -58,6 +58,27 @@ export function createClusterLayer(world: HpGrid): ClusterLayer {
     return el;
   }
 
+  /** Long single-word labels can't wrap, so they shrink until they
+   * sit inside the hex's safe band. Measured against the cell's own
+   * rect, so camera zoom (a shared transform) cancels out. The real
+   * fit-to-shape treatment belongs to hexpunk; this is the
+   * measure-and-shrink stopgap until it lands. */
+  function fitLabels(el: HTMLElement): void {
+    for (const label of el.querySelectorAll<HTMLElement>(".hx-label")) {
+      label.style.fontSize = "";
+      const cell = label.closest("hp-cell");
+      if (!cell) {
+        continue;
+      }
+      const max = cell.getBoundingClientRect().width * 0.78;
+      let size = Number.parseFloat(getComputedStyle(label).fontSize);
+      while (size > 9 && label.getBoundingClientRect().width > max) {
+        size -= 0.5;
+        label.style.fontSize = `${size}px`;
+      }
+    }
+  }
+
   function mountCluster(cluster: Cluster, animate: boolean): void {
     if (mounted?.cluster.id === cluster.id) {
       return;
@@ -65,6 +86,13 @@ export function createClusterLayer(world: HpGrid): ClusterLayer {
     unmountCluster(false);
     const el = buildCluster(cluster, animate);
     world.appendChild(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => fitLabels(el)));
+    // Late webfonts change metrics — refit once faces settle.
+    void document.fonts.ready.then(() => {
+      if (mounted?.el === el) {
+        fitLabels(el);
+      }
+    });
     if (animate) {
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
