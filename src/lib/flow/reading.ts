@@ -9,6 +9,7 @@
 import type { HpGrid } from "@hexpunk/core/grid";
 
 import type { Item } from "../flow-data";
+import { contentFor } from "./content-cache";
 import { anchorsOf, postMeta } from "./posts";
 
 export interface ReadingHost {
@@ -35,6 +36,10 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
   let worldHideTimer = 0;
   let currentCard: HTMLElement | null = null;
   let currentMain: HTMLElement | null = null;
+  /** Resolves when the adopted card's body content is in the DOM —
+   * anchor landings wait on it; cached content resolves in a
+   * microtask, so the wait is invisible when prefetch did its job. */
+  let currentFilled: Promise<void> = Promise.resolve();
 
   /** Stand-in body for items that have no post yet (arcade
    * carts, external links) — sections mirror the declared subs
@@ -50,7 +55,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     return `<h1>${item.label}</h1><p><em>${item.sub}</em> — ${item.lead ?? ""}</p>${sections}`;
   }
 
-  function buildCard(item: Item): HTMLElement {
+  function buildCard(item: Item): { card: HTMLElement; filled: Promise<void> } {
     const card = document.createElement("div");
     card.className = "page-card";
     const meta = item.post ? `/${item.post}` : (item.url ?? "");
@@ -60,21 +65,30 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
       <div class="page-foot">esc surfaces · the track waits at the right edge</div>`;
     const main = card.querySelector<HTMLElement>(".page-main")!;
     const info = postMeta(item.post);
-    const tpl = item.post
-      ? document.querySelector<HTMLTemplateElement>(`template[data-post="${item.post}"]`)
-      : null;
-    if (info && tpl) {
+    if (item.post && info) {
+      // Header paints immediately from the index; the body clones in
+      // when the content cache delivers (instantly when prefetched).
       main.innerHTML = `<h1>${info.title}</h1><p><em>${item.sub}</em> — ${info.description}</p>`;
-      main.appendChild(tpl.content.cloneNode(true));
-    } else {
-      main.innerHTML = standInHtml(item);
+      const filled = contentFor(item.post)
+        .then((template) => {
+          main.appendChild(template.content.cloneNode(true));
+        })
+        .catch(() => {
+          main.insertAdjacentHTML(
+            "beforeend",
+            `<p><em>the archive is unreachable — <a href="/${item.post}">read it directly</a></em></p>`
+          );
+        });
+      return { card, filled };
     }
-    return card;
+    main.innerHTML = standInHtml(item);
+    return { card, filled: Promise.resolve() };
   }
 
-  function adoptCard(card: HTMLElement): void {
+  function adoptCard(card: HTMLElement, filled: Promise<void>): void {
     currentCard = card;
     currentMain = card.querySelector<HTMLElement>(".page-main");
+    currentFilled = filled;
   }
 
   /** Post-open bookkeeping shared by the fade-in and slide paths:
@@ -93,25 +107,32 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
         page.style.opacity = "1";
       }
     }, 700);
+    const filled = currentFilled;
     if (head) {
-      scrollMain(head, !instant);
-      // Late webfonts reflow the prose and shift anchors —
-      // re-land on the heading once faces settle.
-      void document.fonts.ready.then(() => {
-        if (page.hasAttribute("data-open") && host.isCurrentHead(head)) {
-          scrollMain(head, false);
+      void filled.then(() => {
+        scrollMain(head, !instant);
+        // Late webfonts reflow the prose and shift anchors —
+        // re-land on the heading once faces settle.
+        void document.fonts.ready.then(() => {
+          if (page.hasAttribute("data-open") && host.isCurrentHead(head)) {
+            scrollMain(head, false);
+          }
+        });
+      });
+    } else {
+      void filled.then(() => {
+        if (currentMain) {
+          currentMain.scrollTop = 0;
         }
       });
-    } else if (currentMain) {
-      currentMain.scrollTop = 0;
     }
   }
 
   function openPage(item: Item, head: string | undefined, instant: boolean): void {
     window.clearTimeout(pageTimer);
-    const card = buildCard(item);
+    const { card, filled } = buildCard(item);
     page.replaceChildren(card);
-    adoptCard(card);
+    adoptCard(card, filled);
     const show = () => {
       page.dataset.open = "";
       settleOpen(head, instant);
@@ -133,13 +154,13 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
    * the hidden world are never involved. */
   function slideToPage(item: Item, head: string | undefined, dir: number): void {
     const oldCard = currentCard;
-    const next = buildCard(item);
+    const { card: next, filled } = buildCard(item);
     const skip = host.perfLow || REDUCED;
     if (!skip) {
       next.style.transform = `translateX(${dir * 100}vw)`;
     }
     page.appendChild(next);
-    adoptCard(next);
+    adoptCard(next, filled);
     if (skip) {
       oldCard?.remove();
     } else {

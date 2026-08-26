@@ -83,6 +83,11 @@ const rendered = await Promise.all(
   })
 );
 const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]));
+
+// Slim pages: only this route's post ships inline — every other
+// post's content is fetched (and prefetched) from its own page.
+const currentPost = rendered.find((r) => r.key === Astro.params.route) ?? null;
+const CurrentContent = currentPost?.Content;
 ---
 
 <!doctype html>
@@ -127,11 +132,11 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
 
     <div id="posts" hidden>
       {
-        rendered.map(({ key, Content }) => (
-          <template data-post={key}>
-            <Content />
+        currentPost && CurrentContent && (
+          <template data-post={currentPost.key}>
+            <CurrentContent />
           </template>
-        ))
+        )
       }
     </div>
     <script
@@ -170,6 +175,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
 
       import { itemPath, type Cluster } from "../lib/flow-data";
       import { createClusterLayer } from "../lib/flow/clusters";
+      import { prefetchPosts } from "../lib/flow/content-cache";
       import { initPerfMode, installDebugHud } from "../lib/flow/perf";
       import { anchorsOf, slug } from "../lib/flow/posts";
       import { createReadingLayer } from "../lib/flow/reading";
@@ -351,6 +357,7 @@ const clusters = createClusterLayer(world);
         const cell = clusterEl.querySelector<HTMLElement>(`[data-item="${item.id}"]`)!;
 
         const performDive = (instant: boolean) => {
+          prefetchPosts(cluster.items.map((entry) => entry.post));
           // The world goes pointer-dead the moment the dive starts:
           // nothing beneath the incoming page may hover or re-light
           // while the camera is mid-flight.
@@ -582,6 +589,9 @@ const clusters = createClusterLayer(world);
         syncCalm();
       });
       seedUnfold.addEventListener("hp-unfold-open", () => {
+        // The bloom is intent: warm every published post so any dive
+        // that follows reads from cache, never the network.
+        prefetchPosts(CLUSTERS.flatMap((c) => c.items.map((entry) => entry.post)));
         dismissHint();
         syncCalm();
         syncSectionTabs(true);
