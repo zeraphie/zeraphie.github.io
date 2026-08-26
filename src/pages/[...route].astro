@@ -20,6 +20,8 @@ import "@hexpunk/core/elements.css";
 
 import { CLUSTERS, itemPath } from "../lib/flow-data";
 
+import "../styles/flow.css";
+
 // Every world state is a real page: home, each category, and each
 // item at its canonical path. All of them serve this same shell —
 // the client reads location.pathname and restores the state — but
@@ -147,281 +149,13 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       }
     </div>
     <script
+      is:inline
       type="application/json"
       id="post-index"
       set:html={JSON.stringify(postIndex).replaceAll("<", "\\u003c")}
     />
 
-    <style is:global>
-      html,
-      body {
-        margin: 0;
-        height: 100%;
-        background: var(--hp-background);
-        color: var(--hp-on-surface);
-        font-family: "Chakra Petch", Inter, ui-sans-serif, system-ui, sans-serif;
-        overflow: hidden;
-      }
 
-      /* Backdrop: ignition + wake. elements.css gives html its own
-         background, which stops body-background propagation — and a
-         non-propagated body background paints OVER negative-z fixed
-         children, burying the default z:-1. Lift to 0; everything
-         above it in the stage is transparent where it matters. */
-      #bg {
-        --hp-bg-z: 0;
-        --hp-bg-faint-opacity: 0;
-        --hp-bg-bright-opacity: 0.55;
-        --hp-bg-hot-opacity: 0.95;
-        transition: opacity 550ms ease;
-      }
-      #bg.calm {
-        opacity: 0;
-      }
-      /* Page view: a faint base lattice is always there around the
-         reading hex, so the ambience is visible before the pointer
-         ever moves; the wake rides on top of it. */
-      #bg.ambient {
-        --hp-bg-faint-opacity: 0.16;
-      }
-
-      /* Arrival curtain: the stage reveals only after the camera has
-         been placed, so the first painted frame IS the framed seed. */
-      #hs-stage {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        opacity: 0;
-        transition: opacity 320ms ease;
-      }
-      #hs-stage.live {
-        opacity: 1;
-      }
-      #world {
-        position: absolute;
-        inset: 0;
-        display: block;
-        /* Contain the cells' hover/drag z-lifts: without an isolated
-           stacking context, a hovered cell's layer token out-stacks
-           the page overlay — and, sitting on top, keeps the pointer
-           and sustains its own hover. */
-        isolation: isolate;
-      }
-
-      .hs-status {
-        position: absolute;
-        top: 1rem;
-        left: 1.25rem;
-        z-index: 3;
-        font-size: 0.8rem;
-        letter-spacing: 0.14em;
-        text-transform: lowercase;
-        color: var(--hp-on-surface-variant);
-        pointer-events: none;
-      }
-      .hs-status b {
-        color: var(--hp-secondary);
-        font-weight: 400;
-      }
-      .hs-hint {
-        position: absolute;
-        left: 50%;
-        bottom: 7vh;
-        transform: translateX(-50%);
-        z-index: 3;
-        font-size: 0.72rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--hp-on-surface-variant);
-        opacity: 0.65;
-        pointer-events: none;
-        transition: opacity 400ms ease;
-      }
-      .hs-hint[data-gone] {
-        opacity: 0;
-      }
-      .hs-reset {
-        position: absolute;
-        top: 0.9rem;
-        right: 0.9rem;
-        z-index: 3;
-        font: inherit;
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        padding: 0.35rem 0.7rem;
-        background: var(--hp-surface-container);
-        color: var(--hp-on-surface-variant);
-        border: 1px solid var(--hp-outline-variant);
-        cursor: pointer;
-        opacity: 0.5;
-      }
-      .hs-reset:hover {
-        opacity: 1;
-        color: var(--hp-secondary);
-      }
-
-      /* ── cluster reveal (page-side choreography, flagged for
-            absorption into hp-cluster) ── */
-      hp-cluster .hx-reveal {
-        opacity: 0;
-        scale: 0.25;
-        transition:
-          scale 340ms cubic-bezier(0.2, 1.35, 0.35, 1),
-          opacity 240ms ease;
-        transition-delay: var(--d, 0ms);
-      }
-      hp-cluster .hx-on {
-        opacity: 1;
-        scale: 1;
-      }
-      hp-cluster.hx-closing .hx-reveal {
-        opacity: 0;
-        scale: 0.25;
-      }
-      .hx-denied {
-        animation: hx-deny 480ms ease;
-      }
-      @keyframes hx-deny {
-        30% {
-          filter: drop-shadow(0 0 8px var(--hp-warn));
-        }
-      }
-
-      /* ── the dived page layer ──
-         Once the camera lands in a cell, the whole world fades out
-         beneath this screen-space frame: a crisp hex at real pixel
-         scale whose middle band (between the shoulder vertices)
-         holds a standard scrollable main. Typography is the design
-         system's own prose rhythm — no world scaling anywhere. */
-      .page {
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        display: grid;
-        place-items: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 260ms ease;
-        /* Transparent: the world beneath is visibility-hidden while
-           reading, and hp-background's wake shows around the hex to
-           keep the page ambient and alive. */
-        background: transparent;
-      }
-      .page[data-open] {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      /* One dived hex = one card. Sibling moves slide whole cards —
-         transform + opacity only, so the compositor owns the motion. */
-      .page-card {
-        position: absolute;
-        inset: 0;
-        will-change: transform;
-        transition:
-          transform 460ms cubic-bezier(0.3, 0.9, 0.25, 1),
-          opacity 460ms ease;
-      }
-      body[data-perf="low"] .page-card {
-        transition: none;
-      }
-      /* Deep-dive framing: the hex's straight sides hug the viewport
-         sides; the points run off-screen. The reading pane takes the
-         middle band, clamped to the viewport on wide screens. */
-      .page-hex {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 94vw;
-        aspect-ratio: 0.866 / 1;
-        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-        background: var(--hp-outline);
-      }
-      .page-hex-in {
-        position: absolute;
-        inset: 2px;
-        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-        /* Translucent: the ambient field ghosts through the reading
-           surface, muted relative to the open field outside. */
-        background: color-mix(in srgb, var(--hp-surface-container-lowest) 91%, transparent);
-      }
-      .page-meta {
-        position: absolute;
-        top: 1.4rem;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 0.72rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--hp-secondary);
-        pointer-events: none;
-      }
-      /* Wide content (the class tables) scrolls inside its own box —
-         the reading column itself never scrolls horizontally. */
-      .page-main table {
-        display: block;
-        max-width: 100%;
-        overflow-x: auto;
-      }
-      .page-main {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: min(74ch, calc(94vw - 9rem));
-        height: min(51vw, calc(100vh - 9rem));
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding-right: 0.9rem;
-        overscroll-behavior: contain;
-        scrollbar-width: thin;
-        scrollbar-color: var(--hp-outline-variant) transparent;
-      }
-      .page-main::-webkit-scrollbar {
-        width: 6px;
-      }
-      .page-main::-webkit-scrollbar-thumb {
-        background: var(--hp-outline-variant);
-      }
-      .page-foot {
-        position: absolute;
-        bottom: 1.1rem;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 0.66rem;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--hp-on-surface-variant);
-        opacity: 0.7;
-        pointer-events: none;
-      }
-      hp-hextrack {
-        z-index: 3;
-      }
-
-      /* Software-compositor degrade: every layer is CPU-composited,
-         so drop the second GL sim and the long full-viewport fades. */
-      body[data-perf="low"] #bg {
-        display: none;
-      }
-      body[data-perf="low"] .page,
-      body[data-perf="low"] #hs-stage,
-      body[data-perf="low"] hp-cluster .hx-reveal {
-        transition: none;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        hp-cluster .hx-reveal,
-        #bg,
-        #hs-stage {
-          transition: none;
-        }
-      }
-    </style>
 
     <script>
       import "@hexpunk/core";
@@ -442,56 +176,14 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         HpUnfoldList,
       } from "@hexpunk/core/wip";
 
-      import {
-        CLUSTERS,
-        itemPath,
-        resolvePath,
-        type Cluster,
-        type Item,
-      } from "../lib/flow-data";
+      import { CLUSTERS, itemPath } from "../lib/flow-data";
+      import { createClusterLayer } from "../lib/flow/clusters";
+      import { initPerfMode, installDebugHud } from "../lib/flow/perf";
+      import { anchorsOf, slug } from "../lib/flow/posts";
+      import { createReadingLayer } from "../lib/flow/reading";
+      import { clusterById, parseRoute, routePath, type Route } from "../lib/flow/router";
 
-      /* Software WebGL means every frame of every canvas is CPU
-       * work — detect it once, degrade honestly, and say so in the
-       * console so "is it my hardware acceleration?" has an answer. */
-      function softwareRendered(): boolean {
-        try {
-          const probe = document.createElement("canvas");
-          const gl = probe.getContext("webgl2") ?? probe.getContext("webgl");
-          if (!gl) {
-            return true;
-          }
-          const info = gl.getExtension("WEBGL_debug_renderer_info");
-          const renderer = info
-            ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL))
-            : "";
-          console.info(
-            `[flow] webgl renderer: ${renderer || "(masked)"} — ` +
-              "if this says SwiftShader/Software, browser hardware acceleration is off " +
-              "(chrome://gpu, Settings → System → graphics acceleration)"
-          );
-          return /swiftshader|software|llvmpipe|basic render/i.test(renderer);
-        } catch {
-          return true;
-        }
-      }
-      // Manual override for A/B-ing the degrade: ?perf=low or
-      // localStorage flow-perf=low forces it on real hardware.
-      const PERF_FORCED =
-        new URLSearchParams(location.search).get("perf") === "low" ||
-        (() => {
-          try {
-            return localStorage.getItem("flow-perf") === "low";
-          } catch {
-            return false;
-          }
-        })();
-      const PERF_LOW = PERF_FORCED || softwareRendered();
-      if (PERF_LOW) {
-        document.body.dataset.perf = "low";
-        console.info(
-          `[flow] degrade active (${PERF_FORCED ? "forced" : "software gpu detected"})`
-        );
-      }
+const PERF_LOW = initPerfMode();
 
       const PAD = 64;
       /** Category distance from the seed along its fan direction —
@@ -534,28 +226,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         { q: 1, r: -2 },
       ];
 
-      // ── content ──
-      interface PostMeta {
-        title: string;
-        description: string;
-        anchors: { head: string; label: string }[];
-      }
-      /** Server-rendered post metadata: titles, descriptions, and
-       * the h2 anchor points the rail and router navigate by. */
-      const POST_INDEX = JSON.parse(
-        document.getElementById("post-index")!.textContent!
-      ) as Record<string, PostMeta>;
 
-      const slug = (s: string) => s.replaceAll(" ", "-");
-      /** An item's anchor points: real h2s for post items, declared
-       * subs for the rest. `head` is the route segment AND the DOM
-       * id scrollMain lands on. */
-      function anchorsOf(item: Item): { head: string; label: string }[] {
-        if (item.post) {
-          return POST_INDEX[item.post]?.anchors ?? [];
-        }
-        return (item.subs ?? []).map((s) => ({ head: `h-${slug(s)}`, label: s }));
-      }
       const axialDistance = (a: AxialCoord, b: AxialCoord): number => {
         const dq = a.q - b.q;
         const dr = a.r - b.r;
@@ -572,255 +243,20 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       /** A category cluster (ring 2) framed the same way. */
       const zCluster = () => (vh() - 2 * PAD) / (cellH + 6 * side);
 
-      // ── prose face generation ──
-      // ── the dived page layer: cards on an opaque backdrop ──
+// ── the dived page layer ──
       const page = document.getElementById("page")!;
-      const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      let pageTimer = 0;
-      let worldHideTimer = 0;
-      let currentCard: HTMLElement | null = null;
-      let currentMain: HTMLElement | null = null;
       let current: Route = {};
+      const reading = createReadingLayer({
+        page,
+        world,
+        bg,
+        perfLow: PERF_LOW,
+        isCurrentHead: (head) => current.head === head,
+      });
 
-      /** Stand-in body for items that have no post yet (arcade
-       * carts, external links) — sections mirror the declared subs
-       * so their anchors still work. */
-      function standInHtml(item: Item): string {
-        const sections = anchorsOf(item)
-          .map(
-            ({ head, label }) => `
-        <h2 id="${head}">${label}</h2>
-        <p>${item.lead ?? ""} This section stands in for the real ${label} content — a standard page in the hex's middle band, set in the system's own prose rhythm.</p>`
-          )
-          .join("");
-        return `<h1>${item.label}</h1><p><em>${item.sub}</em> — ${item.lead ?? ""}</p>${sections}`;
-      }
-
-      function buildCard(item: Item): HTMLElement {
-        const card = document.createElement("div");
-        card.className = "page-card";
-        const meta = item.post ? `/${item.post}` : item.url ?? "";
-        card.innerHTML = `<div class="page-hex"><div class="page-hex-in"></div></div>
-          <div class="page-meta">izelya.me ${meta}</div>
-          <main class="hp-prose page-main"></main>
-          <div class="page-foot">esc surfaces · the track waits at the right edge</div>`;
-        const main = card.querySelector<HTMLElement>(".page-main")!;
-        const info = item.post ? POST_INDEX[item.post] : undefined;
-        const tpl = item.post
-          ? document.querySelector<HTMLTemplateElement>(`template[data-post="${item.post}"]`)
-          : null;
-        if (info && tpl) {
-          main.innerHTML = `<h1>${info.title}</h1><p><em>${item.sub}</em> — ${info.description}</p>`;
-          main.appendChild(tpl.content.cloneNode(true));
-        } else {
-          main.innerHTML = standInHtml(item);
-        }
-        return card;
-      }
-
-      function adoptCard(card: HTMLElement): void {
-        currentCard = card;
-        currentMain = card.querySelector<HTMLElement>(".page-main");
-      }
-
-      /** Post-open bookkeeping shared by the fade-in and slide paths:
-       * retire the world, watchdog the backdrop fade, land anchors. */
-      function settleOpen(head: string | undefined, instant: boolean): void {
-        window.clearTimeout(worldHideTimer);
-        worldHideTimer = window.setTimeout(
-          () => {
-            world.style.visibility = "hidden";
-          },
-          instant ? 0 : 340
-        );
-        window.setTimeout(() => {
-          if (page.hasAttribute("data-open") && Number(getComputedStyle(page).opacity) < 1) {
-            console.warn("[flow] page fade stranded — forcing completion");
-            page.style.opacity = "1";
-          }
-        }, 700);
-        if (head) {
-          scrollMain(head, !instant);
-          // Late webfonts reflow the prose and shift anchors —
-          // re-land on the heading once faces settle.
-          void document.fonts.ready.then(() => {
-            if (page.hasAttribute("data-open") && current.head === head) {
-              scrollMain(head, false);
-            }
-          });
-        } else if (currentMain) {
-          currentMain.scrollTop = 0;
-        }
-      }
-
-      function openPage(item: Item, head: string | undefined, instant: boolean): void {
-        window.clearTimeout(pageTimer);
-        const card = buildCard(item);
-        page.replaceChildren(card);
-        adoptCard(card);
-        const show = () => {
-          page.dataset.open = "";
-          settleOpen(head, instant);
-        };
-        if (instant) {
-          show();
-        } else {
-          // Start the fade while the camera is still flying — no
-          // still frame of the world's frozen hover ever shows.
-          pageTimer = window.setTimeout(show, 240);
-        }
-      }
-
-      /** Sibling navigation: whole cards slide horizontally, the
-       * direction taken from track order — a target ABOVE the
-       * current item enters from the left, BELOW from the right.
-       * Transform-only, synchronous start→reflow→end so the
-       * transition arms without an animation frame; the camera and
-       * the hidden world are never involved. */
-      function slideToPage(item: Item, head: string | undefined, dir: number): void {
-        const oldCard = currentCard;
-        const next = buildCard(item);
-        const skip = PERF_LOW || REDUCED;
-        if (!skip) {
-          next.style.transform = `translateX(${dir * 100}vw)`;
-        }
-        page.appendChild(next);
-        adoptCard(next);
-        if (skip) {
-          oldCard?.remove();
-        } else {
-          next.getBoundingClientRect();
-          next.style.transform = "translateX(0)";
-          if (oldCard) {
-            oldCard.style.transform = `translateX(${-dir * 100}vw)`;
-            oldCard.style.opacity = "0.35";
-            window.setTimeout(() => oldCard.remove(), 520);
-          }
-        }
-        settleOpen(head, true);
-      }
-
-      function closePage(): void {
-        window.clearTimeout(pageTimer);
-        window.clearTimeout(worldHideTimer);
-        delete page.dataset.open;
-        page.style.opacity = "";
-        world.style.visibility = "";
-        world.style.pointerEvents = "";
-        bg.style.display = "";
-        window.setTimeout(() => {
-          if (!page.hasAttribute("data-open")) {
-            page.replaceChildren();
-            currentCard = null;
-            currentMain = null;
-          }
-        }, 320);
-      }
-
-      function scrollMain(head: string, smooth: boolean): void {
-        const target = currentMain?.querySelector<HTMLElement>(`#${CSS.escape(head)}`);
-        if (currentMain && target) {
-          currentMain.scrollTo({
-            top: Math.max(0, target.offsetTop - 8),
-            behavior: smooth ? "smooth" : "auto",
-          });
-        }
-      }
-
-      // ── cluster build / mount ──
-      const clusterOffsets = new Map<string, AxialCoord>();
-      let mounted: { cluster: Cluster; el: HTMLElement; vein: HTMLElement } | null = null;
-
-      function buildCluster(cluster: Cluster, animate: boolean): HTMLElement {
-        const el = document.createElement("hp-cluster");
-        el.setAttribute("layout", "honeycomb");
-        el.id = `cluster-${cluster.id}`;
-        el.setAttribute("drag-handle", ":first-child");
-        const off = clusterOffsets.get(cluster.id) ?? { q: 0, r: 0 };
-        el.setAttribute("q", String(cluster.cell!.q + off.q));
-        el.setAttribute("r", String(cluster.cell!.r + off.r));
-
-        const centre = document.createElement("hp-cell");
-        centre.setAttribute("variant", "anchor");
-        centre.textContent = cluster.label;
-        el.appendChild(centre);
-
-        cluster.items.forEach((item, i) => {
-          const cell = document.createElement("hp-cell");
-          cell.setAttribute("variant", item.ghost ? "slot" : "secondary");
-          cell.className = item.ghost ? "hx-ghost" : "hx-item";
-          cell.dataset.item = item.id;
-          cell.dataset.slot = String(i + 1);
-          if (!item.ghost) {
-            cell.setAttribute("tabindex", "0");
-          }
-          cell.innerHTML = `<span class="hx-label">${item.label}</span>`;
-          el.appendChild(cell);
-        });
-
-        if (animate) {
-          let delay = 0;
-          for (const child of Array.from(el.children) as HTMLElement[]) {
-            child.classList.add("hx-reveal");
-            child.style.setProperty("--d", `${delay}ms`);
-            delay += 55;
-          }
-        }
-        return el;
-      }
-
-      function mountCluster(cluster: Cluster, animate: boolean): void {
-        if (mounted?.cluster.id === cluster.id) {
-          return;
-        }
-        unmountCluster(false);
-        const el = buildCluster(cluster, animate);
-        world.appendChild(el);
-        if (animate) {
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => {
-              for (const child of Array.from(el.children)) {
-                child.classList.add("hx-on");
-              }
-            })
-          );
-        } else {
-          for (const child of Array.from(el.children)) {
-            child.classList.add("hx-on");
-          }
-        }
-        const vein = document.createElement("hp-tether");
-        vein.setAttribute("from", "#seed-unfold");
-        vein.setAttribute("to", `#cluster-${cluster.id}`);
-        vein.setAttribute("directed", "");
-        world.appendChild(vein);
-        window.setTimeout(() => vein.setAttribute("state", "idle"), 1600);
-        mounted = { cluster, el, vein };
-      }
-
-      /** Closing is the reveal in reverse; the elements leave after
-       * the recede plays. */
-      function unmountCluster(animate: boolean): void {
-        if (!mounted) {
-          return;
-        }
-        const { el, vein } = mounted;
-        mounted = null;
-        vein.remove();
-        if (!animate) {
-          el.remove();
-          return;
-        }
-        el.classList.add("hx-closing");
-        window.setTimeout(() => el.remove(), 420);
-      }
+const clusters = createClusterLayer(world);
 
       // ── router: the hash is the state ──
-      type Route = { cat?: string; item?: string; head?: string };
-      function parseRoute(): Route {
-        const resolved = resolvePath(location.pathname) ?? {};
-        return { ...resolved, head: location.hash.replace(/^#/, "") || undefined };
-      }
       function go(path: string): void {
         if (location.pathname + location.hash === path) {
           return;
@@ -830,15 +266,16 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       }
       let suppressSurfaceSync = false;
 
-      function clusterById(id?: string): Cluster | undefined {
-        return CLUSTERS.find((c) => c.id === id);
-      }
 
       function setPath(route: Route): void {
-        const cluster = clusterById(route.cat);
-        const item = cluster?.items.find((entry) => entry.id === route.item);
-        const p = cluster && item ? itemPath(cluster.id, item) : cluster ? `/${cluster.id}` : "/";
+        const p = routePath(route);
         pathEl.innerHTML = `~<b>${p === "/" ? "" : p}</b>${route.head ? `<span>#${route.head}</span>` : ""}`;
+        const item = clusterById(route.cat)?.items.find((entry) => entry.id === route.item);
+        document.title = item
+          ? `${item.label} · izelya.me`
+          : route.cat
+            ? `${route.cat} · izelya.me`
+            : "izelya.me";
       }
 
       /** Dive framing that fits the whole hex on screen: the engine
@@ -847,7 +284,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
        * On viewports too narrow for that, the real width wins. */
       function diveRect(cell: HTMLElement): { cx: number; cy: number; w: number; h: number } {
         const slot = Number(cell.dataset.slot);
-        const el = mounted!.el;
+        const el = clusters.mounted!.el;
         const q = Number(el.getAttribute("q")) + (HONEY[slot]?.q ?? 0);
         const r = Number(el.getAttribute("r")) + (HONEY[slot]?.r ?? 0);
         const [cx, cy] = axialToWorld(q, r, side);
@@ -863,14 +300,14 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
 
         // page + hextrack bookkeeping first
         if (!route.item && current.item) {
-          closePage();
+          reading.close();
           track.state = "hint";
           track.hidden = true;
         }
 
         if (!cluster) {
           // home
-          unmountCluster(animated);
+          clusters.unmount(animated);
           if (prevDived) {
             suppressSurfaceSync = true;
             world.surface();
@@ -889,8 +326,8 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
 
         // a category is in view — the fan is part of that view
         seedUnfold.open = true;
-        mountCluster(cluster, animated && !prevDived);
-        const clusterEl = mounted!.el;
+        clusters.mount(cluster, animated && !prevDived);
+        const clusterEl = clusters.mounted!.el;
 
         if (!route.item) {
           if (prevDived) {
@@ -934,7 +371,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           current = { cat: cluster.id, item: item.id, head: route.head };
           setPath(current);
           syncCalm();
-          openPage(item, route.head, instant);
+          reading.open(item, route.head, instant);
         };
 
         if (!animated) {
@@ -958,13 +395,13 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
             track.focal = item.id;
             current = { cat: cluster.id, item: item.id, head: route.head };
             setPath(current);
-            slideToPage(item, route.head, dir);
+            reading.slideTo(item, route.head, dir);
             foldTrackAfter(560);
             return;
           }
           // Different category (manual URL edit): the old bounce.
           suppressSurfaceSync = true;
-          closePage();
+          reading.close();
           world.surface();
           window.setTimeout(() => performDive(false), 430);
           return;
@@ -974,7 +411,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           current = { ...current, head: route.head };
           setPath(current);
           if (route.head) {
-            scrollMain(route.head, true);
+            reading.scrollTo(route.head, true);
             foldTrackAfter(420);
           }
           return;
@@ -1027,16 +464,16 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           return;
         }
         const item = target.closest<HTMLElement>(".hx-item");
-        if (item?.dataset.item && mounted) {
-          const entry = mounted.cluster.items.find((e) => e.id === item.dataset.item);
+        if (item?.dataset.item && clusters.mounted) {
+          const entry = clusters.mounted.cluster.items.find((e) => e.id === item.dataset.item);
           if (entry) {
-            go(itemPath(mounted.cluster.id, entry));
+            go(itemPath(clusters.mounted.cluster.id, entry));
           }
           return;
         }
         const centre = target.closest("hp-cluster > hp-cell:first-child");
-        if (centre && mounted) {
-          world.flyTo(mounted.el, zCluster());
+        if (centre && clusters.mounted) {
+          world.flyTo(clusters.mounted.el, zCluster());
         }
       });
       // Enter activates whatever cell has focus.
@@ -1064,12 +501,12 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         const { element, at } = (
           event as CustomEvent<{ element: HTMLElement; at: AxialCoord }>
         ).detail;
-        if (element.tagName.toLowerCase() !== "hp-cluster" || !mounted) {
+        if (element.tagName.toLowerCase() !== "hp-cluster" || !clusters.mounted) {
           return;
         }
         const origin = dragOrigins.get(element);
         dragOrigins.delete(element);
-        const home = mounted.cluster.cell!;
+        const home = clusters.mounted.cluster.cell!;
         if (axialDistance(at, home) > LEASH_CLUSTER && origin) {
           element.setAttribute("q", String(origin.q));
           element.setAttribute("r", String(origin.r));
@@ -1080,7 +517,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           window.setTimeout(() => element.classList.remove("hx-denied"), 500);
           return;
         }
-        clusterOffsets.set(mounted.cluster.id, { q: at.q - home.q, r: at.r - home.r });
+        clusters.offsets.set(clusters.mounted.cluster.id, { q: at.q - home.q, r: at.r - home.r });
       });
 
       // ── hextrack: sibling hops + anchor sidebar ──
@@ -1233,28 +670,18 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       );
 
       document.getElementById("hs-reset")!.addEventListener("click", () => {
-        clusterOffsets.clear();
+        clusters.offsets.clear();
         history.replaceState(null, "", "/");
         location.reload();
       });
 
-      // ?debug: a live state line, so a stuck frame reports exactly
-      // which piece failed instead of needing forensic screenshots.
-      if (new URLSearchParams(location.search).has("debug")) {
-        const hud = document.createElement("div");
-        hud.style.cssText =
-          "position:fixed;left:50%;bottom:4px;transform:translateX(-50%);z-index:99;" +
-          "font:11px Consolas,monospace;color:#00cc88;background:rgba(20,22,23,.85);" +
-          "padding:2px 10px;pointer-events:none;white-space:nowrap;";
-        document.body.appendChild(hud);
-        window.setInterval(() => {
-          hud.textContent =
-            `route=${location.pathname}${location.hash} · open=${page.hasAttribute("data-open")}` +
-            ` · pageOp=${getComputedStyle(page).opacity}` +
-            ` · dived=${world.dived} · worldVis=${world.style.visibility || "visible"}` +
-            ` · worldPE=${world.style.pointerEvents || "auto"} · perf=${PERF_LOW ? "low" : "full"}`;
-        }, 250);
-      }
+      installDebugHud(
+        () =>
+          `route=${location.pathname}${location.hash} · open=${page.hasAttribute("data-open")}` +
+          ` · pageOp=${getComputedStyle(page).opacity}` +
+          ` · dived=${world.dived} · worldVis=${world.style.visibility || "visible"}` +
+          ` · worldPE=${world.style.pointerEvents || "auto"} · perf=${PERF_LOW ? "low" : "full"}`
+      );
 
       // ── boot: wait for the engine's first frame, read the fan's
       //    shuffle, place categories along those directions, then
@@ -1289,20 +716,6 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           return;
         }
         placeCategories();
-        // Old links used hash routes (#/cat/item/head) — translate
-        // once to the canonical path and carry on.
-        const legacy = location.hash.match(/^#\/(.+)$/);
-        if (legacy) {
-          const [cat, item, head] = legacy[1].split("/").filter(Boolean);
-          const cluster = clusterById(cat);
-          const entry = cluster?.items.find((e) => e.id === item);
-          const target = cluster
-            ? entry
-              ? itemPath(cluster.id, entry) + (head ? `#${head}` : "")
-              : `/${cluster.id}`
-            : "/";
-          history.replaceState(null, "", target);
-        }
         const route = parseRoute();
         if (route.cat) {
           seedUnfold.open = true;

@@ -1,0 +1,277 @@
+/* ─ flow.css — the world's chrome ─
+ *
+ * Everything the flow page paints outside its hexpunk elements:
+ * backdrop wiring, the arrival curtain, cluster reveal choreography,
+ * the dived reading layer, and the status readouts. Imported by the
+ * catch-all page, so global by construction — runtime-created DOM
+ * (cards, clusters) is styled here, which Astro scoped styles can't
+ * reach. */
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--hp-background);
+  color: var(--hp-on-surface);
+  font-family: "Chakra Petch", Inter, ui-sans-serif, system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* Backdrop: ignition + wake. elements.css gives html its own
+   background, which stops body-background propagation — and a
+   non-propagated body background paints OVER negative-z fixed
+   children, burying the default z:-1. Lift to 0; everything
+   above it in the stage is transparent where it matters. */
+#bg {
+  --hp-bg-z: 0;
+  --hp-bg-faint-opacity: 0;
+  --hp-bg-bright-opacity: 0.55;
+  --hp-bg-hot-opacity: 0.95;
+  transition: opacity 550ms ease;
+}
+#bg.calm {
+  opacity: 0;
+}
+/* Page view: a faint base lattice is always there around the
+   reading hex, so the ambience is visible before the pointer
+   ever moves; the wake rides on top of it. */
+#bg.ambient {
+  --hp-bg-faint-opacity: 0.16;
+}
+
+/* Arrival curtain: the stage reveals only after the camera has
+   been placed, so the first painted frame IS the framed seed. */
+#hs-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+#hs-stage.live {
+  opacity: 1;
+}
+#world {
+  position: absolute;
+  inset: 0;
+  display: block;
+  /* Contain the cells' hover/drag z-lifts: without an isolated
+     stacking context, a hovered cell's layer token out-stacks
+     the page overlay — and, sitting on top, keeps the pointer
+     and sustains its own hover. */
+  isolation: isolate;
+}
+
+.hs-status {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  z-index: 3;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: var(--hp-on-surface-variant);
+  pointer-events: none;
+}
+.hs-status b {
+  color: var(--hp-secondary);
+  font-weight: 400;
+}
+.hs-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 7vh;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface-variant);
+  opacity: 0.65;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+.hs-hint[data-gone] {
+  opacity: 0;
+}
+.hs-reset {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 3;
+  font: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.7rem;
+  background: var(--hp-surface-container);
+  color: var(--hp-on-surface-variant);
+  border: 1px solid var(--hp-outline-variant);
+  cursor: pointer;
+  opacity: 0.5;
+}
+.hs-reset:hover {
+  opacity: 1;
+  color: var(--hp-secondary);
+}
+
+/* ── cluster reveal (page-side choreography, flagged for
+      absorption into hp-cluster) ── */
+hp-cluster .hx-reveal {
+  opacity: 0;
+  scale: 0.25;
+  transition:
+    scale 340ms cubic-bezier(0.2, 1.35, 0.35, 1),
+    opacity 240ms ease;
+  transition-delay: var(--d, 0ms);
+}
+hp-cluster .hx-on {
+  opacity: 1;
+  scale: 1;
+}
+hp-cluster.hx-closing .hx-reveal {
+  opacity: 0;
+  scale: 0.25;
+}
+.hx-denied {
+  animation: hx-deny 480ms ease;
+}
+@keyframes hx-deny {
+  30% {
+    filter: drop-shadow(0 0 8px var(--hp-warn));
+  }
+}
+
+/* ── the dived page layer ──
+   Once the camera lands in a cell, the whole world fades out
+   beneath this screen-space frame: a crisp hex at real pixel
+   scale whose middle band (between the shoulder vertices)
+   holds a standard scrollable main. Typography is the design
+   system's own prose rhythm — no world scaling anywhere. */
+.page {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+  /* Transparent: the world beneath is visibility-hidden while
+     reading, and hp-background's wake shows around the hex to
+     keep the page ambient and alive. */
+  background: transparent;
+}
+.page[data-open] {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* One dived hex = one card. Sibling moves slide whole cards —
+   transform + opacity only, so the compositor owns the motion. */
+.page-card {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transition:
+    transform 460ms cubic-bezier(0.3, 0.9, 0.25, 1),
+    opacity 460ms ease;
+}
+body[data-perf="low"] .page-card {
+  transition: none;
+}
+/* Deep-dive framing: the hex's straight sides hug the viewport
+   sides; the points run off-screen. The reading pane takes the
+   middle band, clamped to the viewport on wide screens. */
+.page-hex {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 94vw;
+  aspect-ratio: 0.866 / 1;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--hp-outline);
+}
+.page-hex-in {
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  /* Translucent: the ambient field ghosts through the reading
+     surface, muted relative to the open field outside. */
+  background: color-mix(in srgb, var(--hp-surface-container-lowest) 91%, transparent);
+}
+.page-meta {
+  position: absolute;
+  top: 1.4rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hp-secondary);
+  pointer-events: none;
+}
+/* Wide content (the class tables) scrolls inside its own box —
+   the reading column itself never scrolls horizontally. */
+.page-main table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.page-main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(74ch, calc(94vw - 9rem));
+  height: min(51vw, calc(100vh - 9rem));
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.9rem;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hp-outline-variant) transparent;
+}
+.page-main::-webkit-scrollbar {
+  width: 6px;
+}
+.page-main::-webkit-scrollbar-thumb {
+  background: var(--hp-outline-variant);
+}
+.page-foot {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface-variant);
+  opacity: 0.7;
+  pointer-events: none;
+}
+hp-hextrack {
+  z-index: 3;
+}
+
+/* Software-compositor degrade: every layer is CPU-composited,
+   so drop the second GL sim and the long full-viewport fades. */
+body[data-perf="low"] #bg {
+  display: none;
+}
+body[data-perf="low"] .page,
+body[data-perf="low"] #hs-stage,
+body[data-perf="low"] hp-cluster .hx-reveal {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  hp-cluster .hx-reveal,
+  #bg,
+  #hs-stage {
+    transition: none;
+  }
+}
