@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **hexpunk pinned to v0.3.2** — the pixi field tier engages for the first
+  time: v0.3.1's dist shipped an unbound binding in its bundled pixi chunk,
+  so the dynamically-imported field engine rejected silently and the world
+  ran on DOM tiers only. Found here, fixed in hexpunk (pixi.js externalized).
 - **Astro 5 → 7, everything current** — astro ^7.2.7, @astrojs/check
   ^0.9.10, typescript ^6.0.3 (TS 7 waits on @astrojs/check's peer range).
   Unblocked by the system Node upgrade to 24 LTS.
