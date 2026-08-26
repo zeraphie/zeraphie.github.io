@@ -18,6 +18,60 @@ import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 import "@hexpunk/core/elements.css";
 
+import { CLUSTERS, itemPath } from "../lib/flow-data";
+
+// Every world state is a real page: home, each category, and each
+// item at its canonical path. All of them serve this same shell —
+// the client reads location.pathname and restores the state — but
+// each carries its own title and description for links and crawlers.
+export async function getStaticPaths() {
+	const published = [
+		...(await getCollection("dnd", ({ data }) => !data.draft)),
+		...(await getCollection("projects", ({ data }) => !data.draft)),
+	];
+	const postDesc = new Map(published.map((e) => [`${e.collection}/${e.id}`, e.data.description]));
+	const paths = [
+		{
+			params: { route: undefined },
+			props: {
+				title: "izelya.me",
+				description: "Izzy's personal site — an hp-grid world of projects, games, and D&D homebrew.",
+			},
+		},
+		...CLUSTERS.map((c) => ({
+			params: { route: c.id },
+			props: { title: `${c.label} · izelya.me`, description: `${c.label} on izelya.me` },
+		})),
+	];
+	const seen = new Set<string>();
+	for (const cluster of CLUSTERS) {
+		for (const item of cluster.items) {
+			if (item.ghost) {
+				continue;
+			}
+			const route = itemPath(cluster.id, item).slice(1);
+			if (seen.has(route)) {
+				continue;
+			}
+			seen.add(route);
+			paths.push({
+				params: { route },
+				props: {
+					title: `${item.label} · izelya.me`,
+					description: (item.post && postDesc.get(item.post)) || item.lead || `${item.label} on izelya.me`,
+				},
+			});
+		}
+	}
+	return paths;
+}
+
+interface Props {
+	title: string;
+	description: string;
+}
+const { title, description } = Astro.props;
+
 const SIDE = (100 - 2.5) / Math.sqrt(3);
 
 // Published posts render into inert <template>s the reading layer
@@ -51,7 +105,8 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>izelya.me</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
   </head>
@@ -387,6 +442,14 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         HpUnfoldList,
       } from "@hexpunk/core/wip";
 
+      import {
+        CLUSTERS,
+        itemPath,
+        resolvePath,
+        type Cluster,
+        type Item,
+      } from "../lib/flow-data";
+
       /* Software WebGL means every frame of every canvas is CPU
        * work — detect it once, degrade honestly, and say so in the
        * console so "is it my hardware acceleration?" has an answer. */
@@ -483,31 +546,6 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         document.getElementById("post-index")!.textContent!
       ) as Record<string, PostMeta>;
 
-      interface Item {
-        id: string;
-        label: string;
-        sub: string;
-        /** collection/slug of the content entry this item reads. */
-        post?: string;
-        /** Stand-in copy for items without a post (yet). */
-        lead?: string;
-        url?: string;
-        subs?: string[];
-        ghost?: boolean;
-      }
-      interface Cluster {
-        id: string;
-        label: string;
-        key: string;
-        items: Item[];
-        cell?: AxialCoord;
-      }
-      const g = (id: string, label: string, sub: string): Item => ({
-        id,
-        label,
-        sub,
-        ghost: true,
-      });
       const slug = (s: string) => s.replaceAll(" ", "-");
       /** An item's anchor points: real h2s for post items, declared
        * subs for the rest. `head` is the route segment AND the DOM
@@ -518,57 +556,6 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         }
         return (item.subs ?? []).map((s) => ({ head: `h-${slug(s)}`, label: s }));
       }
-      const CLUSTERS: Cluster[] = [
-        {
-          id: "projects",
-          label: "projects",
-          key: "1",
-          items: [
-            { id: "hexpunk", label: "hexpunk", sub: "design system", post: "projects/hexpunk" },
-            { id: "snecko", label: "snecko", sub: "game", post: "projects/snecko" },
-            { id: "wok", label: "warrior of keyboard", sub: "game", post: "projects/warrior-of-keyboard" },
-            { id: "ddf", label: "discord dates", sub: "tool", post: "projects/discord-dates" },
-            g("questboard", "questboard", "soon"),
-            g("vtt", "vtt", "soon"),
-          ],
-        },
-        {
-          id: "arcade",
-          label: "arcade",
-          key: "2",
-          items: [
-            { id: "cart-snecko", label: "snecko", sub: "insert cart", lead: "Boot the snake. High scores are local and sacred.", url: "/arcade/snecko", subs: ["insert coin", "high scores"] },
-            { id: "cart-wok", label: "warrior of keyboard", sub: "insert cart", lead: "Boot the battle. The cartridge-insert animation is a real loading screen.", url: "/arcade/warrior-of-keyboard", subs: ["insert coin", "high scores"] },
-            g("freeplay", "free play", "no coins"),
-          ],
-        },
-        {
-          id: "writing",
-          label: "writing",
-          key: "3",
-          items: [
-            { id: "aetherblade", label: "aetherblade", sub: "d&d · class", post: "dnd/aetherblade" },
-            { id: "sanguine", label: "sanguine pact", sub: "d&d", post: "dnd/sanguine-pact" },
-            { id: "nihility", label: "oath of nihility", sub: "d&d", post: "dnd/oath-of-nihility" },
-            { id: "merlin", label: "merlin's claw", sub: "d&d", post: "dnd/merlins-claw" },
-            { id: "homerules", label: "my home rules", sub: "d&d · rules", post: "dnd/home-rules" },
-            { id: "post-ddf", label: "discord dates", sub: "dev log", post: "projects/discord-dates" },
-            { id: "post-pjax", label: "pjax", sub: "dev log", post: "projects/pjax" },
-            { id: "post-pwgen", label: "passwordgen", sub: "dev log", post: "projects/password-gen" },
-          ],
-        },
-        {
-          id: "about",
-          label: "about",
-          key: "4",
-          items: [
-            { id: "me", label: "about me", sub: "who i am", lead: "Izzy. Builds hexagons, games, and homebrew. This site is the proof.", url: "/about", subs: ["bio", "contact"] },
-            { id: "github", label: "github", sub: "zeraphie", lead: "Where the source lives — every project on this site, in the open.", url: "https://github.com/zeraphie", subs: ["profile"] },
-            { id: "oldsite", label: "the archive", sub: "old site", lead: "zeraphie.github.io, frozen with honour. The 2017 blog this world replaced.", url: "https://zeraphie.github.io", subs: ["visit the archive"] },
-          ],
-        },
-      ];
-
       const axialDistance = (a: AxialCoord, b: AxialCoord): number => {
         const dq = a.q - b.q;
         const dr = a.r - b.r;
@@ -831,11 +818,15 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       // ── router: the hash is the state ──
       type Route = { cat?: string; item?: string; head?: string };
       function parseRoute(): Route {
-        const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-        return { cat: parts[0], item: parts[1], head: parts[2] };
+        const resolved = resolvePath(location.pathname) ?? {};
+        return { ...resolved, head: location.hash.replace(/^#/, "") || undefined };
       }
       function go(path: string): void {
-        location.hash = path;
+        if (location.pathname + location.hash === path) {
+          return;
+        }
+        history.pushState(null, "", path);
+        applyRoute(parseRoute(), true);
       }
       let suppressSurfaceSync = false;
 
@@ -844,8 +835,10 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       }
 
       function setPath(route: Route): void {
-        const p = ["~", route.cat, route.item].filter(Boolean).join("/");
-        pathEl.innerHTML = `~<b>${p.slice(1)}</b>${route.head ? `<span>#${route.head}</span>` : ""}`;
+        const cluster = clusterById(route.cat);
+        const item = cluster?.items.find((entry) => entry.id === route.item);
+        const p = cluster && item ? itemPath(cluster.id, item) : cluster ? `/${cluster.id}` : "/";
+        pathEl.innerHTML = `~<b>${p === "/" ? "" : p}</b>${route.head ? `<span>#${route.head}</span>` : ""}`;
       }
 
       /** Dive framing that fits the whole hex on screen: the engine
@@ -989,7 +982,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         performDive(false);
       }
 
-      window.addEventListener("hashchange", () => applyRoute(parseRoute(), true));
+      window.addEventListener("popstate", () => applyRoute(parseRoute(), true));
 
       // Manual surfacing (ctrl-wheel out) drops the item segment.
       world.addEventListener("hp-grid-dive", (event) => {
@@ -1000,7 +993,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
             return;
           }
           if (current.item) {
-            history.replaceState(null, "", `#/${current.cat}`);
+            history.replaceState(null, "", `/${current.cat}`);
             applyRoute({ cat: current.cat }, false);
           }
         }
@@ -1035,7 +1028,10 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         }
         const item = target.closest<HTMLElement>(".hx-item");
         if (item?.dataset.item && mounted) {
-          go(`/${mounted.cluster.id}/${item.dataset.item}`);
+          const entry = mounted.cluster.items.find((e) => e.id === item.dataset.item);
+          if (entry) {
+            go(itemPath(mounted.cluster.id, entry));
+          }
           return;
         }
         const centre = target.closest("hp-cluster > hp-cell:first-child");
@@ -1107,7 +1103,10 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           track.state = "hint";
           return;
         }
-        go(`/${current.cat}/${id}`);
+        const entry = clusterById(current.cat)?.items.find((e) => e.id === id);
+        if (entry) {
+          go(itemPath(current.cat, entry));
+        }
       });
       track.addEventListener("hp-hextrack-sub", (event) => {
         // The event names the item the TRACK is focused on — which
@@ -1119,8 +1118,11 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           return;
         }
         const owner = clusterById(current.cat)?.items.find((entry) => entry.id === id);
-        const head = owner ? anchorsOf(owner).find((a) => a.label === sub)?.head : undefined;
-        go(`/${current.cat}/${id}/${head ?? slug(sub)}`);
+        if (!owner) {
+          return;
+        }
+        const head = anchorsOf(owner).find((a) => a.label === sub)?.head ?? slug(sub);
+        go(`${itemPath(current.cat, owner)}#${head}`);
       });
 
       // ── stage 1: the living seed ──
@@ -1232,7 +1234,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
 
       document.getElementById("hs-reset")!.addEventListener("click", () => {
         clusterOffsets.clear();
-        location.hash = "";
+        history.replaceState(null, "", "/");
         location.reload();
       });
 
@@ -1247,7 +1249,7 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         document.body.appendChild(hud);
         window.setInterval(() => {
           hud.textContent =
-            `route=${location.hash || "#/"} · open=${page.hasAttribute("data-open")}` +
+            `route=${location.pathname}${location.hash} · open=${page.hasAttribute("data-open")}` +
             ` · pageOp=${getComputedStyle(page).opacity}` +
             ` · dived=${world.dived} · worldVis=${world.style.visibility || "visible"}` +
             ` · worldPE=${world.style.pointerEvents || "auto"} · perf=${PERF_LOW ? "low" : "full"}`;
@@ -1287,6 +1289,20 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
           return;
         }
         placeCategories();
+        // Old links used hash routes (#/cat/item/head) — translate
+        // once to the canonical path and carry on.
+        const legacy = location.hash.match(/^#\/(.+)$/);
+        if (legacy) {
+          const [cat, item, head] = legacy[1].split("/").filter(Boolean);
+          const cluster = clusterById(cat);
+          const entry = cluster?.items.find((e) => e.id === item);
+          const target = cluster
+            ? entry
+              ? itemPath(cluster.id, entry) + (head ? `#${head}` : "")
+              : `/${cluster.id}`
+            : "/";
+          history.replaceState(null, "", target);
+        }
         const route = parseRoute();
         if (route.cat) {
           seedUnfold.open = true;
