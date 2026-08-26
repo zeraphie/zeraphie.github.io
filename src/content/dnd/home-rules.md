@@ -86,6 +86,7 @@ For spells that have a duration of 8 hours, and aren't already rituals and conce
 
 > **The following spells now can be cast as Ritual Spells and have a 24 hour duration**
 >
+> | Spell |
 > |---------------|
 > | Distort Value |
 > | Gift of Alacrity |
@@ -96,6 +97,7 @@ For spells that have a duration of 8 hours, and aren't already rituals and conce
 
 > **The following spells now have a 24 hour duration**
 >
+> | Spell |
 > |-----------------|
 > | Encode Thoughts |
 > | Aid |
@@ -110,6 +112,7 @@ For spells that have a duration of 8 hours, and aren't already rituals and conce
 
 > **The following spells now can be cast as Ritual Spells**
 >
+> | Spell |
 > |-------------------|
 > | Guardian of Faith |
 > | Dream |
@@ -127,6 +130,7 @@ Some feats are better or more interesting than others
 >
 > You have learned techniques to enhance your attacks with certain kinds of spells, gaining the following benefits:
 > 
+> | Benefit | Effect |
 > |---------|---------|
 > | **Ability Score Increase.** | Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20 |
 > | **Bypass Cover.** | Your Attack Rolls for Spells ignore Half Cover and Three-Quarters Cover |
@@ -186,6 +190,7 @@ Or you may use [the stat roller I made](https://codepen.io/chrysokitty/full/jOzg
 > The rolls you distribute are `6, 6, 6, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3`. Below is an example of how you could distribute these rolls as stats
 > 
 > | Stat | Rolls | Total |
+> |------|-------|-------|
 > | Str | 4, 3, 3 | 10 |
 > | Dex | 6, 6, 6 | 18 |
 > | Con | max | 18 |

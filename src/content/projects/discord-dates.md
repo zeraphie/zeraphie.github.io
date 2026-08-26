@@ -19,6 +19,7 @@ However, the amount of people who'll be able to get that timestamp is comparitiv
 > The format is as follows: `<t:${Math.floor(Date.now() / 1000)}:flag>` where `Date.now()` is the timestamp wanted, and `flag` is a preset set of formats to transform into:
 > 
 > | Flag | Format |
+> |------|--------|
 > | `t` | Short Time (i.e. `22:23 pm`) |
 > | `T` | Long Time (i.e. `22:23:00 pm`) |
 > | `d` | Short Date (i.e. `23/10/2022`) |
