@@ -1,0 +1,126 @@
+---
+/*
+  ─ izelya.me — THE JOURNAL (vessel workbench) ─
+
+  A standalone route holding the longform reading vessel while it
+  is built out: the full-viewport book — cover, bands, spine, two
+  leaves with their stack — at its three responsive tiers, with
+  hand-placed stand-in content. The pagination engine, real
+  metadata, content patterns, the turn, and the dive integration
+  land here step by step; then the vessel folds into the flow and
+  this route retires.
+*/
+import "@hexpunk/core/tokens.dark.css";
+import "@hexpunk/core/tokens.light.css";
+
+import "../styles/journal.css";
+
+const title = "the journal · izelya.me";
+const description = "The longform reading vessel, under construction.";
+
+const FILLER = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+  "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt, neque porro quisquam est qui dolorem ipsum.",
+  "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+  </head>
+  <body>
+    <main class="journal">
+      {
+        ["tl", "tr", "bl", "br"].map((corner) => (
+          <svg class="journal-corner" data-corner={corner} viewBox="0 0 31 31" aria-hidden="true">
+            <path
+              class="step"
+              d="M 20 0.5 L 30 10.5 L 30 30.5 L 10 30.5 L 0 20.5"
+              fill="none"
+              stroke-width="1"
+            />
+            <line class="echo" x1="14" y1="14" x2="21" y2="21" stroke-width="1" />
+          </svg>
+        ))
+      }
+
+      <header class="journal-band journal-band--head">
+        <span class="journal-site">izelya.me</span>
+        <span class="journal-crumb">// dnd · aetherblade</span>
+        <span class="journal-mode">read<i class="journal-dot"></i></span>
+      </header>
+
+      <section class="journal-page journal-page--verso">
+        <div class="journal-page__inner journal-page__inner--first">
+          <aside class="journal-meta">
+            <svg
+              class="journal-meta-icon"
+              width="60"
+              height="70"
+              viewBox="0 0 60 70"
+              aria-hidden="true"
+            >
+              <polygon
+                points="30,2 58,18.5 58,51.5 30,68 2,51.5 2,18.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"></polygon>
+            </svg>
+            <h1 class="journal-meta-title">Aetherblade</h1>
+            <p class="journal-meta-sub">
+              A homebrew class themed about inheritance of primordial power
+            </p>
+            <dl class="journal-meta-stats">
+              <dt>Date</dt>
+              <dd>2024.09.22</dd>
+              <dt>Reading</dt>
+              <dd>&approx; 33 min</dd>
+              <dt>Words</dt>
+              <dd>&approx; 7.3k</dd>
+              <dt>Collection</dt>
+              <dd>dnd</dd>
+              <dt>Status</dt>
+              <dd class="live">v0 · wip</dd>
+            </dl>
+          </aside>
+          <div class="journal-prose">
+            {FILLER.slice(0, 4).map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </section>
+
+      <div class="journal-spine" aria-hidden="true"></div>
+
+      <section class="journal-page journal-page--recto">
+        <div class="journal-page__inner">
+          <div class="journal-prose">
+            {FILLER.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </section>
+
+      <footer class="journal-band journal-band--foot">
+        <span class="journal-site">izelya.me</span>
+        <svg class="journal-sigil" width="20" height="22" viewBox="0 0 20 22" aria-hidden="true">
+          <polygon
+            points="10,1.6 19,6.3 19,15.7 10,20.4 1,15.7 1,6.3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"></polygon>
+          <circle class="ring" cx="10" cy="11" r="4" fill="none" stroke-width="0.9"></circle>
+          <circle cx="10" cy="11" r="1.3" fill="currentColor"></circle>
+        </svg>
+        <span class="journal-pager">page — of —<span class="arrows">‹‹ · ››</span></span>
+      </footer>
+    </main>
+  </body>
+</html>

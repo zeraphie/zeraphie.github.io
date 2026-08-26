@@ -1,0 +1,420 @@
+/* ─ journal.css — the reading vessel ─
+ *
+ * The longform journal: the book IS the viewport. The cover is the
+ * darkest layer and carries every embellishment — rails, ticks,
+ * corner steps, the header/footer bands, the spine — while the two
+ * pages float lighter on top of it with their leaf stack showing.
+ * Three tiers: metadata beside the prose, folded above it, then a
+ * single leaf. Imported by the journal route; global by construction. */
+
+/* Site-local palette — the one place these hex values may appear.
+   Brass is deliberately not a hexpunk token yet: it earns system
+   status only if the journal proves it. Everything interactive
+   stays on the --hp-* families; brass is passive trim only. */
+.journal {
+  --iz-brass: #8f7134;
+  --iz-brass-bright: #b8934a;
+  --iz-brass-dim: #574419;
+  --iz-parchment: #d9cdb4;
+  --iz-parchment-ink: #443a28;
+  --iz-cover: #0f1113;
+  --iz-page-verso: #1e2124;
+  --iz-page-recto: #1b1e20;
+  --iz-page-edge-1: #2e3134;
+  --iz-page-edge-2: #292c30;
+  --iz-page-edge-3: #24272a;
+  --iz-page-edge-4: #1f2226;
+
+  --journal-pad: 26px;
+  --journal-band-head: 40px;
+  --journal-band-foot: 38px;
+  --journal-spine: 64px;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--iz-cover, var(--hp-background));
+  color: var(--hp-on-surface);
+  font-family: "Chakra Petch", Inter, ui-sans-serif, system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* ── the cover ─────────────────────────────────────────────────── */
+
+.journal {
+  position: fixed;
+  inset: 0;
+  background: var(--iz-cover);
+  display: grid;
+  grid-template:
+    "head head head head head" var(--journal-band-head)
+    ". verso spine recto ." 1fr
+    "foot foot foot foot foot" var(--journal-band-foot)
+    / var(--journal-pad) 1fr var(--journal-spine) 1fr var(--journal-pad);
+}
+
+/* Bronze rail just inside the viewport edge, and the tick pulse
+   along the top and bottom — both live on the cover, never the
+   pages. */
+.journal::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid color-mix(in srgb, var(--iz-brass) 70%, transparent);
+  pointer-events: none;
+}
+.journal::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  --journal-tick: color-mix(in srgb, var(--iz-brass) 45%, transparent);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 55px, var(--journal-tick) 55px 56px) left top /
+      100% 4px no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 55px, var(--journal-tick) 55px 56px) left bottom
+      / 100% 4px no-repeat;
+}
+
+.journal-corner {
+  position: absolute;
+  width: 31px;
+  height: 31px;
+  pointer-events: none;
+}
+.journal-corner[data-corner="tl"] {
+  top: 6px;
+  left: 6px;
+}
+.journal-corner[data-corner="tr"] {
+  top: 6px;
+  right: 6px;
+  transform: scaleX(-1);
+}
+.journal-corner[data-corner="bl"] {
+  bottom: 6px;
+  left: 6px;
+  transform: scaleY(-1);
+}
+.journal-corner[data-corner="br"] {
+  bottom: 6px;
+  right: 6px;
+  transform: scale(-1);
+}
+.journal-corner .step {
+  stroke: var(--iz-brass-bright);
+}
+.journal-corner .echo {
+  stroke: var(--iz-brass-dim);
+}
+
+/* ── the bands ─────────────────────────────────────────────────── */
+
+.journal-band {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-inline: var(--journal-pad);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-width: 0;
+}
+.journal-band--head {
+  grid-area: head;
+}
+.journal-band--foot {
+  grid-area: foot;
+  position: relative;
+}
+
+.journal-site {
+  color: var(--iz-brass);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+.journal-crumb {
+  color: var(--hp-on-surface-variant);
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.journal-mode {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--hp-on-surface-variant);
+}
+.journal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--hp-secondary);
+}
+
+.journal-sigil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--iz-brass);
+}
+.journal-sigil .ring {
+  stroke: var(--iz-brass-bright);
+}
+.journal-pager {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hp-on-surface-variant);
+}
+.journal-pager .arrows {
+  color: var(--hp-primary-bright);
+  letter-spacing: 0.1em;
+}
+
+/* ── the spine ─────────────────────────────────────────────────── */
+
+/* Seam of light down the centre, one dim groove either side, and a
+   small gem where the spine meets the header band. */
+.journal-spine {
+  grid-area: spine;
+  position: relative;
+  background:
+    linear-gradient(color-mix(in srgb, var(--hp-primary-bright) 50%, transparent) 0 0) center / 1px
+      calc(100% - 12px) no-repeat,
+    linear-gradient(color-mix(in srgb, var(--iz-brass-dim) 60%, transparent) 0 0) calc(50% - 12px)
+      center / 1px calc(100% - 24px) no-repeat,
+    linear-gradient(color-mix(in srgb, var(--iz-brass-dim) 60%, transparent) 0 0) calc(50% + 12px)
+      center / 1px calc(100% - 24px) no-repeat;
+}
+.journal-spine::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translateX(-50%) rotate(45deg);
+  border: 1px solid color-mix(in srgb, var(--iz-brass-bright) 85%, transparent);
+}
+
+/* ── the pages ─────────────────────────────────────────────────── */
+
+.journal-page {
+  position: relative;
+  /* Grid items default their min sizes to content size, which would
+     let an overfull page stretch the vessel past the viewport —
+     pages must clip, never grow (overflow adds pages instead). */
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid color-mix(in srgb, var(--hp-primary) 50%, transparent);
+}
+.journal-page--verso {
+  grid-area: verso;
+  background: var(--iz-page-verso);
+  /* One read leaf behind the page — this is page one. */
+  box-shadow: -1.5px 2px 0 0 var(--iz-page-edge-2);
+}
+.journal-page--recto {
+  grid-area: recto;
+  background: var(--iz-page-recto);
+  /* The remaining pages: a stepped stack on the fore-edge and foot. */
+  box-shadow:
+    2.5px 2px 0 0 var(--iz-page-edge-1),
+    5px 4px 0 0 var(--iz-page-edge-2),
+    7.5px 6px 0 0 var(--iz-page-edge-3),
+    10px 8px 0 0 var(--iz-page-edge-4);
+}
+
+/* Each page shades into the gutter so the spread reads as one bound
+   thing rather than two panels. */
+.journal-page--verso::after,
+.journal-page--recto::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 34px;
+  pointer-events: none;
+}
+.journal-page--verso::after {
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgb(0 0 0 / 0.5));
+}
+.journal-page--recto::after {
+  left: 0;
+  background: linear-gradient(270deg, transparent, rgb(0 0 0 / 0.5));
+}
+
+.journal-page__inner {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 28px;
+  overflow: hidden;
+}
+.journal-page__inner--first {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 28px;
+}
+
+/* ── the metadata panel (page one) ─────────────────────────────── */
+
+.journal-meta {
+  border-right: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
+  padding-right: 24px;
+  min-width: 0;
+}
+.journal-meta-icon {
+  display: block;
+  color: var(--hp-primary-bright);
+  margin-bottom: 14px;
+}
+.journal-meta-title {
+  margin: 0 0 6px;
+  font-family: Iceland, "Chakra Petch", sans-serif;
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface);
+}
+.journal-meta-sub {
+  margin: 0 0 18px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--hp-on-surface-variant);
+}
+.journal-meta-stats {
+  margin: 0;
+  font-size: 12px;
+}
+.journal-meta-stats dt {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface-variant);
+  opacity: 0.7;
+}
+.journal-meta-stats dd {
+  margin: 2px 0 0;
+  padding-bottom: 7px;
+  border-bottom: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
+  color: var(--hp-on-surface);
+}
+.journal-meta-stats dd + dt {
+  margin-top: 8px;
+}
+.journal-meta-stats .live {
+  color: var(--hp-secondary);
+}
+
+/* ── placeholder prose (the real patterns arrive with the content
+      step; this only proves the page holds a text column) ───────── */
+
+.journal-prose {
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hp-on-surface);
+}
+.journal-prose p {
+  margin: 0 0 1em;
+}
+
+/* ── tier 2: the metadata folds to a band on page one ──────────── */
+
+@media (max-width: 1100px) {
+  .journal-page__inner--first {
+    display: block;
+  }
+  .journal-meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 18px;
+    align-items: center;
+    border-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  .journal-meta-icon {
+    grid-row: 1 / 4;
+    width: 44px;
+    height: auto;
+    margin: 0;
+  }
+  .journal-meta-title {
+    font-size: 24px;
+    margin: 0;
+  }
+  .journal-meta-sub {
+    margin: 2px 0 0;
+  }
+  .journal-meta-stats {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 18px;
+    margin-top: 6px;
+  }
+  .journal-meta-stats dt {
+    display: none;
+  }
+  .journal-meta-stats dd {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 11px;
+    color: var(--hp-on-surface-variant);
+  }
+}
+
+/* ── tier 3: one leaf ──────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .journal {
+    --journal-pad: 12px;
+    --journal-band-head: 24px;
+    --journal-band-foot: 22px;
+    grid-template:
+      "head head head" var(--journal-band-head)
+      ". verso ." 1fr
+      "foot foot foot" var(--journal-band-foot)
+      / var(--journal-pad) 1fr var(--journal-pad);
+  }
+  .journal-spine,
+  .journal-page--recto {
+    display: none;
+  }
+  /* The single leaf carries the remaining-pages stack itself. */
+  .journal-page--verso {
+    box-shadow:
+      2px 1.5px 0 0 var(--iz-page-edge-1),
+      4px 3px 0 0 var(--iz-page-edge-2),
+      6px 4.5px 0 0 var(--iz-page-edge-3);
+  }
+  .journal-page--verso::after {
+    display: none;
+  }
+  .journal-page__inner {
+    padding: 18px;
+  }
+  .journal-band {
+    font-size: 9px;
+    gap: 10px;
+  }
+  .journal-corner {
+    width: 18px;
+    height: 18px;
+  }
+}
