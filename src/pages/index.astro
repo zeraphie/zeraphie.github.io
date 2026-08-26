@@ -12,11 +12,38 @@
   animate. The longform reading vessel is still under design —
   the deep hex here is the standing baseline, not a decision.
 */
+import { getCollection, render } from "astro:content";
+
 import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 import "@hexpunk/core/elements.css";
 
 const SIDE = (100 - 2.5) / Math.sqrt(3);
+
+// Published posts render into inert <template>s the reading layer
+// clones on dive; their h2s become the hextrack's anchor points,
+// shipped to the client as a small JSON index.
+const posts = [
+  ...(await getCollection("dnd", ({ data }) => !data.draft)),
+  ...(await getCollection("projects", ({ data }) => !data.draft)),
+];
+const rendered = await Promise.all(
+  posts.map(async (entry) => {
+    const { Content, headings } = await render(entry);
+    return {
+      key: `${entry.collection}/${entry.id}`,
+      Content,
+      meta: {
+        title: entry.data.title,
+        description: entry.data.description,
+        anchors: headings
+          .filter((h) => h.depth === 2)
+          .map((h) => ({ head: h.slug, label: h.text })),
+      },
+    };
+  })
+);
+const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]));
 ---
 
 <!doctype html>
@@ -54,6 +81,21 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
 
       <hp-hextrack id="track" hidden></hp-hextrack>
     </div>
+
+    <div id="posts" hidden>
+      {
+        rendered.map(({ key, Content }) => (
+          <template data-post={key}>
+            <Content />
+          </template>
+        ))
+      }
+    </div>
+    <script
+      type="application/json"
+      id="post-index"
+      set:html={JSON.stringify(postIndex).replaceAll("<", "\\u003c")}
+    />
 
     <style is:global>
       html,
@@ -262,6 +304,13 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
         color: var(--hp-secondary);
         pointer-events: none;
       }
+      /* Wide content (the class tables) scrolls inside its own box —
+         the reading column itself never scrolls horizontally. */
+      .page-main table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+      }
       .page-main {
         position: absolute;
         top: 50%;
@@ -423,13 +472,27 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
       ];
 
       // ── content ──
+      interface PostMeta {
+        title: string;
+        description: string;
+        anchors: { head: string; label: string }[];
+      }
+      /** Server-rendered post metadata: titles, descriptions, and
+       * the h2 anchor points the rail and router navigate by. */
+      const POST_INDEX = JSON.parse(
+        document.getElementById("post-index")!.textContent!
+      ) as Record<string, PostMeta>;
+
       interface Item {
         id: string;
         label: string;
         sub: string;
-        lead: string;
-        url: string;
-        subs: string[];
+        /** collection/slug of the content entry this item reads. */
+        post?: string;
+        /** Stand-in copy for items without a post (yet). */
+        lead?: string;
+        url?: string;
+        subs?: string[];
         ghost?: boolean;
       }
       interface Cluster {
@@ -443,21 +506,28 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
         id,
         label,
         sub,
-        lead: "",
-        url: "",
-        subs: [],
         ghost: true,
       });
+      const slug = (s: string) => s.replaceAll(" ", "-");
+      /** An item's anchor points: real h2s for post items, declared
+       * subs for the rest. `head` is the route segment AND the DOM
+       * id scrollMain lands on. */
+      function anchorsOf(item: Item): { head: string; label: string }[] {
+        if (item.post) {
+          return POST_INDEX[item.post]?.anchors ?? [];
+        }
+        return (item.subs ?? []).map((s) => ({ head: `h-${slug(s)}`, label: s }));
+      }
       const CLUSTERS: Cluster[] = [
         {
           id: "projects",
           label: "projects",
           key: "1",
           items: [
-            { id: "hexpunk", label: "hexpunk", sub: "design system", lead: "Wireframe-cyberpunk Lit components — the system this very site is built from. Hexagonal-first, honest geometry, tokens all the way down.", url: "/projects/hexpunk", subs: ["overview", "elements", "changelog"] },
-            { id: "snecko", label: "snecko", sub: "game", lead: "A browser snake with opinions. Playable in the arcade, embedded from its own deployment.", url: "/projects/snecko", subs: ["about", "play in arcade"] },
-            { id: "wok", label: "warrior of keyboard", sub: "game", lead: "A keyboard battle game. Bring your fastest fingers and a mechanical conscience.", url: "/projects/warrior-of-keyboard", subs: ["about", "play in arcade"] },
-            { id: "ddf", label: "discord dates", sub: "tool", lead: "A timestamp formatter for Discord messages — paste a time, get every format Discord understands.", url: "/projects/discord-date-formatter", subs: ["about", "formats"] },
+            { id: "hexpunk", label: "hexpunk", sub: "design system", post: "projects/hexpunk" },
+            { id: "snecko", label: "snecko", sub: "game", post: "projects/snecko" },
+            { id: "wok", label: "warrior of keyboard", sub: "game", post: "projects/warrior-of-keyboard" },
+            { id: "ddf", label: "discord dates", sub: "tool", post: "projects/discord-dates" },
             g("questboard", "questboard", "soon"),
             g("vtt", "vtt", "soon"),
           ],
@@ -477,14 +547,14 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
           label: "writing",
           key: "3",
           items: [
-            { id: "aetherblade", label: "aetherblade", sub: "d&d · class", lead: "A full homebrew class, fifteen-column table of legend included. The hardest rendering test this site owns.", url: "/dnd/aetherblade", subs: ["the class", "subclass paths", "balance notes"] },
-            { id: "sanguine", label: "sanguine pact", sub: "d&d", lead: "Blood-priced power, notarised. A warlock pact for tables that read the fine print.", url: "/dnd/sanguine-pact", subs: ["the pact", "invocations"] },
-            { id: "nihility", label: "oath of nihility", sub: "d&d", lead: "A paladin oath sworn to the void, for players who keep their promises to nothing.", url: "/dnd/oath-of-nihility", subs: ["tenets", "oath spells"] },
-            { id: "merlin", label: "merlin's claw", sub: "d&d", lead: "An artefact with opinions about who wields it.", url: "/dnd/merlins-claw", subs: ["the artefact", "attunement"] },
-            { id: "homerules", label: "my home rules", sub: "d&d · rules", lead: "The table law. Argue with the DM, lose gracefully.", url: "/dnd/my-home-rules", subs: ["table law", "variants"] },
-            { id: "post-ddf", label: "discord dates", sub: "dev log", lead: "Building the timestamp formatter, and what Discord's format tokens taught me.", url: "/posts/discord-dates", subs: ["write-up", "source"] },
-            { id: "post-pjax", label: "pjax", sub: "dev log", lead: "Instant navigation, 2017 edition — the ancestor of everything this site does with a camera.", url: "/posts/pjax", subs: ["write-up", "source"] },
-            { id: "post-pwgen", label: "passwordgen", sub: "dev log", lead: "Small tool, strong strings.", url: "/posts/passwordgen", subs: ["write-up", "source"] },
+            { id: "aetherblade", label: "aetherblade", sub: "d&d · class", post: "dnd/aetherblade" },
+            { id: "sanguine", label: "sanguine pact", sub: "d&d", post: "dnd/sanguine-pact" },
+            { id: "nihility", label: "oath of nihility", sub: "d&d", post: "dnd/oath-of-nihility" },
+            { id: "merlin", label: "merlin's claw", sub: "d&d", post: "dnd/merlins-claw" },
+            { id: "homerules", label: "my home rules", sub: "d&d · rules", post: "dnd/home-rules" },
+            { id: "post-ddf", label: "discord dates", sub: "dev log", post: "projects/discord-dates" },
+            { id: "post-pjax", label: "pjax", sub: "dev log", post: "projects/pjax" },
+            { id: "post-pwgen", label: "passwordgen", sub: "dev log", post: "projects/password-gen" },
           ],
         },
         {
@@ -499,7 +569,6 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
         },
       ];
 
-      const slug = (s: string) => s.replaceAll(" ", "-");
       const axialDistance = (a: AxialCoord, b: AxialCoord): number => {
         const dq = a.q - b.q;
         const dr = a.r - b.r;
@@ -526,25 +595,39 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
       let currentMain: HTMLElement | null = null;
       let current: Route = {};
 
-      function pageHtml(item: Item): string {
-        const sections = item.subs
+      /** Stand-in body for items that have no post yet (arcade
+       * carts, external links) — sections mirror the declared subs
+       * so their anchors still work. */
+      function standInHtml(item: Item): string {
+        const sections = anchorsOf(item)
           .map(
-            (s) => `
-        <h2 id="h-${slug(s)}">${s}</h2>
-        <p>${item.lead} This section stands in for the real ${s} content — a standard page in the hex's middle band, set in the system's own prose rhythm.</p>
-        <p>[placeholder — your ${s} voice goes here. The geometry is honest; the words are not yet.]</p>`
+            ({ head, label }) => `
+        <h2 id="${head}">${label}</h2>
+        <p>${item.lead ?? ""} This section stands in for the real ${label} content — a standard page in the hex's middle band, set in the system's own prose rhythm.</p>`
           )
           .join("");
-        return `<h1>${item.label}</h1><p><em>${item.sub}</em> — ${item.lead}</p>${sections}`;
+        return `<h1>${item.label}</h1><p><em>${item.sub}</em> — ${item.lead ?? ""}</p>${sections}`;
       }
 
       function buildCard(item: Item): HTMLElement {
         const card = document.createElement("div");
         card.className = "page-card";
+        const meta = item.post ? `/${item.post}` : item.url ?? "";
         card.innerHTML = `<div class="page-hex"><div class="page-hex-in"></div></div>
-          <div class="page-meta">izelya.me ${item.url}</div>
-          <main class="hp-prose page-main">${pageHtml(item)}</main>
+          <div class="page-meta">izelya.me ${meta}</div>
+          <main class="hp-prose page-main"></main>
           <div class="page-foot">esc surfaces · the track waits at the right edge</div>`;
+        const main = card.querySelector<HTMLElement>(".page-main")!;
+        const info = item.post ? POST_INDEX[item.post] : undefined;
+        const tpl = item.post
+          ? document.querySelector<HTMLTemplateElement>(`template[data-post="${item.post}"]`)
+          : null;
+        if (info && tpl) {
+          main.innerHTML = `<h1>${info.title}</h1><p><em>${item.sub}</em> — ${info.description}</p>`;
+          main.appendChild(tpl.content.cloneNode(true));
+        } else {
+          main.innerHTML = standInHtml(item);
+        }
         return card;
       }
 
@@ -648,7 +731,7 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
       }
 
       function scrollMain(head: string, smooth: boolean): void {
-        const target = currentMain?.querySelector<HTMLElement>(`#h-${CSS.escape(head)}`);
+        const target = currentMain?.querySelector<HTMLElement>(`#${CSS.escape(head)}`);
         if (currentMain && target) {
           currentMain.scrollTo({
             top: Math.max(0, target.offsetTop - 8),
@@ -850,7 +933,7 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
             label: entry.label,
             sub: entry.sub,
             ghost: entry.ghost,
-            subs: entry.subs,
+            subs: anchorsOf(entry).map((a) => a.label),
           }));
           track.focal = item.id;
           track.state = "hint";
@@ -1032,9 +1115,12 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
         // Another hex: the route drives a full deep dive, and
         // performDive carries the heading through to land on it.
         const { id, sub } = (event as CustomEvent<HpHextrackSubDetail>).detail;
-        if (current.cat) {
-          go(`/${current.cat}/${id}/${slug(sub)}`);
+        if (!current.cat) {
+          return;
         }
+        const owner = clusterById(current.cat)?.items.find((entry) => entry.id === id);
+        const head = owner ? anchorsOf(owner).find((a) => a.label === sub)?.head : undefined;
+        go(`/${current.cat}/${id}/${head ?? slug(sub)}`);
       });
 
       // ── stage 1: the living seed ──

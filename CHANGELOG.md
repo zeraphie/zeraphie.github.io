@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   validation: `dnd` and `projects` published sets plus drafts (`lyrics`,
   `guides`, `about`, unpublished projects) carrying the old
   `published: false` as `draft: true`.
+- **Real content in the world** — every wired item dives into its actual
+  post: server-rendered collections clone into the reading layer, the
+  hextrack rail's anchor points are the posts' real h2 headings (route
+  heads = heading slugs), and wide tables scroll inside their own box.
+  Three lorem stubs (hexpunk, snecko, warrior of keyboard) fill the
+  projects cluster until their write-ups are real.
 - **House repo pattern** — oxfmt/oxlint configs, justfile, CI workflow
   (install → check/build, lint, format, test; deliberately no deploy),
   `.nvmrc` (lts/krypton), this changelog.

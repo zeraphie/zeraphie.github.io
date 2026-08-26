@@ -6,7 +6,6 @@ date: 2024-09-22
 ---
 This class is a version 0 WIP that I've been working on to give better access to different mono-element abilities. The current iteration is massively overtuned but I wanted to lay out all of my ideas first, and then scale them back after.
 
-# Aetherblade
 Masters of elemental power channeled through martial precision, Aetherblades are conduits of raw, primordial energy. Born from the mystical bond with a departed draconic, elemental entity or primordial existence, they wield a unique blend of spellcasting and combat, reshaping the battlefield with their dynamic abilities.
 
 ## The Source of Their Power
