@@ -12,65 +12,51 @@
   animate. The longform reading vessel is still under design —
   the deep hex here is the standing baseline, not a decision.
 */
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 
 import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 import "@hexpunk/core/elements.css";
 
-import { CLUSTERS, itemPath } from "../lib/flow-data";
+import { buildWorld } from "../lib/world";
 
 import "../styles/flow.css";
 
-// Every world state is a real page: home, each category, and each
-// item at its canonical path. All of them serve this same shell —
-// the client reads location.pathname and restores the state — but
-// each carries its own title and description for links and crawlers.
+// The world derives from the content collections: every collection
+// with at least one published post becomes a category, its posts the
+// items. Every world state is a real page — home, /<collection>, and
+// each post at /<collection>/<slug> — all serving this same shell
+// with their own title and description for links and crawlers.
 export async function getStaticPaths() {
-	const published = [
-		...(await getCollection("dnd", ({ data }) => !data.draft)),
-		...(await getCollection("projects", ({ data }) => !data.draft)),
-	];
-	const postDesc = new Map(published.map((e) => [`${e.collection}/${e.id}`, e.data.description]));
-	const paths = [
-		{
-			params: { route: undefined },
-			props: {
-				title: "izelya.me",
-				description: "Izzy's personal site — an hp-grid world of projects, games, and D&D homebrew.",
-			},
-		},
-		...CLUSTERS.map((c) => ({
-			params: { route: c.id },
-			props: { title: `${c.label} · izelya.me`, description: `${c.label} on izelya.me` },
-		})),
-	];
-	const seen = new Set<string>();
-	for (const cluster of CLUSTERS) {
-		for (const item of cluster.items) {
-			if (item.ghost) {
-				continue;
-			}
-			const route = itemPath(cluster.id, item).slice(1);
-			if (seen.has(route)) {
-				continue;
-			}
-			seen.add(route);
-			paths.push({
-				params: { route },
-				props: {
-					title: `${item.label} · izelya.me`,
-					description: (item.post && postDesc.get(item.post)) || item.lead || `${item.label} on izelya.me`,
-				},
-			});
-		}
-	}
-	return paths;
+  const { published, clusters } = await buildWorld();
+  const desc = new Map(published.map((e) => [`${e.collection}/${e.id}`, e.data.description]));
+  return [
+    {
+      params: { route: undefined },
+      props: {
+        title: "izelya.me",
+        description: "Izzy's personal site — an hp-grid world of projects, games, and D&D homebrew.",
+      },
+    },
+    ...clusters.map((c) => ({
+      params: { route: c.id },
+      props: { title: `${c.label} · izelya.me`, description: `${c.label} on izelya.me` },
+    })),
+    ...clusters.flatMap((c) =>
+      c.items.map((item) => ({
+        params: { route: item.post! },
+        props: {
+          title: `${item.label} · izelya.me`,
+          description: desc.get(item.post!) ?? `${item.label} on izelya.me`,
+        },
+      }))
+    ),
+  ];
 }
 
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description: string;
 }
 const { title, description } = Astro.props;
 
@@ -78,13 +64,10 @@ const SIDE = (100 - 2.5) / Math.sqrt(3);
 
 // Published posts render into inert <template>s the reading layer
 // clones on dive; their h2s become the hextrack's anchor points,
-// shipped to the client as a small JSON index.
-const posts = [
-  ...(await getCollection("dnd", ({ data }) => !data.draft)),
-  ...(await getCollection("projects", ({ data }) => !data.draft)),
-];
+// shipped to the client as a small JSON index alongside the world.
+const { published, clusters } = await buildWorld();
 const rendered = await Promise.all(
-  posts.map(async (entry) => {
+  published.map(async (entry) => {
     const { Content, headings } = await render(entry);
     return {
       key: `${entry.collection}/${entry.id}`,
@@ -119,10 +102,13 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       <hp-grid id="world" draggable>
         <hp-unfold-list id="seed-unfold" unordered hover q="0" r="0" draggable="false">
           <hp-cell variant="anchor" filled slot="source" id="seed-cell">izelya</hp-cell>
-          <hp-cell class="section" data-cluster="projects" variant="action">projects</hp-cell>
-          <hp-cell class="section" data-cluster="arcade" variant="action">arcade</hp-cell>
-          <hp-cell class="section" data-cluster="writing" variant="action">writing</hp-cell>
-          <hp-cell class="section" data-cluster="about" variant="action">about</hp-cell>
+          {
+            clusters.map((cluster) => (
+              <hp-cell class="section" data-cluster={cluster.id} variant="action">
+                {cluster.label}
+              </hp-cell>
+            ))
+          }
         </hp-unfold-list>
       </hp-grid>
 
@@ -154,6 +140,12 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
       id="post-index"
       set:html={JSON.stringify(postIndex).replaceAll("<", "\\u003c")}
     />
+    <script
+      is:inline
+      type="application/json"
+      id="world-index"
+      set:html={JSON.stringify(clusters).replaceAll("<", "\u003c")}
+    />
 
 
 
@@ -176,14 +168,20 @@ const postIndex = Object.fromEntries(rendered.map(({ key, meta }) => [key, meta]
         HpUnfoldList,
       } from "@hexpunk/core/wip";
 
-      import { CLUSTERS, itemPath } from "../lib/flow-data";
+      import { itemPath, type Cluster } from "../lib/flow-data";
       import { createClusterLayer } from "../lib/flow/clusters";
       import { initPerfMode, installDebugHud } from "../lib/flow/perf";
       import { anchorsOf, slug } from "../lib/flow/posts";
       import { createReadingLayer } from "../lib/flow/reading";
-      import { clusterById, parseRoute, routePath, type Route } from "../lib/flow/router";
+      import { createRouter, type Route } from "../lib/flow/router";
 
 const PERF_LOW = initPerfMode();
+
+      /** The world, as the build derived it from the collections. */
+      const CLUSTERS = JSON.parse(
+        document.getElementById("world-index")!.textContent!
+      ) as Cluster[];
+      const { clusterById, parseRoute, routePath } = createRouter(CLUSTERS);
 
       const PAD = 64;
       /** Category distance from the seed along its fan direction —
@@ -467,7 +465,7 @@ const clusters = createClusterLayer(world);
         if (item?.dataset.item && clusters.mounted) {
           const entry = clusters.mounted.cluster.items.find((e) => e.id === item.dataset.item);
           if (entry) {
-            go(itemPath(clusters.mounted.cluster.id, entry));
+            go(itemPath(entry));
           }
           return;
         }
@@ -542,7 +540,7 @@ const clusters = createClusterLayer(world);
         }
         const entry = clusterById(current.cat)?.items.find((e) => e.id === id);
         if (entry) {
-          go(itemPath(current.cat, entry));
+          go(itemPath(entry));
         }
       });
       track.addEventListener("hp-hextrack-sub", (event) => {
@@ -559,7 +557,7 @@ const clusters = createClusterLayer(world);
           return;
         }
         const head = anchorsOf(owner).find((a) => a.label === sub)?.head ?? slug(sub);
-        go(`${itemPath(current.cat, owner)}#${head}`);
+        go(`${itemPath(owner)}#${head}`);
       });
 
       // ── stage 1: the living seed ──
