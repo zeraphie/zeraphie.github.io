@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   validation: `dnd` and `projects` published sets plus drafts (`lyrics`,
   `guides`, `about`, unpublished projects) carrying the old
   `published: false` as `draft: true`.
+- **The collections are the categories** — the seed's bloom shows every
+  content collection with at least one published post (dnd and projects
+  today; lyrics/guides/about appear the day a post publishes), items are
+  the posts themselves, and the world index ships as JSON. The custom
+  category list is gone.
+- **Slim pages, prefetched world** — each page inlines only its own post
+  (home fell 103KB → 7KB; every URL owns exactly its content for SEO);
+  the bloom prefetches every published post so dives and sibling slides
+  read from cache, never the network. Long item labels shrink to fit
+  their hex.
 - **Real content in the world** — every wired item dives into its actual
   post: server-rendered collections clone into the reading layer, the
   hextrack rail's anchor points are the posts' real h2 headings (route
