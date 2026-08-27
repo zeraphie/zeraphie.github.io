@@ -450,13 +450,16 @@ const clusters = createClusterLayer(world);
         }
         const cell = clusterEl.querySelector<HTMLElement>(`[data-item="${item.id}"]`)!;
 
-        const performDive = (instant: boolean) => {
+        // Opening a post is instant: the camera is placed, not flown.
+        // The journal fills the viewport anyway, so a flight beneath
+        // it is motion nobody sees the point of — and the world's
+        // hover/relight kept surfacing through the fade.
+        const performDive = () => {
           prefetchPosts(cluster.items.map((entry) => entry.post));
           // The world goes pointer-dead the moment the dive starts:
-          // nothing beneath the incoming page may hover or re-light
-          // while the camera is mid-flight.
+          // nothing beneath the incoming page may hover or re-light.
           world.style.pointerEvents = "none";
-          world.diveInto(diveRect(cell), { instant });
+          world.diveInto(diveRect(cell), { instant: true });
           track.items = cluster.items.map((entry) => ({
             id: entry.id,
             label: entry.label,
@@ -470,14 +473,14 @@ const clusters = createClusterLayer(world);
           current = { cat: cluster.id, item: item.id, head: route.head };
           setPath(current);
           syncCalm();
-          reading.open(item, route.head, instant);
+          reading.open(item, route.head, true);
         };
 
         if (!animated) {
           // Deep link: place the pre-dive camera at the category view
           // first, so surfacing later returns somewhere sensible.
           world.jumpTo(clusterEl, zCluster());
-          performDive(true);
+          performDive();
           return;
         }
         if (prevDived && current.item !== item.id) {
@@ -502,7 +505,7 @@ const clusters = createClusterLayer(world);
           suppressSurfaceSync = true;
           reading.close();
           world.surface();
-          window.setTimeout(() => performDive(false), 430);
+          window.setTimeout(performDive, 430);
           return;
         }
         if (prevDived && current.item === item.id) {
@@ -515,7 +518,7 @@ const clusters = createClusterLayer(world);
           }
           return;
         }
-        performDive(false);
+        performDive();
       }
 
       window.addEventListener("popstate", () => applyRoute(parseRoute(), true));
