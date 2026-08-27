@@ -95,11 +95,12 @@ const meta = {
         <span class="journal-mode">read<i class="journal-dot"></i></span>
       </header>
 
-      <section class="journal-page journal-page--verso" aria-hidden="true"></section>
-      <div class="journal-spine" aria-hidden="true"></div>
-      <section class="journal-page journal-page--recto" aria-hidden="true"></section>
+      <div class="journal-body">
+        <section class="journal-page journal-page--verso" aria-hidden="true"></section>
+        <div class="journal-spine" aria-hidden="true"></div>
+        <section class="journal-page journal-page--recto" aria-hidden="true"></section>
 
-      <div class="journal-pages" id="journal-pages">
+        <div class="journal-pages" id="journal-pages">
         <aside class="journal-meta">
           <svg
             class="journal-meta-icon"
@@ -132,6 +133,13 @@ const meta = {
         <div class="journal-prose">
           <Content />
         </div>
+        </div>
+
+        {
+          ["tl", "tr", "bl", "br"].map((corner) => (
+            <div class="journal-corner-zone" data-corner={corner} aria-hidden="true" />
+          ))
+        }
       </div>
 
       <footer class="journal-band journal-band--foot">
@@ -162,6 +170,7 @@ const meta = {
       import "@hexpunk/core";
 
       import { initPerfMode } from "../../lib/flow/perf";
+      import { beginTurn, type TurnController } from "../../lib/journal-turn";
 
       const PERF_LOW = initPerfMode();
 
@@ -207,28 +216,88 @@ const meta = {
         next.disabled = last >= count;
       }
 
-      // The hinge is presentation: state and scroll land in the DOM
-      // update; the view transition folds the old page region over
-      // the live cover. PERF_LOW swaps instantly instead.
-      const useVT = !PERF_LOW && typeof document.startViewTransition === "function";
+      // The leaf overlay is presentation: state and scroll land in
+      // commit() before the first animated frame. Reduced motion and
+      // PERF_LOW turn instantly instead.
+      const body = document.querySelector(".journal-body") as HTMLElement;
+      const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const ANIMATE = !PERF_LOW && !REDUCED;
+      let busy = false;
+
+      function startTurn(target: number, dir: 1 | -1): TurnController | null {
+        const next_ = clampLead(target);
+        if (next_ === lead || busy) {
+          return null;
+        }
+        const from = lead;
+        lead = next_;
+        if (!ANIMATE) {
+          apply();
+          return null;
+        }
+        busy = true;
+        return beginTurn({
+          strip: pages,
+          host: body,
+          dir,
+          oldScroll: from * unit,
+          newScroll: next_ * unit,
+          perView,
+          commit: () => apply(),
+          revert: () => {
+            lead = from;
+            apply();
+          },
+        });
+      }
 
       function go(target: number, dir: 1 | -1): void {
-        const next_ = clampLead(target);
-        if (next_ === lead) {
-          return;
-        }
-        lead = next_;
-        if (!useVT) {
-          apply();
-          return;
-        }
-        document.documentElement.dataset.turn = dir > 0 ? "forward" : "back";
-        document.startViewTransition(() => apply()).finished.finally(() => {
-          delete document.documentElement.dataset.turn;
+        const controller = startTurn(target, dir);
+        controller?.settle(true).finally(() => {
+          busy = false;
         });
       }
 
       const turn = (dir: 1 | -1) => go(lead + dir * perView, dir);
+
+      // Corner drags scrub the turn; releasing past the halfway
+      // line completes it, short of it the leaf settles back.
+      for (const zone of document.querySelectorAll<HTMLElement>(".journal-corner-zone")) {
+        zone.addEventListener("pointerdown", (event) => {
+          const corner = zone.dataset.corner ?? "";
+          const dir: 1 | -1 =
+            perView > 1
+              ? corner.endsWith("r")
+                ? 1
+                : -1
+              : corner.startsWith("b")
+                ? 1
+                : -1;
+          const controller = startTurn(lead + dir * perView, dir);
+          if (!controller) {
+            return;
+          }
+          event.preventDefault();
+          zone.setPointerCapture(event.pointerId);
+          let last = controller.progressFrom(event.clientX, event.clientY);
+          controller.set(last);
+          const move = (moved: PointerEvent) => {
+            last = controller.progressFrom(moved.clientX, moved.clientY);
+            controller.set(last);
+          };
+          const finish = () => {
+            zone.removeEventListener("pointermove", move);
+            zone.removeEventListener("pointerup", finish);
+            zone.removeEventListener("pointercancel", finish);
+            controller.settle(last > 0.5).finally(() => {
+              busy = false;
+            });
+          };
+          zone.addEventListener("pointermove", move);
+          zone.addEventListener("pointerup", finish);
+          zone.addEventListener("pointercancel", finish);
+        });
+      }
 
       prev.addEventListener("click", () => turn(-1));
       next.addEventListener("click", () => turn(1));
