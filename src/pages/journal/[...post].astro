@@ -58,7 +58,6 @@ const meta = {
   reading: `≈ ${Math.max(1, Math.round(words / 220))} min`,
   words: words >= 1000 ? `≈ ${(words / 1000).toFixed(1)}k` : String(words),
   collection: entry.collection,
-  status: entry.data.draft ? "draft" : "live",
 };
 ---
 
@@ -122,14 +121,12 @@ const meta = {
           <dl class="journal-meta-stats">
             <dt>Date</dt>
             <dd>{meta.date}</dd>
-            <dt>Reading</dt>
+            <dt>Time</dt>
             <dd>{meta.reading}</dd>
             <dt>Words</dt>
             <dd>{meta.words}</dd>
             <dt>Collection</dt>
             <dd>{meta.collection}</dd>
-            <dt>Status</dt>
-            <dd class:list={{ live: meta.status === "live" }}>{meta.status}</dd>
           </dl>
         </aside>
         <div class="journal-prose">
