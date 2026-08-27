@@ -18,7 +18,8 @@
   --iz-parchment: #d9cdb4;
   --iz-parchment-ink: #443a28;
   --iz-parchment-fold: #c4b795;
-  --iz-parchment-clip: #8a8070;
+  /* The third metal beside brass and paper: steel for wire fittings. */
+  --iz-silver: #76858f;
   --iz-cover: #0f1113;
   --iz-page-verso: #1e2124;
   --iz-page-recto: #1b1e20;
