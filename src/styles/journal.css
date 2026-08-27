@@ -31,6 +31,12 @@
   --iz-page-edge-4: #1f2226;
 
   --journal-pad: 34px;
+  /* Widest the book may grow. Sized so the two text columns land at
+     about 65 characters — past that the measure runs long enough
+     that the eye loses the line on its return sweep. Derived from
+     the grid: book = 2 x column + pad*2 + spine + strip padding*2 +
+     gap, so a 441px column caps the book here. */
+  --journal-max: 1126px;
   /* Inset of the bronze rail from the viewport edge. */
   --journal-rail: 6px;
   --journal-band-head: var(--journal-pad);
@@ -40,17 +46,20 @@
   --journal-hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-/* While a journal is open, the page ground is the cover — the
-   world's ambience sits above it, the opaque leaves above that. */
-body[data-journal-open] {
-  background: var(--iz-cover);
-}
-
 /* ── the cover ─────────────────────────────────────────────────── */
 
+/* The cover carries its own ground rather than borrowing the body's,
+   because it no longer fills the viewport: once the screen outgrows
+   the measure the book stops widening and centres, and the world's
+   ground and ambience become the surround it rests on. Fixed with
+   every inset at zero and auto inline margins, so the centring is
+   the over-constraint resolving itself. */
 .journal {
   position: fixed;
   inset: 0;
+  max-width: var(--journal-max);
+  margin-inline: auto;
+  background: var(--iz-cover);
   z-index: 1;
   display: grid;
   grid-template:
