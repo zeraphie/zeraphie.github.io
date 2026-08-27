@@ -386,6 +386,86 @@ body {
   margin-top: 8px;
 }
 
+/* ── the turn — a view-transition hinge on the page region ─────── */
+
+/* Only the strip snapshots: the root opts out where supported, so
+   the cover chrome and the live ambience never freeze — the fold
+   happens over them. */
+:root {
+  view-transition-name: none;
+}
+.journal-pages {
+  view-transition-name: journal-pages;
+}
+
+/* Blank paper behind the snapshots — the live, already-turned strip
+   must not bleed through while the halves are clipped. */
+::view-transition-image-pair(journal-pages) {
+  background: linear-gradient(90deg, var(--iz-page-verso) 0 50%, var(--iz-page-recto) 50% 100%);
+}
+
+/* Forward: the old recto folds to the spine (with a travelling
+   dim), then the new verso lays open leftward from the spine. */
+::view-transition-old(journal-pages) {
+  z-index: 2;
+  clip-path: inset(0 0 0 50%);
+  transform-origin: 50% 50%;
+  animation: journal-fold-out 420ms cubic-bezier(0.5, 0, 0.7, 0.4) both;
+}
+::view-transition-new(journal-pages) {
+  z-index: 1;
+  animation: journal-lay-open 420ms cubic-bezier(0.3, 0.5, 0.2, 1) both;
+}
+@keyframes journal-fold-out {
+  0% {
+    transform: none;
+    filter: brightness(1);
+  }
+  50%,
+  100% {
+    transform: perspective(1400px) rotateY(-90deg);
+    filter: brightness(0.45);
+  }
+}
+@keyframes journal-lay-open {
+  0%,
+  50% {
+    clip-path: inset(0 0 0 50%);
+  }
+  100% {
+    clip-path: inset(0);
+  }
+}
+
+/* Backward mirrors: the old verso folds, the new recto lays open. */
+html[data-turn="back"] ::view-transition-old(journal-pages) {
+  clip-path: inset(0 50% 0 0);
+  animation-name: journal-fold-out-back;
+}
+html[data-turn="back"] ::view-transition-new(journal-pages) {
+  animation-name: journal-lay-open-back;
+}
+@keyframes journal-fold-out-back {
+  0% {
+    transform: none;
+    filter: brightness(1);
+  }
+  50%,
+  100% {
+    transform: perspective(1400px) rotateY(90deg);
+    filter: brightness(0.45);
+  }
+}
+@keyframes journal-lay-open-back {
+  0%,
+  50% {
+    clip-path: inset(0 50% 0 0);
+  }
+  100% {
+    clip-path: inset(0);
+  }
+}
+
 /* Prose styling — everything the content itself wears — lives in
    journal-prose.css; this sheet is only the vessel. */
 
@@ -501,4 +581,48 @@ body {
     width: 18px;
     height: 18px;
   }
+
+  /* One leaf: the whole old page folds at the book's left edge and
+     the new one fades open — no halves to hinge. */
+  ::view-transition-image-pair(journal-pages) {
+    background: var(--iz-page-verso);
+  }
+  ::view-transition-old(journal-pages),
+  html[data-turn="back"] ::view-transition-old(journal-pages) {
+    clip-path: none;
+    transform-origin: 0 50%;
+  }
+  ::view-transition-new(journal-pages),
+  html[data-turn="back"] ::view-transition-new(journal-pages) {
+    animation-name: journal-fade-in;
+  }
+}
+
+/* Honest floors. Reduced motion turns with a short crossfade (last
+   in the sheet so it outranks the direction variants); PERF_LOW
+   skips the transition in script and rests the ambience. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(journal-pages),
+  html[data-turn="back"] ::view-transition-old(journal-pages) {
+    clip-path: none;
+    animation: journal-fade-out 120ms ease both;
+  }
+  ::view-transition-new(journal-pages),
+  html[data-turn="back"] ::view-transition-new(journal-pages) {
+    clip-path: none;
+    animation: journal-fade-in 120ms ease both;
+  }
+}
+@keyframes journal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes journal-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+body[data-perf="low"] #journal-bg {
+  display: none;
 }
