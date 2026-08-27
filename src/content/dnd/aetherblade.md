@@ -248,7 +248,8 @@ Your powers come from a draconic, elemental or primordial being that fused with 
 While your origin is tied to a single elemental essence, your mastery over Aetheric Conduits allows you to expand and adapt, borrowing from the other elements to overcome challenges and forge your own path. Whether you are a blazing warrior of destruction, a sentinel of ice and order, a tempest of chaotic energy, or an immovable bulwark, your origin reflects the elemental force that burns brightest within you.
 
 ## Blazing Warrior
-*"I am the fire that burns away the darkness."*
+> [!quote]
+> *"I am the fire that burns away the darkness."*
 
 A Blazing Warrior Aetherblade is a relentless force of destruction, wielding flames with precision and fury. They embody the uncontrollable nature of fire, channeling their inner inferno to consume their enemies. These Aetherblades thrive on overwhelming offense, searing the battlefield with explosive power and leaving scorched ruins in their wake. Their connection to fire grants them devastating strikes and abilities that intensify the longer the battle rages.
 
@@ -311,7 +312,8 @@ As a bonus action, you ignite your body in a fiery aura, transforming into a liv
 You can use this feature once per long rest.
 
 ## Ice Sentinel
-*"Winter is eternal, and so am I."*
+> [!quote]
+> *"Winter is eternal, and so am I."*
 
 Ice Sentinels are masters of icy constructs and control, representing the unyielding and still nature of winter. These Aetherblades wield their cold magic to create barriers, entrap foes, and summon frozen allies to fight alongside them. Their combat style emphasizes methodical strikes and tactical control, ensuring that the battlefield remains in their icy grasp. By embracing the chill, they endure where others falter, turning patience and persistence into their greatest weapons.
 
@@ -375,7 +377,8 @@ As a bonus action, you envelop yourself in a shimmering frost, transforming into
 You can use this feature once per long rest.
 
 ## Chaotic Tempest
-*"Like lightning, I strike where least expected."*
+> [!quote]
+> *"Like lightning, I strike where least expected."*
 
 Chaotic Tempests harness the speed and chaos of the storm, zipping across the battlefield with unmatched agility. They embody the swift, unpredictable nature of lightning, delivering devastating strikes and vanishing before retaliation. These Aetherblades thrive on mobility, using their powers to evade, confuse, and outmaneuver their foes. With every flash of electricity, they leave their enemies reeling, always one step ahead and impossible to pin down.
 ### Stormcaller’s Manifestation
@@ -436,7 +439,8 @@ As a bonus action, you surge with lightning and thunder, transforming into a liv
 - **Thunderous Strikes:** Your Storm's Edge weapon attacks deal an additional 2d10 lightning damage. On a hit, you can push the target 10 feet away.
 
 ## Earthen Bulwark
-*"I am the mountain that cannot be moved."*
+> [!quote]
+> *"I am the mountain that cannot be moved."*
 
 Earthen Bulwarks are stalwart defenders and masters of battlefield control, drawing their power from the immovable strength of the earth. They reshape the terrain to hinder foes, protect allies, and establish dominion over the battlefield. These Aetherblades are unyielding, their power as steady as the ground beneath their feet. With their mastery of stone and soil, they ensure their enemies face an uphill battle, turning every confrontation into a war of attrition that only they can win.
 
