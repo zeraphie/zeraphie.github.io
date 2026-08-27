@@ -350,3 +350,161 @@
 .journal-sitemap a:hover {
   border-bottom: 1px solid color-mix(in srgb, var(--hp-secondary) 60%, transparent);
 }
+
+/* ── the cartridge: a post's playable build ───────────────────────
+      The SNES silhouette in the house language — ridged shoulders,
+      a label window, and the connector lip carrying the call to
+      action, so the affordance sits where the slot would take it.
+      Azure throughout: brass is never interactive. */
+
+.journal-cartridge {
+  --cart-edge: color-mix(in srgb, var(--hp-primary) 55%, transparent);
+  --cart-shoulder: #20272c;
+  --cart-ridge: #2a3238;
+  display: block;
+  width: 260px;
+  max-width: 100%;
+  margin: 1.4em auto 1.8em;
+  border: 0;
+  text-decoration: none;
+  break-inside: avoid;
+  /* The shoulders sit outside the shell, so the whole control is
+     one padded box rather than three positioned pieces. */
+  padding-inline: 34px;
+  position: relative;
+  transition:
+    transform 140ms ease,
+    filter 140ms ease;
+}
+.journal-cartridge::before,
+.journal-cartridge::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  width: 34px;
+  background:
+    radial-gradient(circle at 50% 8px, var(--iz-silver) 1.4px, transparent 1.6px) no-repeat,
+    radial-gradient(circle at 50% calc(100% - 8px), var(--iz-silver) 1.4px, transparent 1.6px)
+      no-repeat,
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 16px,
+      var(--cart-ridge) 16px 28px,
+      transparent 28px 36px
+    ),
+    var(--cart-shoulder);
+}
+.journal-cartridge::before {
+  left: 0;
+}
+.journal-cartridge::after {
+  right: 0;
+}
+
+.journal-cartridge__shell {
+  display: block;
+  padding: 14px;
+  background: #2a3238;
+  border: 1.2px solid var(--cart-edge);
+  /* Chamfered top corners — the plate language the rail speaks. */
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.journal-cartridge__label {
+  display: block;
+  padding: 10px 12px 12px;
+  min-height: 84px;
+  box-sizing: border-box;
+  background: #16232b;
+  border: 1px solid var(--cart-edge);
+  /* The label's sweep: a lattice line where the SNES swoosh was. */
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent 0 20%,
+      color-mix(in srgb, var(--hp-primary) 30%, transparent) 20% 21%,
+      transparent 21% 100%
+    ),
+    linear-gradient(
+      100deg,
+      transparent 0 26%,
+      color-mix(in srgb, var(--hp-primary) 18%, transparent) 26% 27%,
+      transparent 27% 100%
+    );
+}
+.journal-cartridge__glyph {
+  display: block;
+  width: 22px;
+  height: 22px;
+  color: var(--hp-primary-bright);
+  margin-bottom: 6px;
+}
+.journal-cartridge__glyph svg {
+  width: 100%;
+  height: 100%;
+}
+.journal-cartridge__title {
+  display: block;
+  font-family: Iceland, "Chakra Petch", sans-serif;
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface);
+}
+
+.journal-cartridge__lip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 7px 0;
+  background: #20272c;
+  border: 0.8px solid color-mix(in srgb, var(--cart-edge) 80%, transparent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface-variant);
+}
+.journal-cartridge__out {
+  font-style: normal;
+  letter-spacing: 0;
+  text-indent: 0;
+  opacity: 0.7;
+}
+
+/* Hover lifts it toward you; pressing seats it. */
+.journal-cartridge:hover,
+.journal-cartridge:focus-visible {
+  --cart-edge: var(--hp-primary-bright);
+  transform: translateY(-4px);
+  outline: none;
+}
+.journal-cartridge:hover .journal-cartridge__lip,
+.journal-cartridge:focus-visible .journal-cartridge__lip {
+  color: var(--hp-on-surface);
+}
+.journal-cartridge:active {
+  --cart-edge: var(--hp-secondary);
+  transform: translateY(3px);
+}
+.journal-cartridge:active .journal-cartridge__lip {
+  color: var(--hp-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-cartridge {
+    transition: none;
+  }
+  .journal-cartridge:hover,
+  .journal-cartridge:focus-visible,
+  .journal-cartridge:active {
+    transform: none;
+  }
+}

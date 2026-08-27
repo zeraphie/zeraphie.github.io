@@ -17,6 +17,7 @@ import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 import "@hexpunk/core/elements.css";
 
+import Cartridge from "../components/Cartridge.astro";
 import Seo from "../components/Seo.astro";
 import { buildWorld } from "../lib/world";
 
@@ -93,6 +94,7 @@ const rendered = await Promise.all(
         title: entry.data.title,
         description: entry.data.description,
         icon: entry.data.icon ?? null,
+        game: entry.data.game ?? null,
         date: entry.data.date.toISOString().slice(0, 10),
         words: (entry.body ?? "").split(/\s+/).filter(Boolean).length,
         anchors: headings
@@ -237,6 +239,16 @@ const CurrentContent = currentPost?.Content;
       {
         currentPost && CurrentContent && (
           <template data-post={currentPost.key}>
+            {
+              currentPost.meta.game && (
+                <Cartridge
+                  href={currentPost.meta.game}
+                  title={currentPost.meta.title}
+                  icon={currentPost.meta.icon}
+                  collection={currentPost.key.split("/")[0]!}
+                />
+              )
+            }
             <CurrentContent />
           </template>
         )
