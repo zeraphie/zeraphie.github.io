@@ -1,0 +1,233 @@
+/* ─ journal-prose.css — the content's language ─
+ *
+ * What a post wears inside the journal's pages: numbered hex-chip
+ * section heads (the h2s are the rail's anchors), hex bullets,
+ * table and code dress with the one sanctioned scroll exception,
+ * and the blockquote patterns — a wireframe callout everywhere,
+ * parchment handouts in the dnd collection. The vessel around the
+ * content lives in journal.css. */
+
+.journal-prose {
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hp-on-surface);
+  orphans: 2;
+  widows: 2;
+  counter-reset: journal-section;
+}
+.journal-prose p {
+  margin: 0 0 1em;
+}
+.journal-prose > :first-child {
+  margin-top: 0;
+}
+.journal-prose a {
+  color: var(--hp-primary-bright);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--hp-primary) 45%, transparent);
+}
+.journal-prose a:hover {
+  color: var(--hp-secondary);
+  border-color: color-mix(in srgb, var(--hp-secondary) 60%, transparent);
+}
+
+/* ── section heads: chip + number + title + rule + diamond ─────── */
+
+.journal-prose h2,
+.journal-prose h3 {
+  break-after: avoid;
+  color: var(--hp-primary-bright);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.journal-prose h2 {
+  counter-increment: journal-section;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin: 1.7em 0 0.8em;
+}
+.journal-prose h2::before {
+  content: counter(journal-section, decimal-leading-zero);
+  flex: none;
+  width: 20px;
+  height: 23px;
+  clip-path: var(--journal-hex);
+  background: color-mix(in srgb, var(--hp-primary) 16%, transparent);
+  display: grid;
+  place-items: center;
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+}
+.journal-prose h2::after {
+  content: "";
+  flex: 1;
+  min-width: 40px;
+  height: 9px;
+  background: color-mix(in srgb, var(--hp-primary) 55%, transparent);
+  mask:
+    linear-gradient(#000 0 0) 0 50% / calc(100% - 13px) 1px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0 10 5 5 10 0 5Z'/%3E%3C/svg%3E")
+      right center / 9px 9px no-repeat;
+}
+.journal-prose h3 {
+  font-size: 13px;
+  margin: 1.5em 0 0.6em;
+}
+.journal-prose h3::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 10.4px;
+  margin-right: 8px;
+  clip-path: var(--journal-hex);
+  background: color-mix(in srgb, var(--hp-primary-bright) 65%, transparent);
+  vertical-align: -1px;
+}
+
+/* ── lists: hex bullets ────────────────────────────────────────── */
+
+.journal-prose ul {
+  list-style: none;
+  padding-left: 18px;
+  margin: 0 0 1em;
+}
+.journal-prose ul li {
+  position: relative;
+  margin: 0 0 0.4em;
+}
+.journal-prose ul li::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 0.42em;
+  width: 8px;
+  height: 9.2px;
+  clip-path: var(--journal-hex);
+  background: color-mix(in srgb, var(--hp-primary-bright) 55%, transparent);
+}
+.journal-prose ol {
+  padding-left: 22px;
+  margin: 0 0 1em;
+}
+.journal-prose ol li {
+  margin: 0 0 0.4em;
+}
+
+.journal-prose hr {
+  border: 0;
+  height: 1px;
+  margin: 1.4em 0;
+  background: color-mix(in srgb, var(--hp-outline-variant) 45%, transparent);
+}
+
+/* ── tables: hairline grid under an azure header rule; oversize
+      lives in its own box — the one sanctioned scroll exception ── */
+
+.journal-prose table {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  break-inside: avoid;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.journal-prose th,
+.journal-prose td {
+  padding: 3px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+.journal-prose th {
+  color: var(--hp-primary-bright);
+  border-bottom: 1px solid color-mix(in srgb, var(--hp-primary) 70%, transparent);
+}
+.journal-prose th:not(:last-child),
+.journal-prose td:not(:last-child) {
+  border-right: 1px solid color-mix(in srgb, var(--hp-outline-variant) 30%, transparent);
+}
+.journal-prose tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--hp-primary) 4%, transparent);
+}
+
+/* ── code: a contained slab (long lines share the exception) ───── */
+
+.journal-prose code {
+  font-family: "Fira Code", ui-monospace, monospace;
+  font-size: 0.85em;
+}
+.journal-prose pre {
+  margin: 0 0 1em;
+  padding: 12px 14px;
+  font-family: "Fira Code", ui-monospace, monospace;
+  /* A well sunk into the page, not a raised slab — the journal's
+     paper is already darker than the theme's lowest surface. */
+  background: rgb(0 0 0 / 0.32);
+  border: 1px solid color-mix(in srgb, var(--hp-outline-variant) 40%, transparent);
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  break-inside: avoid;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.journal-prose pre code {
+  font-size: inherit;
+}
+
+/* ── blockquotes: the callout, and its dnd parchment flavour ───── */
+
+.journal-prose blockquote {
+  margin: 0 0 1em;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--hp-outline-variant) 45%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--hp-primary) 45%, transparent);
+  color: var(--hp-on-surface-variant);
+  break-inside: avoid;
+}
+.journal-prose blockquote p {
+  margin: 0 0 0.6em;
+}
+.journal-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+/* A quote whose first line is nothing but bold text is a TITLED
+   callout — the home-rules rulings pattern. */
+.journal-prose blockquote > p:first-child > strong:only-child {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hp-primary-bright);
+}
+
+/* dnd posts render their callouts as parchment handouts — the
+   Araitael fiction lives in content, never in the vessel. The cut
+   corner lets the page show through; the fold sits on top. */
+[data-collection="dnd"] .journal-prose blockquote {
+  position: relative;
+  border: 0;
+  background: var(--iz-parchment);
+  color: var(--iz-parchment-ink);
+  padding: 12px 16px;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  transform: rotate(-0.35deg);
+}
+[data-collection="dnd"] .journal-prose blockquote::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
+}
+[data-collection="dnd"] .journal-prose blockquote > p:first-child > strong:only-child {
+  color: var(--iz-parchment-ink);
+  font-style: italic;
+  letter-spacing: 0.1em;
+}

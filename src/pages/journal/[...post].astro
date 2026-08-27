@@ -10,22 +10,41 @@
   dive integration land here step by step; then the vessel folds
   into the flow and this route retires.
 */
-import { getEntry, render } from "astro:content";
+import { render } from "astro:content";
 
 import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 
-import { iconFor } from "../lib/icons";
+import { iconFor } from "../../lib/icons";
+import { buildWorld } from "../../lib/world";
 
-import "../styles/journal.css";
+import "../../styles/journal.css";
+import "../../styles/journal-prose.css";
 
-const title = "the journal · izelya.me";
-const description = "The longform reading vessel, under construction.";
-
-const entry = await getEntry("dnd", "aetherblade");
-if (!entry) {
-  throw new Error("the workbench post is missing");
+// Every published post gets a workbench page, so any content shape
+// can be walked through the vessel; bare /journal shows the densest
+// post as the standing worst case.
+export async function getStaticPaths() {
+  const { published } = await buildWorld();
+  const fallback =
+    published.find((e) => e.collection === "dnd" && e.id === "aetherblade") ?? published[0];
+  return [
+    { params: { post: undefined }, props: { entry: fallback } },
+    ...published.map((entry) => ({
+      params: { post: `${entry.collection}/${entry.id}` },
+      props: { entry },
+    })),
+  ];
 }
+
+interface Props {
+  entry: Awaited<ReturnType<typeof buildWorld>>["published"][number];
+}
+const { entry } = Astro.props;
+
+const title = `${entry.data.title} · the journal · izelya.me`;
+const description = entry.data.description;
+
 const { Content } = await render(entry);
 
 const words = (entry.body ?? "").split(/\s+/).filter(Boolean).length;
@@ -53,7 +72,7 @@ const meta = {
     <link rel="stylesheet" href="/fonts/fonts.css" />
   </head>
   <body>
-    <main class="journal">
+    <main class="journal" data-collection={entry.collection}>
       {
         ["tl", "tr", "bl", "br"].map((corner) => (
           <svg class="journal-corner" data-corner={corner} viewBox="0 0 31 31" aria-hidden="true">
