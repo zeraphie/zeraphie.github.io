@@ -573,6 +573,7 @@ a.journal-site:hover {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    justify-content: center;
     row-gap: 4px;
     margin: 0;
   }

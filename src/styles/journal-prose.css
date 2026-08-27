@@ -34,11 +34,9 @@
 .journal-prose a {
   color: var(--hp-primary-bright);
   text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--hp-primary) 45%, transparent);
 }
 .journal-prose a:hover {
   color: var(--hp-secondary);
-  border-color: color-mix(in srgb, var(--hp-secondary) 60%, transparent);
 }
 
 /* ── section heads: chip + number + title + rule + diamond ─────── */
@@ -319,10 +317,9 @@
   margin: 0 0 0.5em;
 }
 /* The collection heading is a link, but it keeps the head's own
-   colour and rule — the underline would fight the diamond. */
+   colour — the rule and its diamond carry the emphasis. */
 .journal-sitemap h2 a {
   color: inherit;
-  border-bottom: 0;
 }
 .journal-sitemap h2 a:hover {
   color: var(--hp-secondary);
@@ -343,12 +340,6 @@
   height: 9.2px;
   clip-path: var(--journal-hex);
   background: color-mix(in srgb, var(--hp-primary-bright) 40%, transparent);
-}
-.journal-sitemap a {
-  border-bottom: 0;
-}
-.journal-sitemap a:hover {
-  border-bottom: 1px solid color-mix(in srgb, var(--hp-secondary) 60%, transparent);
 }
 
 /* The slot centres the cartridge on its own line — an inline-block
