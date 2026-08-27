@@ -599,6 +599,12 @@ a.journal-site:hover {
     padding-left: 14px;
     border-left: 1px solid var(--hp-outline-faint);
   }
+  /* The crumb already says which collection this is — the band
+     needn't repeat it. */
+  .journal-meta-stats dt:nth-of-type(4),
+  .journal-meta-stats dd:nth-of-type(4) {
+    display: none;
+  }
 }
 
 /* ── tier 3: one leaf ──────────────────────────────────────────── */

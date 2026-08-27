@@ -22,13 +22,14 @@ const { href, title, icon, collection } = Astro.props;
 const glyph = iconFor(collection, icon ?? undefined);
 
 /** Contact fins along the connector foot — the PCB edge. */
-const FINS = Array.from({ length: 13 }, (_, i) => 48 + i * 13);
+const FINS = Array.from({ length: 13 }, (_, i) => 68 + i * 10);
 /** Ridge blocks on each shoulder grip. */
 const RIDGES = [0, 1, 2, 3, 4];
 ---
 
-<a class="journal-cartridge" href={href} target="_blank" rel="noopener noreferrer">
-  <svg class="journal-cartridge__chassis" viewBox="0 0 260 168" aria-hidden="true">
+<span class="journal-cartridge-slot">
+  <a class="journal-cartridge" href={href} target="_blank" rel="noopener noreferrer">
+  <svg class="journal-cartridge__chassis" viewBox="0 0 260 162" aria-hidden="true">
     {
       [0, 226].map((sx) => (
         <g>
@@ -42,18 +43,20 @@ const RIDGES = [0, 1, 2, 3, 4];
       ))
     }
 
-    <path class="foot" d="M 62 136 H 198 V 160 H 62 Z" />
-    {FINS.map((x) => <rect class="fin" x={x} y="142" width="7" height="12" />)}
-    <rect class="notch" x="118" y="161" width="24" height="5" rx="2.5" />
+    <path class="foot" d="M 62 132 H 198 V 158 H 62 Z" />
 
-    <path class="shell" d="M 26 0 H 220 L 234 14 V 140 H 26 Z" />
+    {/* One silhouette for shell AND connector foot, so the outline
+        wraps the contacts instead of cutting a line above them. */}
+    <path class="shell" d="M 26 0 H 220 L 234 14 V 132 H 198 V 158 H 62 V 132 H 26 Z" />
+    {FINS.map((x) => <rect class="fin" x={x} y="138" width="6" height="14" />)}
     <rect class="window" x="40" y="14" width="180" height="84" />
     <path class="sweep" d="M 40 72 L 101 44 L 220 52" />
     <path class="sweep sweep--faint" d="M 40 80 L 101 52 L 220 60" />
     <rect class="lip" x="40" y="106" width="180" height="26" />
   </svg>
 
-  <span class="journal-cartridge__glyph" set:html={glyph} />
-  <span class="journal-cartridge__title">{title}</span>
-  <span class="journal-cartridge__play">play<i>↗</i></span>
-</a>
+    <span class="journal-cartridge__glyph" set:html={glyph} />
+    <span class="journal-cartridge__title">{title}</span>
+    <span class="journal-cartridge__play">play<i>↗</i></span>
+  </a>
+</span>

@@ -351,6 +351,17 @@
   border-bottom: 1px solid color-mix(in srgb, var(--hp-secondary) 60%, transparent);
 }
 
+/* The slot centres the cartridge on its own line — an inline-block
+   takes no auto margins, so the line box does the centring. A plain
+   block wrapper (like any paragraph) sits beside page one's metadata
+   float without leaving the empty column fragment a bare block box
+   would. */
+.journal-cartridge-slot {
+  display: block;
+  text-align: center;
+  margin: 1.4em 0 1.8em;
+}
+
 /* ── the cartridge: a post's playable build ───────────────────────
       The chassis is DRAWN (one svg, the design board's geometry at
       260 x 168) rather than assembled from boxes — ridged shoulders,
@@ -371,7 +382,8 @@
   position: relative;
   width: 260px;
   max-width: 100%;
-  margin: 1.4em 0 1.8em;
+  margin: 0;
+  text-align: initial;
   border: 0;
   text-decoration: none;
   break-inside: avoid;
@@ -398,18 +410,10 @@
 }
 .journal-cartridge .foot {
   fill: #1a2024;
-  stroke: var(--cart-edge);
-  stroke-width: 0.8;
 }
 .journal-cartridge .fin {
   fill: var(--iz-silver);
   opacity: 0.55;
-}
-.journal-cartridge .notch {
-  fill: #1a2024;
-  stroke: var(--iz-silver);
-  stroke-width: 0.8;
-  stroke-opacity: 0.5;
 }
 .journal-cartridge .shell {
   fill: #2a3238;
@@ -442,7 +446,7 @@
 .journal-cartridge__glyph {
   position: absolute;
   left: 19.2%;
-  top: 14.3%;
+  top: 14.8%;
   width: 7%;
   color: var(--hp-primary-bright);
 }
@@ -455,7 +459,7 @@
   position: absolute;
   left: 19.2%;
   right: 17.3%;
-  top: 26%;
+  top: 27%;
   font-family: Iceland, "Chakra Petch", sans-serif;
   font-size: 21px;
   line-height: 1.02;
@@ -467,8 +471,8 @@
   position: absolute;
   left: 15.4%;
   right: 15.4%;
-  top: 63.1%;
-  height: 15.5%;
+  top: 65.4%;
+  height: 16%;
   display: flex;
   align-items: center;
   justify-content: center;
