@@ -318,6 +318,15 @@
 .journal-sitemap h2 {
   margin: 0 0 0.5em;
 }
+/* The collection heading is a link, but it keeps the head's own
+   colour and rule — the underline would fight the diamond. */
+.journal-sitemap h2 a {
+  color: inherit;
+  border-bottom: 0;
+}
+.journal-sitemap h2 a:hover {
+  color: var(--hp-secondary);
+}
 .journal-sitemap ul {
   padding-left: 30px;
 }

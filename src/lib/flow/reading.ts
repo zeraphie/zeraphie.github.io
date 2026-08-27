@@ -68,6 +68,16 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
    * is invisible when prefetch did its job. */
   let currentFilled: Promise<void> = Promise.resolve();
 
+  /** A stat with nothing to say leaves — its label goes with it. */
+  function setStat(dd: HTMLElement, value: string | undefined): void {
+    const dt = dd.previousElementSibling as HTMLElement | null;
+    dd.textContent = value ?? "";
+    dd.hidden = value === undefined;
+    if (dt) {
+      dt.hidden = value === undefined;
+    }
+  }
+
   function sep(): HTMLElement {
     const el = document.createElement("span");
     el.className = "sep";
@@ -104,16 +114,28 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     metaTitle.textContent = fields.title;
     metaSub.textContent = fields.sub;
     glyph.innerHTML = iconFor(collection, fields.icon);
-    stats.date.textContent = fields.date ? fields.date.replaceAll("-", ".") : "—";
-    stats.time.textContent =
-      fields.words === undefined ? "—" : `≈ ${Math.max(1, Math.round(fields.words / 220))} min`;
-    stats.words.textContent =
+    setStat(stats.date, fields.date?.replaceAll("-", "."));
+    setStat(
+      stats.time,
       fields.words === undefined
-        ? "—"
+        ? undefined
+        : `≈ ${Math.max(1, Math.round(fields.words / 220))} min`
+    );
+    setStat(
+      stats.words,
+      fields.words === undefined
+        ? undefined
         : fields.words >= 1000
           ? `≈ ${(fields.words / 1000).toFixed(1)}k`
-          : String(fields.words);
-    stats.collection.textContent = collection || "site";
+          : String(fields.words)
+    );
+    setStat(stats.collection, collection || undefined);
+    // With every stat gone, the rule above them has nothing to
+    // divide.
+    const rule = page.querySelector<HTMLElement>(".journal-meta hr");
+    if (rule) {
+      rule.hidden = Object.values(stats).every((dd) => dd.hidden);
+    }
   }
 
   /** Fill the vessel for an item: metadata instantly from the

@@ -364,7 +364,7 @@ const clusters = createClusterLayer(world);
             .filter((item) => !item.ghost)
             .map((item) => `<li><a href="${itemPath(item)}">${item.label}</a></li>`)
             .join("");
-          return `<li><h2 id="${cluster.id}">${cluster.label}</h2><ul>${items}</ul></li>`;
+          return `<li><h2 id="${cluster.id}"><a href="/${cluster.id}">${cluster.label}</a></h2><ul>${items}</ul></li>`;
         }).join("");
         return {
           id: "sitemap",
