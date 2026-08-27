@@ -30,9 +30,9 @@
   --iz-page-edge-3: #24272a;
   --iz-page-edge-4: #1f2226;
 
-  --journal-pad: 26px;
-  --journal-band-head: 40px;
-  --journal-band-foot: 38px;
+  --journal-pad: 30px;
+  --journal-band-head: var(--journal-pad);
+  --journal-band-foot: var(--journal-pad);
   --journal-spine: 64px;
   /* Pointy-top hexagon, shared by every chip and bullet. */
   --journal-hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
@@ -146,7 +146,9 @@ body[data-journal-open] {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding-inline: var(--journal-pad);
+  /* Clear the corner steps: the trim owns the corners, the band's
+     words start beside them. */
+  padding-inline: calc(var(--journal-pad) + 22px);
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -167,10 +169,38 @@ body[data-journal-open] {
   letter-spacing: 0.24em;
 }
 .journal-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
   color: var(--hp-on-surface-variant);
-  opacity: 0.7;
+  overflow: hidden;
+}
+.journal-crumb a {
+  color: var(--hp-on-surface-variant);
+  text-decoration: none;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.journal-crumb a:hover {
+  color: var(--hp-primary-bright);
+}
+.journal-crumb .sep {
+  color: var(--iz-brass);
+  opacity: 0.8;
+}
+.journal-crumb .here {
+  color: var(--hp-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.journal-site {
+  text-decoration: none;
+}
+a.journal-site:hover {
+  color: var(--iz-brass-bright);
 }
 .journal-mode {
   margin-left: auto;
@@ -186,15 +216,16 @@ body[data-journal-open] {
   background: var(--hp-secondary);
 }
 
+/* The footer mark echoes the spine's gem — one diamond above the
+   seam, one below, so the book reads symmetrical. */
 .journal-sigil {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--iz-brass);
-}
-.journal-sigil .ring {
-  stroke: var(--iz-brass-bright);
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1px solid color-mix(in srgb, var(--iz-brass-bright) 85%, transparent);
 }
 .journal-pager {
   margin-left: auto;
@@ -584,9 +615,7 @@ body[data-journal-open] {
 
 @media (max-width: 760px) {
   .journal {
-    --journal-pad: 12px;
-    --journal-band-head: 24px;
-    --journal-band-foot: 22px;
+    --journal-pad: 16px;
     grid-template:
       "head head head" var(--journal-band-head)
       ". body ." 1fr

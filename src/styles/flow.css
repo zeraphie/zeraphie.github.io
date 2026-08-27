@@ -63,57 +63,30 @@ body {
   isolation: isolate;
 }
 
-.hs-status {
-  position: absolute;
-  top: 1rem;
-  left: 1.25rem;
-  z-index: 3;
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-  color: var(--hp-on-surface-variant);
-  pointer-events: none;
-}
-.hs-status b {
-  color: var(--hp-secondary);
-  font-weight: 400;
-}
-.hs-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 7vh;
-  transform: translateX(-50%);
-  z-index: 3;
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--hp-on-surface-variant);
-  opacity: 0.65;
-  pointer-events: none;
-  transition: opacity 400ms ease;
-}
-.hs-hint[data-gone] {
-  opacity: 0;
-}
-.hs-reset {
+/* The world's one piece of chrome: back walks up a level, and it
+   only exists when there is somewhere to go. */
+.hs-back {
   position: absolute;
   top: 0.9rem;
-  right: 0.9rem;
+  left: 1rem;
   z-index: 3;
   font: inherit;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.35rem 0.7rem;
+  padding: 0.35rem 0.8rem;
   background: var(--hp-surface-container);
   color: var(--hp-on-surface-variant);
   border: 1px solid var(--hp-outline-variant);
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.6;
 }
-.hs-reset:hover {
+.hs-back:hover {
   opacity: 1;
   color: var(--hp-secondary);
+}
+.hs-back[hidden] {
+  display: none;
 }
 
 /* ── cluster reveal (page-side choreography, flagged for

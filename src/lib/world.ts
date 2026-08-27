@@ -15,6 +15,7 @@ import type { Cluster } from "./flow-data";
 const COLLECTION_ORDER = [
   { id: "dnd", label: "dnd" },
   { id: "projects", label: "projects" },
+  { id: "arcade", label: "arcade" },
   { id: "lyrics", label: "lyrics" },
   { id: "guides", label: "guides" },
   { id: "about", label: "about" },
@@ -24,6 +25,7 @@ export async function buildWorld() {
   const published = [
     ...(await getCollection("dnd", ({ data }) => !data.draft)),
     ...(await getCollection("projects", ({ data }) => !data.draft)),
+    ...(await getCollection("arcade", ({ data }) => !data.draft)),
     ...(await getCollection("lyrics", ({ data }) => !data.draft)),
     ...(await getCollection("guides", ({ data }) => !data.draft)),
     ...(await getCollection("about", ({ data }) => !data.draft)),

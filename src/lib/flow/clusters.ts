@@ -79,6 +79,11 @@ export function createClusterLayer(world: HpGrid): ClusterLayer {
     }
   }
 
+  function centreOf(el: HTMLElement): { x: number; y: number } {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+
   function mountCluster(cluster: Cluster, animate: boolean): void {
     if (mounted?.cluster.id === cluster.id) {
       return;
@@ -106,11 +111,40 @@ export function createClusterLayer(world: HpGrid): ClusterLayer {
         child.classList.add("hx-on");
       }
     }
+    // The vein links HEXES, not groups: the bloomed section cell for
+    // this category, and the cluster member nearest to it. hp-tether
+    // then picks the best vertex pair between those two hexes —
+    // pointing it at the containers anchored it to their bounding
+    // boxes instead, which read as a line into empty space.
     const vein = document.createElement("hp-tether");
-    vein.setAttribute("from", "#seed-unfold");
+    const source =
+      document.querySelector<HTMLElement>(`.section[data-cluster="${cluster.id}"]`) ?? null;
+    source?.setAttribute("id", "vein-source");
+    vein.setAttribute("from", source ? "#vein-source" : "#seed-unfold");
     vein.setAttribute("to", `#cluster-${cluster.id}`);
     vein.setAttribute("directed", "");
     world.appendChild(vein);
+    // Retarget to the nearest member once the cluster has boxes.
+    requestAnimationFrame(() => {
+      if (mounted?.el !== el || !source) {
+        return;
+      }
+      const from = centreOf(source);
+      let best: HTMLElement | null = null;
+      let bestDist = Infinity;
+      for (const cell of el.querySelectorAll<HTMLElement>("[data-item]")) {
+        const c = centreOf(cell);
+        const dist = (c.x - from.x) ** 2 + (c.y - from.y) ** 2;
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = cell;
+        }
+      }
+      if (best) {
+        best.id = "vein-target";
+        vein.setAttribute("to", "#vein-target");
+      }
+    });
     window.setTimeout(() => vein.setAttribute("state", "idle"), 1600);
     mounted = { cluster, el, vein };
   }
@@ -124,6 +158,7 @@ export function createClusterLayer(world: HpGrid): ClusterLayer {
     const { el, vein } = mounted;
     mounted = null;
     vein.remove();
+    document.getElementById("vein-source")?.removeAttribute("id");
     if (!animate) {
       el.remove();
       return;

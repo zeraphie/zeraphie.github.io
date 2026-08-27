@@ -17,6 +17,7 @@ const posts = (base: string) =>
 export const collections = {
   dnd: posts("./src/content/dnd"),
   projects: posts("./src/content/projects"),
+  arcade: posts("./src/content/arcade"),
   lyrics: posts("./src/content/lyrics"),
   guides: posts("./src/content/guides"),
   about: posts("./src/content/about"),

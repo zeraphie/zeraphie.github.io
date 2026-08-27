@@ -57,6 +57,13 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
    * is invisible when prefetch did its job. */
   let currentFilled: Promise<void> = Promise.resolve();
 
+  function sep(): HTMLElement {
+    const el = document.createElement("span");
+    el.className = "sep";
+    el.textContent = ">";
+    return el;
+  }
+
   /** Fill the vessel for an item: metadata instantly from the
    * index, the flow cloned in when the content cache delivers. */
   function fillVessel(item: Item): Promise<void> {
@@ -64,7 +71,19 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     const collection = key?.split("/")[0] ?? "";
     const info = postMeta(key);
     root.dataset.collection = collection;
-    crumb.textContent = key ? `// ${collection} · ${item.id}` : `// ${item.id}`;
+    // Breadcrumbs are real links: the collection is a world state,
+    // slugs read as words.
+    crumb.replaceChildren();
+    if (collection) {
+      const cat = document.createElement("a");
+      cat.href = `/${collection}`;
+      cat.textContent = collection;
+      crumb.append(sep(), cat);
+    }
+    const here = document.createElement("span");
+    here.className = "here";
+    here.textContent = item.id.replaceAll("-", " ");
+    crumb.append(sep(), here);
     metaTitle.textContent = info?.title ?? item.label;
     metaSub.textContent = info?.description ?? item.sub;
     glyph.innerHTML = iconFor(collection, info?.icon ?? undefined);
