@@ -162,6 +162,7 @@ body[data-journal-open] {
    inset so the text centres on that strip. */
 .journal-band--head {
   grid-area: head;
+  position: relative;
   padding-top: var(--journal-rail);
 }
 .journal-band--foot {
@@ -223,16 +224,22 @@ a.journal-site:hover {
   background: var(--hp-secondary);
 }
 
-/* The footer mark echoes the spine's gem — one diamond above the
-   seam, one below, so the book reads symmetrical. */
+/* Two gems on the spine's axis, one per band, each centred on the
+   same strip the band's words use — the pair mirrors exactly about
+   the middle of the book. */
 .journal-sigil {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   transform: translate(-50%, -50%) rotate(45deg);
   border: 1px solid color-mix(in srgb, var(--iz-brass-bright) 85%, transparent);
+}
+.journal-band--head .journal-sigil {
+  top: calc((var(--journal-rail) + var(--journal-band-head)) / 2);
+}
+.journal-band--foot .journal-sigil {
+  top: calc((var(--journal-band-foot) - var(--journal-rail)) / 2);
 }
 .journal-pager {
   margin-left: auto;
@@ -273,16 +280,6 @@ a.journal-site:hover {
       center / 1px calc(100% - 24px) no-repeat,
     linear-gradient(color-mix(in srgb, var(--iz-brass-dim) 60%, transparent) 0 0) calc(50% + 12px)
       center / 1px calc(100% - 24px) no-repeat;
-}
-.journal-spine::before {
-  content: "";
-  position: absolute;
-  top: -13px;
-  left: 50%;
-  width: 7px;
-  height: 7px;
-  transform: translateX(-50%) rotate(45deg);
-  border: 1px solid color-mix(in srgb, var(--iz-brass-bright) 85%, transparent);
 }
 
 /* ── the pages ─────────────────────────────────────────────────── */
