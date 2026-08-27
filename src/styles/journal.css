@@ -384,46 +384,92 @@ a.journal-site:hover {
 
 /* ── the metadata panel (page one) ─────────────────────────────── */
 
-/* First element in the flow, floated: line boxes in the first
-   column narrow around it, so the prose runs beside the panel and
-   the pair paginates as ordinary content — always page one. */
+/* A tipped-in slip: a parchment card held to page one by the same
+   wire clip the handout notes use, sitting in the text flow so the
+   prose beneath it runs the full measure. It stays first in the
+   flow, so it always lands on page one. Wide enough viewports lift
+   it off the page entirely — see the tab block below. */
 .journal-meta {
-  float: left;
-  /* The column fits its widest run — in practice the title — so a
-     long one-word name never clips; short titles keep the floor. */
-  width: min-content;
-  min-width: 150px;
-  max-width: 45%;
-  height: 100%;
-  margin-right: 28px;
-  border-right: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
-  padding-right: 24px;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  align-items: center;
+  width: auto;
+  max-width: 87%;
+  margin: 0 auto 1.7em;
+  padding: 14px 18px;
   box-sizing: border-box;
+  background: var(--iz-parchment);
+  color: var(--iz-parchment-ink);
+  clip-path: polygon(
+    0 -14px,
+    calc(100% - 14px) -14px,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    0 100%
+  );
+  transform: rotate(-0.8deg);
+  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.3));
+  /* Rotated text shimmers under hinted subpixel AA — same fix the
+     handout notes carry. */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* The folded corner, and the wire that straddles the top edge. */
+.journal-meta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
+}
+.journal-meta::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 17px;
+  height: 24px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: var(--iz-silver);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 .journal-meta-icon {
   display: block;
-  color: var(--hp-primary-bright);
-  margin-bottom: 14px;
+  grid-row: 1 / 3;
+  align-self: center;
+  width: 44px;
+  height: auto;
+  color: var(--iz-parchment-ink);
+  margin: 0;
 }
 .journal-meta-title {
-  margin: 0 0 6px;
+  margin: 0;
+  align-self: end;
   font-family: Iceland, "Chakra Petch", sans-serif;
-  font-size: 27px;
+  font-size: 24px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--hp-on-surface);
+  color: var(--iz-parchment-ink);
 }
 .journal-meta-sub {
-  margin: 0 0 18px;
+  margin: 2px 0 0;
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1.6;
-  color: var(--hp-on-surface-variant);
+  color: color-mix(in srgb, var(--iz-parchment-ink) 78%, transparent);
 }
 .journal-meta-stats {
+  grid-column: 1 / -1;
   margin: 0;
   font-size: 12px;
 }
@@ -431,20 +477,38 @@ a.journal-site:hover {
   font-size: 9px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--hp-on-surface-variant);
-  opacity: 0.7;
+  color: color-mix(in srgb, var(--iz-parchment-ink) 70%, transparent);
+  opacity: 1;
 }
 .journal-meta hr.hp-separator {
-  margin: 10px 0;
+  grid-column: 1 / -1;
+  margin: 12px 0 9px;
+  border-color: color-mix(in srgb, var(--iz-parchment-ink) 30%, transparent);
+  color: color-mix(in srgb, var(--iz-parchment-ink) 45%, transparent);
+}
+/* The stats read as one line of pairs, divided by hairlines — a
+   filing stamp rather than a column of fields. */
+.journal-meta-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: 4px;
+}
+.journal-meta-stats dt::after {
+  content: ":";
+  margin-right: 5px;
 }
 .journal-meta-stats dd {
-  margin: 2px 0 0;
-  padding-bottom: 7px;
-  border-bottom: 1px solid var(--hp-outline-faint);
-  color: var(--hp-on-surface);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 11px;
+  color: var(--iz-parchment-ink);
 }
 .journal-meta-stats dd + dt {
-  margin-top: 8px;
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid color-mix(in srgb, var(--iz-parchment-ink) 30%, transparent);
 }
 
 /* ── the turn — a real two-leaf overlay ────────────────────────── */
@@ -557,78 +621,97 @@ a.journal-site:hover {
 /* Prose styling — everything the content itself wears — lives in
    journal-prose.css; this sheet is only the vessel. */
 
-/* ── tier 2: the metadata folds to a band on page one ──────────── */
+/* ── the tab: the slip leaves the page ─────────────────────────── */
 
-/* Band anatomy: icon vertically centred beside heading +
-   description, the dot separator across the full band, then one
-   labelled stats line with hairline dividers between pairs. */
-@media (max-width: 1100px) {
+/* Once the viewport outgrows the book by enough to hold it, the
+   metadata stops being a card on page one and becomes a slip seated
+   in the book's outer edge — a few centimetres of it under the
+   cover, the rest standing out in the margin the cap freed. Fixed,
+   so the strip's own clipping can't crop it, and out of the flow,
+   so page one reads at the full measure. The left edge is the free
+   one: the rail owns the right.
+
+   The breakpoint is derived, not chosen: the slip sits a fixed
+   distance from the page and never negotiates, so the tab may only
+   appear once the margin can hold the part that stands clear.
+   Protrusion is 190 - 34 = 156, and 1500 leaves 31 either side of
+   it. Clamping into a narrower margin instead would make the seat
+   depth drift with the viewport, which reads as the slip sliding
+   about. */
+@media (min-width: 1500px) {
+  :root {
+    --journal-tab-w: 190px;
+    /* How far the slip reaches in from the cover's edge. Tied to the
+       cover padding, because that is exactly the distance to the
+       page: the slip's inner edge then meets the paper flush, and
+       the seated band covers the cover margin it crosses. */
+    --journal-tab-seat: var(--journal-pad);
+  }
   .journal-meta {
-    float: none;
-    width: auto;
-    min-width: 0;
+    position: fixed;
+    top: 50%;
+    left: calc((100vw - var(--journal-max)) / 2 + var(--journal-tab-seat) - var(--journal-tab-w));
+    width: var(--journal-tab-w);
     max-width: none;
-    height: auto;
-    margin-right: 0;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 20px;
-    border-right: 0;
-    padding-right: 0;
-    margin-bottom: 20px;
+    margin: 0;
+    padding: 16px 18px 18px;
+    display: block;
+    z-index: 2;
+    /* Square to the book, not tilted: the slip is bound into the
+       edge here rather than laid on a page, so it reads as part of
+       the object. The tilt stays on the in-flow card, which is a
+       placed thing. */
+    transform: translateY(-50%);
+    filter: drop-shadow(-3px 3px 0 rgb(0 0 0 / 0.38));
+    /* Upright text wants the platform's own hinting back — the
+       geometric fallback only earns its place under rotation. */
+    text-rendering: auto;
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+    /* The fold reads on the outer corner now, not the inner one. */
+    clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+  }
+  /* Seated end: a darker band where the cover overlaps the paper. */
+  .journal-meta::before {
+    top: 0;
+    right: 0;
+    width: var(--journal-tab-seat);
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--iz-parchment-fold));
+  }
+  /* No clip out here — the book's edge is what holds it. */
+  .journal-meta::after {
+    display: none;
   }
   .journal-meta-icon {
-    grid-row: 1 / 3;
-    align-self: center;
-    width: 44px;
-    height: auto;
-    margin: 0;
+    width: 38px;
+    margin: 0 0 12px;
   }
   .journal-meta-title {
-    font-size: 24px;
-    margin: 0;
-    align-self: end;
-  }
-  .journal-meta-sub {
-    margin: 2px 0 0;
-  }
-  .journal-meta hr.hp-separator {
-    grid-column: 1 / -1;
-    margin: 12px 0 8px;
+    font-size: 22px;
   }
   .journal-meta-stats {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: center;
-    row-gap: 4px;
-    margin: 0;
-  }
-  .journal-meta-stats dt {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: lowercase;
-    color: var(--hp-on-surface-variant);
-    opacity: 1;
+    display: block;
+    margin-top: 2px;
   }
   .journal-meta-stats dt::after {
-    content: ":";
-    margin-right: 5px;
-  }
-  .journal-meta-stats dd {
+    content: "";
     margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 11px;
-    color: var(--hp-on-surface);
   }
   .journal-meta-stats dd + dt {
-    margin: 0 0 0 14px;
-    padding-left: 14px;
-    border-left: 1px solid var(--hp-outline-faint);
+    margin: 7px 0 0;
+    padding: 0;
+    border: 0;
   }
-  /* The crumb already says which collection this is — the band
+}
+
+/* A turning leaf clones the strip; the slip must not come with it. */
+.journal-leaf .journal-meta {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  /* The crumb already says which collection this is — the slip
      needn't repeat it. */
   .journal-meta-stats dt:nth-of-type(4),
   .journal-meta-stats dd:nth-of-type(4) {
