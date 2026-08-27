@@ -134,100 +134,13 @@ hp-cluster.hx-closing .hx-reveal {
   opacity: 0;
   pointer-events: none;
   transition: opacity 260ms ease;
-  /* Transparent: the world beneath is visibility-hidden while
-     reading, and hp-background's wake shows around the hex to
-     keep the page ambient and alive. */
+  /* Transparent: the journal inside paints the cover, and the
+     ambience shows through its margins. */
   background: transparent;
 }
 .page[data-open] {
   opacity: 1;
   pointer-events: auto;
-}
-/* One dived hex = one card. Sibling moves slide whole cards —
-   transform + opacity only, so the compositor owns the motion. */
-.page-card {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-  transition:
-    transform 460ms cubic-bezier(0.3, 0.9, 0.25, 1),
-    opacity 460ms ease;
-}
-body[data-perf="low"] .page-card {
-  transition: none;
-}
-/* Deep-dive framing: the hex's straight sides hug the viewport
-   sides; the points run off-screen. The reading pane takes the
-   middle band, clamped to the viewport on wide screens. */
-.page-hex {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 94vw;
-  aspect-ratio: 0.866 / 1;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: var(--hp-outline);
-}
-.page-hex-in {
-  position: absolute;
-  inset: 2px;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  /* Translucent: the ambient field ghosts through the reading
-     surface, muted relative to the open field outside. */
-  background: color-mix(in srgb, var(--hp-surface-container-lowest) 91%, transparent);
-}
-.page-meta {
-  position: absolute;
-  top: 1.4rem;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--hp-secondary);
-  pointer-events: none;
-}
-/* Wide content (the class tables) scrolls inside its own box —
-   the reading column itself never scrolls horizontally. */
-.page-main table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-}
-.page-main {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(74ch, calc(94vw - 9rem));
-  height: min(51vw, calc(100vh - 9rem));
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 0.9rem;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--hp-outline-variant) transparent;
-}
-.page-main::-webkit-scrollbar {
-  width: 6px;
-}
-.page-main::-webkit-scrollbar-thumb {
-  background: var(--hp-outline-variant);
-}
-.page-foot {
-  position: absolute;
-  bottom: 1.1rem;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.66rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--hp-on-surface-variant);
-  opacity: 0.7;
-  pointer-events: none;
 }
 /* The rail rides above the journal (the page layer is z-2), and its
    scrim dims the book rather than the world — the vessel IS the

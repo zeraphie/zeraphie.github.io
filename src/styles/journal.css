@@ -618,8 +618,12 @@ a.journal-site:hover {
 /* ── tier 3: one leaf ──────────────────────────────────────────── */
 
 @media (max-width: 760px) {
-  .journal {
+  /* On :root, not .journal — the band heights are derived from the
+     pad at this level, so they only re-resolve when it changes here. */
+  :root {
     --journal-pad: 18px;
+  }
+  .journal {
     grid-template:
       "head head head" var(--journal-band-head)
       ". body ." 1fr
