@@ -18,6 +18,7 @@ import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 import "@hexpunk/core/elements.css";
 
+import Seo from "../components/Seo.astro";
 import { buildWorld } from "../lib/world";
 
 import "../styles/flow.css";
@@ -31,7 +32,7 @@ import "../styles/journal-prose.css";
 // with their own title and description for links and crawlers.
 export async function getStaticPaths() {
   const { published, clusters } = await buildWorld();
-  const desc = new Map(published.map((e) => [`${e.collection}/${e.id}`, e.data.description]));
+  const entryFor = new Map(published.map((e) => [`${e.collection}/${e.id}`, e]));
   return [
     {
       params: { route: undefined },
@@ -49,14 +50,21 @@ export async function getStaticPaths() {
     },
     ...clusters.map((c) => ({
       params: { route: c.id },
-      props: { title: `${c.label} · izelya.me`, description: `${c.label} on izelya.me` },
+      props: {
+        title: `${c.label} · izelya.me`,
+        description: `Everything in the ${c.label} collection on izelya.me.`,
+      },
     })),
     ...clusters.flatMap((c) =>
       c.items.map((item) => ({
         params: { route: item.post! },
         props: {
           title: `${item.label} · izelya.me`,
-          description: desc.get(item.post!) ?? `${item.label} on izelya.me`,
+          description: entryFor.get(item.post!)?.data.description ?? `${item.label} on izelya.me`,
+          article: {
+            section: c.label,
+            published: (entryFor.get(item.post!)?.data.date ?? new Date(0)).toISOString(),
+          },
         },
       }))
     ),
@@ -66,8 +74,9 @@ export async function getStaticPaths() {
 interface Props {
   title: string;
   description: string;
+  article?: { section: string; published: string };
 }
-const { title, description } = Astro.props;
+const { title, description, article } = Astro.props;
 
 const SIDE = (100 - 2.5) / Math.sqrt(3);
 
@@ -107,9 +116,7 @@ const CurrentContent = currentPost?.Content;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Seo title={title} description={description} article={article} />
     <link rel="stylesheet" href="/fonts/fonts.css" />
   </head>
   <body>
@@ -224,7 +231,7 @@ const CurrentContent = currentPost?.Content;
         </main>
       </div>
 
-      <hp-hextrack id="track" hidden></hp-hextrack>
+      <hp-hextrack id="track" loop hidden></hp-hextrack>
     </div>
 
     <div id="posts" hidden>
@@ -270,7 +277,7 @@ const CurrentContent = currentPost?.Content;
         HpUnfoldList,
       } from "@hexpunk/core/wip";
 
-      import { itemPath, type Cluster } from "../lib/flow-data";
+      import { itemPath, type Cluster, type Item } from "../lib/flow-data";
       import { createClusterLayer } from "../lib/flow/clusters";
       import { prefetchPosts } from "../lib/flow/content-cache";
       import { initPerfMode, installDebugHud } from "../lib/flow/perf";
@@ -355,6 +362,33 @@ const PERF_LOW = initPerfMode();
       });
 
 const clusters = createClusterLayer(world);
+
+      /** The rail spans the WHOLE world, not one collection: with a
+       * handful of posts per collection a single-cluster list is too
+       * short to scrub, so every published post rides it and the
+       * track loops. Rows key on the post path — slugs can repeat
+       * across collections, paths cannot. */
+      function railItems() {
+        return CLUSTERS.flatMap((cluster) =>
+          cluster.items
+            .filter((entry) => !entry.ghost)
+            .map((entry) => ({
+              id: entry.post ?? entry.id,
+              label: entry.label,
+              sub: cluster.label,
+              subs: anchorsOf(entry).map((a) => a.label),
+            }))
+        );
+      }
+      function itemByKey(key: string): { cluster: Cluster; item: Item } | null {
+        for (const cluster of CLUSTERS) {
+          const item = cluster.items.find((entry) => (entry.post ?? entry.id) === key);
+          if (item) {
+            return { cluster, item };
+          }
+        }
+        return null;
+      }
 
       /** The sitemap is the world written out: every collection and
        * every post it holds, as ordinary links. */
@@ -504,14 +538,8 @@ const clusters = createClusterLayer(world);
           // nothing beneath the incoming page may hover or re-light.
           world.style.pointerEvents = "none";
           world.diveInto(diveRect(cell), { instant: true });
-          track.items = cluster.items.map((entry) => ({
-            id: entry.id,
-            label: entry.label,
-            sub: entry.sub,
-            ghost: entry.ghost,
-            subs: anchorsOf(entry).map((a) => a.label),
-          }));
-          track.focal = item.id;
+          track.items = railItems();
+          track.focal = item.post ?? item.id;
           track.state = "hint";
           track.hidden = false;
           current = { cat: cluster.id, item: item.id, head: route.head };
@@ -528,28 +556,10 @@ const clusters = createClusterLayer(world);
           return;
         }
         if (prevDived && current.item !== item.id) {
-          if (current.cat === cluster.id) {
-            // Sibling slide: track order decides the direction —
-            // above the current item enters from the left, below
-            // from the right. The camera never moves; the hidden
-            // dive is retargeted so esc surfaces from the cell we
-            // are actually reading.
-            const fromIdx = cluster.items.findIndex((entry) => entry.id === current.item);
-            const toIdx = cluster.items.indexOf(item);
-            const dir = toIdx < fromIdx ? -1 : 1;
-            world.diveInto(diveRect(cell), { instant: true });
-            track.focal = item.id;
-            current = { cat: cluster.id, item: item.id, head: route.head };
-            setPath(current);
-            reading.slideTo(item, route.head, dir);
-            foldTrackAfter(560);
-            return;
-          }
-          // Different category (manual URL edit): the old bounce.
-          suppressSurfaceSync = true;
-          reading.close();
-          world.surface();
-          window.setTimeout(performDive, 430);
+          // The rail crosses collections, so a sibling and a
+          // cross-collection hop are the same move: retarget the
+          // hidden dive and swap the book.
+          performDive();
           return;
         }
         if (prevDived && current.item === item.id) {
@@ -682,13 +692,13 @@ const clusters = createClusterLayer(world);
         if (!current.cat) {
           return;
         }
-        if (id === current.item) {
+        if (itemByKey(id)?.item.id === current.item) {
           track.state = "hint";
           return;
         }
-        const entry = clusterById(current.cat)?.items.find((e) => e.id === id);
-        if (entry) {
-          go(itemPath(entry));
+        const found = itemByKey(id);
+        if (found) {
+          go(itemPath(found.item));
         }
       });
       track.addEventListener("hp-hextrack-sub", (event) => {
@@ -700,7 +710,7 @@ const clusters = createClusterLayer(world);
         if (!current.cat) {
           return;
         }
-        const owner = clusterById(current.cat)?.items.find((entry) => entry.id === id);
+        const owner = itemByKey(id)?.item;
         if (!owner) {
           return;
         }
