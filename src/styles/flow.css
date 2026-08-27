@@ -229,8 +229,13 @@ body[data-perf="low"] .page-card {
   opacity: 0.7;
   pointer-events: none;
 }
+/* The rail rides above the journal (the page layer is z-2), and its
+   scrim dims the book rather than the world — the vessel IS the
+   preview behind the track now. On a phone the rail can't be wider
+   than the screen, or its hint peek pushes off-canvas. */
 hp-hextrack {
   z-index: 3;
+  --hp-hextrack-width: min(380px, 92vw);
 }
 
 /* Software-compositor degrade: every layer is CPU-composited,
