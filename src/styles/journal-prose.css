@@ -302,3 +302,42 @@
   font-size: 13.5px;
   padding: 10px 14px;
 }
+
+/* ── the sitemap: the world written out as links ──────────────── */
+
+.journal-sitemap,
+.journal-sitemap ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.journal-sitemap > li {
+  margin: 0 0 1.1em;
+  break-inside: avoid;
+}
+.journal-sitemap h2 {
+  margin: 0 0 0.5em;
+}
+.journal-sitemap ul {
+  padding-left: 30px;
+}
+.journal-sitemap ul li {
+  position: relative;
+  margin: 0 0 0.3em;
+}
+.journal-sitemap ul li::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 0.42em;
+  width: 8px;
+  height: 9.2px;
+  clip-path: var(--journal-hex);
+  background: color-mix(in srgb, var(--hp-primary-bright) 40%, transparent);
+}
+.journal-sitemap a {
+  border-bottom: 0;
+}
+.journal-sitemap a:hover {
+  border-bottom: 1px solid color-mix(in srgb, var(--hp-secondary) 60%, transparent);
+}

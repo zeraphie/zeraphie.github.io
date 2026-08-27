@@ -8,7 +8,7 @@
 
 import { itemPath, resolvePath, type Cluster } from "../flow-data";
 
-export type Route = { cat?: string; item?: string; head?: string };
+export type Route = { cat?: string; item?: string; head?: string; doc?: string };
 
 export interface Router {
   clusterById(id?: string): Cluster | undefined;
@@ -29,6 +29,9 @@ export function createRouter(clusters: Cluster[]): Router {
   /** A route's canonical path — the item's real page when there is
    * one, its category otherwise. */
   function routePath(route: Route): string {
+    if (route.doc) {
+      return `/${route.doc}`;
+    }
     const cluster = clusterById(route.cat);
     const item = cluster?.items.find((entry) => entry.id === route.item);
     return cluster && item ? itemPath(item) : cluster ? `/${cluster.id}` : "/";

@@ -36,13 +36,21 @@ export function itemPath(item: Item): string {
 
 /** Resolve a pathname back to world state. Returns {} for home,
  * null for paths this world doesn't know. */
+/** Standalone journal documents: world states that are neither a
+ * cluster nor a post, read in the vessel like anything else. */
+export const DOC_ROUTES = ["sitemap"] as const;
+
 export function resolvePath(
   clusters: Cluster[],
   pathname: string
-): { cat?: string; item?: string } | null {
+): { cat?: string; item?: string; doc?: string } | null {
   const clean = pathname.replace(/\/+$/, "") || "/";
   if (clean === "/") {
     return {};
+  }
+  const doc = DOC_ROUTES.find((id) => `/${id}` === clean);
+  if (doc) {
+    return { doc };
   }
   for (const cluster of clusters) {
     for (const item of cluster.items) {

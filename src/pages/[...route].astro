@@ -40,6 +40,13 @@ export async function getStaticPaths() {
         description: "Izzy's personal site — an hp-grid world of projects, games, and D&D homebrew.",
       },
     },
+    {
+      params: { route: "sitemap" },
+      props: {
+        title: "sitemap · izelya.me",
+        description: "Every page on izelya.me, by collection.",
+      },
+    },
     ...clusters.map((c) => ({
       params: { route: c.id },
       props: { title: `${c.label} · izelya.me`, description: `${c.label} on izelya.me` },
@@ -119,6 +126,7 @@ const CurrentContent = currentPost?.Content;
               </hp-cell>
             ))
           }
+          <hp-cell class="section" data-cluster="sitemap" variant="action">sitemap</hp-cell>
         </hp-unfold-list>
       </hp-grid>
 
@@ -267,7 +275,7 @@ const CurrentContent = currentPost?.Content;
       import { prefetchPosts } from "../lib/flow/content-cache";
       import { initPerfMode, installDebugHud } from "../lib/flow/perf";
       import { anchorsOf, slug } from "../lib/flow/posts";
-      import { createReadingLayer } from "../lib/flow/reading";
+      import { createReadingLayer, type JournalDoc } from "../lib/flow/reading";
       import { createRouter, type Route } from "../lib/flow/router";
 
 const PERF_LOW = initPerfMode();
@@ -348,6 +356,27 @@ const PERF_LOW = initPerfMode();
 
 const clusters = createClusterLayer(world);
 
+      /** The sitemap is the world written out: every collection and
+       * every post it holds, as ordinary links. */
+      function buildSitemap(): JournalDoc {
+        const list = CLUSTERS.map((cluster) => {
+          const items = cluster.items
+            .filter((item) => !item.ghost)
+            .map((item) => `<li><a href="${itemPath(item)}">${item.label}</a></li>`)
+            .join("");
+          return `<li><h2 id="${cluster.id}">${cluster.label}</h2><ul>${items}</ul></li>`;
+        }).join("");
+        return {
+          id: "sitemap",
+          title: "Sitemap",
+          description: "Every page on izelya.me, by collection",
+          icon: "map",
+          html: `<p>A useful collection of links for this site.</p>
+            <hr class="hp-separator" aria-hidden="true" />
+            <ul class="journal-sitemap"><li><a href="/">home</a></li>${list}</ul>`,
+        };
+      }
+
       // ── router: the hash is the state ──
       function go(path: string): void {
         if (location.pathname + location.hash === path) {
@@ -362,7 +391,7 @@ const clusters = createClusterLayer(world);
       /** Back exists whenever there is a level to leave: a post, a
        * category, or the bloom itself. */
       function syncBack(): void {
-        backEl.hidden = !current.cat && !seedUnfold.open;
+        backEl.hidden = !current.cat && !current.doc && !seedUnfold.open;
       }
 
       function setPath(route: Route): void {
@@ -397,10 +426,24 @@ const clusters = createClusterLayer(world);
         const prevDived = world.dived;
 
         // page + hextrack bookkeeping first
-        if (!route.item && current.item) {
+        if ((!route.item || route.doc) && current.item) {
           reading.close();
           track.state = "hint";
           track.hidden = true;
+        }
+
+        if (route.doc === "sitemap") {
+          // A standalone document: the world stays where it is
+          // behind the vessel, so leaving returns to it.
+          clusters.unmount(animated);
+          current = { doc: "sitemap" };
+          setPath(current);
+          syncCalm();
+          reading.openDoc(buildSitemap());
+          return;
+        }
+        if (current.doc) {
+          reading.close();
         }
 
         if (!cluster) {
@@ -777,7 +820,9 @@ const clusters = createClusterLayer(world);
       // click.
       backEl.addEventListener("pointerdown", (event) => event.stopPropagation());
       backEl.addEventListener("click", () => {
-        if (current.item) {
+        if (current.doc) {
+          go("/");
+        } else if (current.item) {
           go(`/${current.cat}`);
         } else if (current.cat) {
           go("/");

@@ -25,8 +25,19 @@ export interface ReadingHost {
   isCurrentHead(head: string): boolean;
 }
 
+/** A journal page that is not a post — generated content read in
+ * the same vessel (the sitemap today). */
+export interface JournalDoc {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  html: string;
+}
+
 export interface ReadingLayer {
   open(item: Item, head: string | undefined, instant: boolean): void;
+  openDoc(doc: JournalDoc): void;
   slideTo(item: Item, head: string | undefined, dir: number): void;
   close(): void;
   scrollTo(head: string, smooth: boolean): void;
@@ -64,12 +75,18 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     return el;
   }
 
-  /** Fill the vessel for an item: metadata instantly from the
-   * index, the flow cloned in when the content cache delivers. */
-  function fillVessel(item: Item): Promise<void> {
-    const key = item.post;
-    const collection = key?.split("/")[0] ?? "";
-    const info = postMeta(key);
+  /** Paint the metadata panel and the crumb. `collection` empty
+   * means a standalone document — the crumb is just its name. */
+  function paintMeta(fields: {
+    collection: string;
+    id: string;
+    title: string;
+    sub: string;
+    icon?: string;
+    date?: string;
+    words?: number;
+  }): void {
+    const { collection } = fields;
     root.dataset.collection = collection;
     // Breadcrumbs are real links: the collection is a world state,
     // slugs read as words.
@@ -82,19 +99,38 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     }
     const here = document.createElement("span");
     here.className = "here";
-    here.textContent = item.id.replaceAll("-", " ");
+    here.textContent = fields.id.replaceAll("-", " ");
     crumb.append(sep(), here);
-    metaTitle.textContent = info?.title ?? item.label;
-    metaSub.textContent = info?.description ?? item.sub;
-    glyph.innerHTML = iconFor(collection, info?.icon ?? undefined);
-    stats.date.textContent = info ? info.date.replaceAll("-", ".") : "—";
-    stats.time.textContent = info ? `≈ ${Math.max(1, Math.round(info.words / 220))} min` : "—";
-    stats.words.textContent = info
-      ? info.words >= 1000
-        ? `≈ ${(info.words / 1000).toFixed(1)}k`
-        : String(info.words)
-      : "—";
-    stats.collection.textContent = collection || "—";
+    metaTitle.textContent = fields.title;
+    metaSub.textContent = fields.sub;
+    glyph.innerHTML = iconFor(collection, fields.icon);
+    stats.date.textContent = fields.date ? fields.date.replaceAll("-", ".") : "—";
+    stats.time.textContent =
+      fields.words === undefined ? "—" : `≈ ${Math.max(1, Math.round(fields.words / 220))} min`;
+    stats.words.textContent =
+      fields.words === undefined
+        ? "—"
+        : fields.words >= 1000
+          ? `≈ ${(fields.words / 1000).toFixed(1)}k`
+          : String(fields.words);
+    stats.collection.textContent = collection || "site";
+  }
+
+  /** Fill the vessel for an item: metadata instantly from the
+   * index, the flow cloned in when the content cache delivers. */
+  function fillVessel(item: Item): Promise<void> {
+    const key = item.post;
+    const collection = key?.split("/")[0] ?? "";
+    const info = postMeta(key);
+    paintMeta({
+      collection,
+      id: item.id,
+      title: info?.title ?? item.label,
+      sub: info?.description ?? item.sub,
+      icon: info?.icon ?? undefined,
+      date: info?.date,
+      words: info?.words,
+    });
     prose.replaceChildren();
     if (!key) {
       prose.innerHTML = `<p><em>${item.sub}</em> — ${item.lead ?? ""}</p>`;
@@ -165,6 +201,25 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     });
   }
 
+  /** Open a generated document — same vessel, no content fetch. */
+  function openDoc(doc: JournalDoc): void {
+    window.clearTimeout(pageTimer);
+    paintMeta({
+      collection: "",
+      id: doc.id,
+      title: doc.title,
+      sub: doc.description,
+      icon: doc.icon,
+    });
+    prose.replaceChildren();
+    prose.innerHTML = doc.html;
+    currentFilled = Promise.resolve();
+    document.body.dataset.journalOpen = "";
+    mountReader();
+    page.dataset.open = "";
+    settleOpen(undefined, true);
+  }
+
   function openPage(item: Item, head: string | undefined, instant: boolean): void {
     window.clearTimeout(pageTimer);
     currentFilled = fillVessel(item);
@@ -213,5 +268,5 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     landOn(head);
   }
 
-  return { open: openPage, slideTo: slideToPage, close: closePage, scrollTo };
+  return { open: openPage, openDoc, slideTo: slideToPage, close: closePage, scrollTo };
 }
