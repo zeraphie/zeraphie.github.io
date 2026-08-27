@@ -48,7 +48,6 @@ body[data-journal-open] {
 
 /* ── the cover ─────────────────────────────────────────────────── */
 
-/* A dimmed ambient lattice lives UNDER the vessel: the pages are
 .journal {
   position: fixed;
   inset: 0;
