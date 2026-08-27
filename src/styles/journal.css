@@ -460,6 +460,9 @@ body {
   cursor: grab;
   touch-action: none;
 }
+.journal[data-turns="static"] .journal-corner-zone {
+  display: none;
+}
 .journal-corner-zone[data-corner="tl"] {
   top: 0;
   left: 0;

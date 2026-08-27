@@ -170,205 +170,29 @@ const meta = {
       import "@hexpunk/core";
 
       import { initPerfMode } from "../../lib/flow/perf";
-      import { beginTurn, type TurnController } from "../../lib/journal-turn";
+      import { createJournalReader } from "../../lib/journal-reader";
+
+      // The leaf animation is parked: it reads see-through on real
+      // hardware, so turns are instant until it gets its own pass.
+      const TURN_ANIMATION = false;
 
       const PERF_LOW = initPerfMode();
-
-      // Reading is turning: the clipped column strip scrolls by whole
-      // spreads, never freely. Wheel and keys arm the turn; resize and
-      // font arrival re-derive the geometry keeping the leading page.
-      const pages = document.getElementById("journal-pages")!;
-      const label = document.getElementById("journal-pager-label")!;
-      const prev = document.getElementById("journal-turn-prev") as HTMLButtonElement;
-      const next = document.getElementById("journal-turn-next") as HTMLButtonElement;
-
-      let perView = 2;
-      let unit = 0;
-      let count = 1;
-      let lead = 0;
-
-      function measure(): void {
-        const style = getComputedStyle(pages);
-        perView = Math.max(1, Number(style.columnCount) || 1);
-        const gap = Number.parseFloat(style.columnGap) || 0;
-        const padX =
-          (Number.parseFloat(style.paddingLeft) || 0) +
-          (Number.parseFloat(style.paddingRight) || 0);
-        const column = (pages.clientWidth - padX - gap * (perView - 1)) / perView;
-        unit = column + gap;
-        count = Math.max(1, Math.round((pages.scrollWidth - padX + gap) / unit));
-      }
-
-      function clampLead(value: number): number {
-        const clamped = Math.max(0, Math.min(value, count - 1));
-        return clamped - (clamped % perView);
-      }
-
-      function apply(): void {
-        lead = clampLead(lead);
-        pages.scrollTo({ left: lead * unit, top: 0, behavior: "instant" });
-        const last = Math.min(count, lead + perView);
-        label.textContent =
-          last > lead + 1
-            ? `page ${lead + 1}–${last} of ${count}`
-            : `page ${lead + 1} of ${count}`;
-        prev.disabled = lead === 0;
-        next.disabled = last >= count;
-      }
-
-      // The leaf overlay is presentation: state and scroll land in
-      // commit() before the first animated frame. Reduced motion and
-      // PERF_LOW turn instantly instead.
-      const body = document.querySelector(".journal-body") as HTMLElement;
       const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const ANIMATE = !PERF_LOW && !REDUCED;
-      let busy = false;
+      const animate = TURN_ANIMATION && !PERF_LOW && !REDUCED;
+      document.querySelector(".journal")?.setAttribute("data-turns", animate ? "leaf" : "static");
 
-      function startTurn(target: number, dir: 1 | -1): TurnController | null {
-        const next_ = clampLead(target);
-        if (next_ === lead || busy) {
-          return null;
-        }
-        const from = lead;
-        lead = next_;
-        if (!ANIMATE) {
-          apply();
-          return null;
-        }
-        busy = true;
-        return beginTurn({
-          strip: pages,
-          host: body,
-          dir,
-          oldScroll: from * unit,
-          newScroll: next_ * unit,
-          perView,
-          commit: () => apply(),
-          revert: () => {
-            lead = from;
-            apply();
-          },
-        });
-      }
-
-      // ?hold=0.4 freezes a timed turn at that progress so the
-      // mid-flight frame can be inspected; the next press finishes.
-      const HOLD = Number(new URLSearchParams(location.search).get("hold")) || 0;
-      let held: TurnController | null = null;
-
-      function go(target: number, dir: 1 | -1): void {
-        if (held) {
-          const holding = held;
-          held = null;
-          holding.settle(true).finally(() => {
-            busy = false;
-          });
-          return;
-        }
-        const controller = startTurn(target, dir);
-        if (!controller) {
-          return;
-        }
-        if (HOLD > 0) {
-          controller.set(HOLD);
-          held = controller;
-          return;
-        }
-        controller.settle(true).finally(() => {
-          busy = false;
-        });
-      }
-
-      const turn = (dir: 1 | -1) => go(lead + dir * perView, dir);
-
-      // Corner drags scrub the turn; releasing past the halfway
-      // line completes it, short of it the leaf settles back.
-      for (const zone of document.querySelectorAll<HTMLElement>(".journal-corner-zone")) {
-        zone.addEventListener("pointerdown", (event) => {
-          const corner = zone.dataset.corner ?? "";
-          const dir: 1 | -1 =
-            perView > 1
-              ? corner.endsWith("r")
-                ? 1
-                : -1
-              : corner.startsWith("b")
-                ? 1
-                : -1;
-          const controller = startTurn(lead + dir * perView, dir);
-          if (!controller) {
-            return;
-          }
-          event.preventDefault();
-          zone.setPointerCapture(event.pointerId);
-          let last = controller.progressFrom(event.clientX, event.clientY);
-          controller.set(last);
-          const move = (moved: PointerEvent) => {
-            last = controller.progressFrom(moved.clientX, moved.clientY);
-            controller.set(last);
-          };
-          const finish = () => {
-            zone.removeEventListener("pointermove", move);
-            zone.removeEventListener("pointerup", finish);
-            zone.removeEventListener("pointercancel", finish);
-            controller.settle(last > 0.5).finally(() => {
-              busy = false;
-            });
-          };
-          zone.addEventListener("pointermove", move);
-          zone.addEventListener("pointerup", finish);
-          zone.addEventListener("pointercancel", finish);
-        });
-      }
-
-      prev.addEventListener("click", () => turn(-1));
-      next.addEventListener("click", () => turn(1));
-
-      // One wheel notch is one turn — the cooldown covers the hinge
-      // and soaks inertial deltas so a flick doesn't skip spreads.
-      let wheelAt = 0;
-      window.addEventListener(
-        "wheel",
-        (event) => {
-          event.preventDefault();
-          const now = performance.now();
-          if (now - wheelAt < 430 || Math.abs(event.deltaY) < 4) {
-            return;
-          }
-          wheelAt = now;
-          turn(event.deltaY > 0 ? 1 : -1);
-        },
-        { passive: false }
-      );
-
-      window.addEventListener("keydown", (event) => {
-        const forward =
-          event.key === "ArrowRight" || event.key === "PageDown" ||
-          (event.key === " " && !event.shiftKey);
-        const back =
-          event.key === "ArrowLeft" || event.key === "PageUp" ||
-          (event.key === " " && event.shiftKey);
-        if (event.key === "Home") {
-          go(0, -1);
-        } else if (event.key === "End") {
-          go(count, 1);
-        } else if (forward) {
-          turn(1);
-        } else if (back) {
-          turn(-1);
-        } else {
-          return;
-        }
-        event.preventDefault();
+      createJournalReader({
+        strip: document.getElementById("journal-pages")!,
+        body: document.querySelector(".journal-body") as HTMLElement,
+        label: document.getElementById("journal-pager-label")!,
+        prev: document.getElementById("journal-turn-prev") as HTMLButtonElement,
+        next: document.getElementById("journal-turn-next") as HTMLButtonElement,
+        zones: animate
+          ? [...document.querySelectorAll<HTMLElement>(".journal-corner-zone")]
+          : [],
+        animate,
+        hold: Number(new URLSearchParams(location.search).get("hold")) || 0,
       });
-
-      const refresh = (): void => {
-        measure();
-        apply();
-      };
-      new ResizeObserver(refresh).observe(pages);
-      window.addEventListener("resize", refresh);
-      document.fonts.ready.then(refresh);
-      refresh();
     </script>
   </body>
 </html>
