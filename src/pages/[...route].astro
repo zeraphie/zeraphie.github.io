@@ -21,6 +21,8 @@ import "@hexpunk/core/elements.css";
 import { buildWorld } from "../lib/world";
 
 import "../styles/flow.css";
+import "../styles/journal.css";
+import "../styles/journal-prose.css";
 
 // The world derives from the content collections: every collection
 // with at least one published post becomes a category, its posts the
@@ -75,6 +77,9 @@ const rendered = await Promise.all(
       meta: {
         title: entry.data.title,
         description: entry.data.description,
+        icon: entry.data.icon ?? null,
+        date: entry.data.date.toISOString().slice(0, 10),
+        words: (entry.body ?? "").split(/\s+/).filter(Boolean).length,
         anchors: headings
           .filter((h) => h.depth === 2)
           .map((h) => ({ head: h.slug, label: h.text })),
@@ -122,10 +127,110 @@ const CurrentContent = currentPost?.Content;
       <button type="button" class="hs-reset" id="hs-reset">↺ reset world</button>
 
       <!-- The dived page: once the camera lands in a cell, the world
-           fades out beneath this layer and reading happens at real
-           pixel scale. Each dived hex is a CARD; sibling navigation
-           slides cards horizontally — transform-only, no camera. -->
-      <div class="page" id="page"></div>
+           fades out beneath this layer and reading happens in the
+           JOURNAL — the full-viewport book. The reading layer fills
+           the metadata panel and the flow strip per post. -->
+      <div class="page" id="page">
+        <main class="journal" data-turns="static">
+          {
+            ["tl", "tr", "bl", "br"].map((corner) => (
+              <svg
+                class="journal-corner"
+                data-corner={corner}
+                viewBox="0 0 31 31"
+                aria-hidden="true"
+              >
+                <path
+                  class="step"
+                  d="M 20 0.5 L 30 10.5 L 30 30.5 L 10 30.5 L 0 20.5"
+                  fill="none"
+                  stroke-width="1"
+                />
+                <line class="echo" x1="14" y1="14" x2="21" y2="21" stroke-width="1" />
+              </svg>
+            ))
+          }
+
+          <header class="journal-band journal-band--head">
+            <span class="journal-site">izelya.me</span>
+            <span class="journal-crumb"></span>
+            <span class="journal-mode">read<i class="journal-dot"></i></span>
+          </header>
+
+          <div class="journal-body">
+            <section class="journal-page journal-page--verso" aria-hidden="true"></section>
+            <div class="journal-spine" aria-hidden="true"></div>
+            <section class="journal-page journal-page--recto" aria-hidden="true"></section>
+
+            <div class="journal-pages" id="journal-pages">
+              <aside class="journal-meta">
+                <svg
+                  class="journal-meta-icon"
+                  width="60"
+                  height="70"
+                  viewBox="0 0 60 70"
+                  aria-hidden="true"
+                >
+                  <polygon
+                    points="30,2 58,18.5 58,51.5 30,68 2,51.5 2,18.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.4"></polygon>
+                  <g class="journal-meta-glyph" transform="translate(18 23)"></g>
+                </svg>
+                <h2 class="journal-meta-title"></h2>
+                <p class="journal-meta-sub"></p>
+                <hr class="hp-separator" data-mark="dot" aria-hidden="true" />
+                <dl class="journal-meta-stats">
+                  <dt>Date</dt>
+                  <dd data-stat="date"></dd>
+                  <dt>Time</dt>
+                  <dd data-stat="time"></dd>
+                  <dt>Words</dt>
+                  <dd data-stat="words"></dd>
+                  <dt>Collection</dt>
+                  <dd data-stat="collection"></dd>
+                </dl>
+              </aside>
+              <div class="journal-prose"></div>
+            </div>
+          </div>
+
+          <footer class="journal-band journal-band--foot">
+            <span class="journal-site">izelya.me</span>
+            <svg
+              class="journal-sigil"
+              width="20"
+              height="22"
+              viewBox="0 0 20 22"
+              aria-hidden="true"
+            >
+              <polygon
+                points="10,1.6 19,6.3 19,15.7 10,20.4 1,15.7 1,6.3"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"></polygon>
+              <circle class="ring" cx="10" cy="11" r="4" fill="none" stroke-width="0.9"></circle>
+              <circle cx="10" cy="11" r="1.3" fill="currentColor"></circle>
+            </svg>
+            <span class="journal-pager">
+              <span id="journal-pager-label">page — of —</span>
+              <button
+                class="journal-turn"
+                id="journal-turn-prev"
+                type="button"
+                aria-label="previous"
+              >
+                ‹‹
+              </button>
+              <span class="arrows">·</span>
+              <button class="journal-turn" id="journal-turn-next" type="button" aria-label="next">
+                ››
+              </button>
+            </span>
+          </footer>
+        </main>
+      </div>
 
       <hp-hextrack id="track" hidden></hp-hextrack>
     </div>

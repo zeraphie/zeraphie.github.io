@@ -10,8 +10,10 @@
 /* Site-local palette — the one place these hex values may appear.
    Brass is deliberately not a hexpunk token yet: it earns system
    status only if the journal proves it. Everything interactive
-   stays on the --hp-* families; brass is passive trim only. */
-.journal {
+   stays on the --hp-* families; brass is passive trim only.
+   Root-scoped: the flow's body backdrop and the turn overlay both
+   read these from outside the vessel element. */
+:root {
   --iz-brass: #8f7134;
   --iz-brass-bright: #b8934a;
   --iz-brass-dim: #574419;
@@ -36,14 +38,11 @@
   --journal-hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-html,
-body {
-  margin: 0;
-  height: 100%;
-  background: var(--iz-cover, var(--hp-background));
-  color: var(--hp-on-surface);
-  font-family: "Chakra Petch", Inter, ui-sans-serif, system-ui, sans-serif;
-  overflow: hidden;
+/* While a journal is open, the page ground is the cover — the
+   ambience canvas sits above it, the opaque leaves above that.
+   The workbench sets this for good; the flow toggles it per dive. */
+body[data-journal-open] {
+  background: var(--iz-cover);
 }
 
 /* ── the cover ─────────────────────────────────────────────────── */

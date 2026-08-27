@@ -1,16 +1,19 @@
-// ─ reading — the dived page layer ─
-//
-// Once the camera lands in a cell, the world fades beneath this
-// layer and reading happens at real pixel scale. Each dived item is
-// a CARD cloned from its server-rendered template (or a stand-in for
-// items without a post); sibling navigation slides whole cards
-// horizontally — transform-only, the camera never moves.
+/* ─ reading — the dived journal ─
+ *
+ * Once the camera lands in a cell, the world fades beneath this
+ * layer and the JOURNAL opens: the full-viewport book, its metadata
+ * panel filled from the post index, the post's flow cloned into the
+ * column strip, and the shared reader driving pagination. Reading
+ * is turning — a heading resolves to the page that contains it,
+ * never to a scroll position. */
 
 import type { HpGrid } from "@hexpunk/core/grid";
 
 import type { Item } from "../flow-data";
+import { iconFor } from "../icons";
+import { createJournalReader, type JournalReader } from "../journal-reader";
 import { contentFor } from "./content-cache";
-import { anchorsOf, postMeta } from "./posts";
+import { postMeta } from "./posts";
 
 export interface ReadingHost {
   page: HTMLElement;
@@ -31,68 +34,77 @@ export interface ReadingLayer {
 
 export function createReadingLayer(host: ReadingHost): ReadingLayer {
   const { page, world, bg } = host;
-  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const root = page.querySelector<HTMLElement>(".journal")!;
+  const strip = page.querySelector<HTMLElement>("#journal-pages")!;
+  const prose = page.querySelector<HTMLElement>(".journal-prose")!;
+  const crumb = page.querySelector<HTMLElement>(".journal-crumb")!;
+  const glyph = page.querySelector<SVGGElement>(".journal-meta-glyph")!;
+  const metaTitle = page.querySelector<HTMLElement>(".journal-meta-title")!;
+  const metaSub = page.querySelector<HTMLElement>(".journal-meta-sub")!;
+  const stat = (name: string) => page.querySelector<HTMLElement>(`[data-stat="${name}"]`)!;
+  const stats = {
+    date: stat("date"),
+    time: stat("time"),
+    words: stat("words"),
+    collection: stat("collection"),
+  };
+
   let pageTimer = 0;
   let worldHideTimer = 0;
-  let currentCard: HTMLElement | null = null;
-  let currentMain: HTMLElement | null = null;
-  /** Resolves when the adopted card's body content is in the DOM —
-   * anchor landings wait on it; cached content resolves in a
-   * microtask, so the wait is invisible when prefetch did its job. */
+  let reader: JournalReader | null = null;
+  /** Resolves when the strip holds the post's body — page-landings
+   * wait on it; cached content resolves in a microtask, so the wait
+   * is invisible when prefetch did its job. */
   let currentFilled: Promise<void> = Promise.resolve();
 
-  /** Stand-in body for items that have no post yet (arcade
-   * carts, external links) — sections mirror the declared subs
-   * so their anchors still work. */
-  function standInHtml(item: Item): string {
-    const sections = anchorsOf(item)
-      .map(
-        ({ head, label }) => `
-    <h2 id="${head}">${label}</h2>
-    <p>${item.lead ?? ""} This section stands in for the real ${label} content — a standard page in the hex's middle band, set in the system's own prose rhythm.</p>`
-      )
-      .join("");
-    return `<h1>${item.label}</h1><p><em>${item.sub}</em> — ${item.lead ?? ""}</p>${sections}`;
-  }
-
-  function buildCard(item: Item): { card: HTMLElement; filled: Promise<void> } {
-    const card = document.createElement("div");
-    card.className = "page-card";
-    const meta = item.post ? `/${item.post}` : (item.url ?? "");
-    card.innerHTML = `<div class="page-hex"><div class="page-hex-in"></div></div>
-      <div class="page-meta">izelya.me ${meta}</div>
-      <main class="hp-prose page-main"></main>
-      <div class="page-foot">esc surfaces · the track waits at the right edge</div>`;
-    const main = card.querySelector<HTMLElement>(".page-main")!;
-    const info = postMeta(item.post);
-    if (item.post && info) {
-      // Header paints immediately from the index; the body clones in
-      // when the content cache delivers (instantly when prefetched).
-      main.innerHTML = `<h1>${info.title}</h1><p><em>${item.sub}</em> — ${info.description}</p>`;
-      const filled = contentFor(item.post)
-        .then((template) => {
-          main.appendChild(template.content.cloneNode(true));
-        })
-        .catch(() => {
-          main.insertAdjacentHTML(
-            "beforeend",
-            `<p><em>the archive is unreachable — <a href="/${item.post}">read it directly</a></em></p>`
-          );
-        });
-      return { card, filled };
+  /** Fill the vessel for an item: metadata instantly from the
+   * index, the flow cloned in when the content cache delivers. */
+  function fillVessel(item: Item): Promise<void> {
+    const key = item.post;
+    const collection = key?.split("/")[0] ?? "";
+    const info = postMeta(key);
+    root.dataset.collection = collection;
+    crumb.textContent = key ? `// ${collection} · ${item.id}` : `// ${item.id}`;
+    metaTitle.textContent = info?.title ?? item.label;
+    metaSub.textContent = info?.description ?? item.sub;
+    glyph.innerHTML = iconFor(collection, info?.icon ?? undefined);
+    stats.date.textContent = info ? info.date.replaceAll("-", ".") : "—";
+    stats.time.textContent = info ? `≈ ${Math.max(1, Math.round(info.words / 220))} min` : "—";
+    stats.words.textContent = info
+      ? info.words >= 1000
+        ? `≈ ${(info.words / 1000).toFixed(1)}k`
+        : String(info.words)
+      : "—";
+    stats.collection.textContent = collection || "—";
+    prose.replaceChildren();
+    if (!key) {
+      prose.innerHTML = `<p><em>${item.sub}</em> — ${item.lead ?? ""}</p>`;
+      return Promise.resolve();
     }
-    main.innerHTML = standInHtml(item);
-    return { card, filled: Promise.resolve() };
+    return contentFor(key)
+      .then((template) => {
+        prose.appendChild(template.content.cloneNode(true));
+      })
+      .catch(() => {
+        prose.insertAdjacentHTML(
+          "beforeend",
+          `<p><em>the archive is unreachable — <a href="/${key}">read it directly</a></a></em></p>`
+        );
+      });
   }
 
-  function adoptCard(card: HTMLElement, filled: Promise<void>): void {
-    currentCard = card;
-    currentMain = card.querySelector<HTMLElement>(".page-main");
-    currentFilled = filled;
+  /** Turn to the page holding a heading (page one without one). */
+  function landOn(head: string | undefined): void {
+    if (!reader) {
+      return;
+    }
+    reader.refresh();
+    const target = head ? strip.querySelector(`#${CSS.escape(head)}`) : null;
+    reader.goTo(target ? reader.pageOf(target) : 0);
   }
 
-  /** Post-open bookkeeping shared by the fade-in and slide paths:
-   * retire the world, watchdog the backdrop fade, land anchors. */
+  /** Post-open bookkeeping shared by every path: retire the world,
+   * watchdog the backdrop fade, land on the routed heading. */
   function settleOpen(head: string | undefined, instant: boolean): void {
     window.clearTimeout(worldHideTimer);
     worldHideTimer = window.setTimeout(
@@ -108,31 +120,37 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
       }
     }, 700);
     const filled = currentFilled;
-    if (head) {
-      void filled.then(() => {
-        scrollMain(head, !instant);
-        // Late webfonts reflow the prose and shift anchors —
-        // re-land on the heading once faces settle.
-        void document.fonts.ready.then(() => {
-          if (page.hasAttribute("data-open") && host.isCurrentHead(head)) {
-            scrollMain(head, false);
-          }
-        });
-      });
-    } else {
-      void filled.then(() => {
-        if (currentMain) {
-          currentMain.scrollTop = 0;
+    void filled.then(() => {
+      landOn(head);
+      // Late webfonts reflow the columns and shift page breaks —
+      // re-land once faces settle.
+      void document.fonts.ready.then(() => {
+        if (page.hasAttribute("data-open") && (!head || host.isCurrentHead(head))) {
+          landOn(head);
         }
       });
-    }
+    });
+  }
+
+  function mountReader(): void {
+    reader ??= createJournalReader({
+      strip,
+      body: page.querySelector<HTMLElement>(".journal-body")!,
+      label: page.querySelector<HTMLElement>("#journal-pager-label")!,
+      prev: page.querySelector<HTMLButtonElement>("#journal-turn-prev")!,
+      next: page.querySelector<HTMLButtonElement>("#journal-turn-next")!,
+      // The leaf animation is parked (see-through on real hardware)
+      // — instant turns, no drag grips, until it gets its own pass.
+      zones: [],
+      animate: false,
+    });
   }
 
   function openPage(item: Item, head: string | undefined, instant: boolean): void {
     window.clearTimeout(pageTimer);
-    const { card, filled } = buildCard(item);
-    page.replaceChildren(card);
-    adoptCard(card, filled);
+    currentFilled = fillVessel(item);
+    document.body.dataset.journalOpen = "";
+    mountReader();
     const show = () => {
       page.dataset.open = "";
       settleOpen(head, instant);
@@ -140,38 +158,17 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     if (instant) {
       show();
     } else {
-      // Start the fade while the camera is still flying — no
-      // still frame of the world's frozen hover ever shows.
+      // Start the fade while the camera is still flying — no still
+      // frame of the world's frozen hover ever shows.
       pageTimer = window.setTimeout(show, 240);
     }
   }
 
-  /** Sibling navigation: whole cards slide horizontally, the
-   * direction taken from track order — a target ABOVE the
-   * current item enters from the left, BELOW from the right.
-   * Transform-only, synchronous start→reflow→end so the
-   * transition arms without an animation frame; the camera and
-   * the hidden world are never involved. */
-  function slideToPage(item: Item, head: string | undefined, dir: number): void {
-    const oldCard = currentCard;
-    const { card: next, filled } = buildCard(item);
-    const skip = host.perfLow || REDUCED;
-    if (!skip) {
-      next.style.transform = `translateX(${dir * 100}vw)`;
-    }
-    page.appendChild(next);
-    adoptCard(next, filled);
-    if (skip) {
-      oldCard?.remove();
-    } else {
-      next.getBoundingClientRect();
-      next.style.transform = "translateX(0)";
-      if (oldCard) {
-        oldCard.style.transform = `translateX(${-dir * 100}vw)`;
-        oldCard.style.opacity = "0.35";
-        window.setTimeout(() => oldCard.remove(), 520);
-      }
-    }
+  /** Sibling navigation: the vessel stays, the post inside it
+   * swaps. The slide animation retired with the card layer — a
+   * sibling is a different book, opened at its first page. */
+  function slideToPage(item: Item, head: string | undefined, _dir: number): void {
+    currentFilled = fillVessel(item);
     settleOpen(head, true);
   }
 
@@ -179,28 +176,23 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     window.clearTimeout(pageTimer);
     window.clearTimeout(worldHideTimer);
     delete page.dataset.open;
+    delete document.body.dataset.journalOpen;
     page.style.opacity = "";
     world.style.visibility = "";
     world.style.pointerEvents = "";
     bg.style.display = "";
+    reader?.destroy();
+    reader = null;
     window.setTimeout(() => {
       if (!page.hasAttribute("data-open")) {
-        page.replaceChildren();
-        currentCard = null;
-        currentMain = null;
+        prose.replaceChildren();
       }
     }, 320);
   }
 
-  function scrollMain(head: string, smooth: boolean): void {
-    const target = currentMain?.querySelector<HTMLElement>(`#${CSS.escape(head)}`);
-    if (currentMain && target) {
-      currentMain.scrollTo({
-        top: Math.max(0, target.offsetTop - 8),
-        behavior: smooth ? "smooth" : "auto",
-      });
-    }
+  function scrollTo(head: string, _smooth: boolean): void {
+    landOn(head);
   }
 
-  return { open: openPage, slideTo: slideToPage, close: closePage, scrollTo: scrollMain };
+  return { open: openPage, slideTo: slideToPage, close: closePage, scrollTo };
 }

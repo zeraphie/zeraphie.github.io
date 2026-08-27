@@ -70,6 +70,17 @@ const meta = {
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
+    <style is:global>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--iz-cover, #0f1113);
+        color: var(--hp-on-surface);
+        font-family: "Chakra Petch", Inter, ui-sans-serif, system-ui, sans-serif;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
     <hp-background id="journal-bg" page hex-size={((100 - 2.5) / Math.sqrt(3)).toFixed(2)}

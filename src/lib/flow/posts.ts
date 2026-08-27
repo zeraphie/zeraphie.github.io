@@ -10,6 +10,10 @@ import type { Item } from "../flow-data";
 export interface PostMeta {
   title: string;
   description: string;
+  icon: string | null;
+  /** ISO date, journal-formatted client-side. */
+  date: string;
+  words: number;
   anchors: { head: string; label: string }[];
 }
 /** Server-rendered post metadata: titles, descriptions, and
