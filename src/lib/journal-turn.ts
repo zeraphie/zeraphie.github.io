@@ -50,6 +50,9 @@ function face(
   el.className = `journal-leaf-face${back ? " journal-leaf-face--back" : ""}`;
   el.dataset.paper = paper;
   if (scroll === null) {
+    const blankShade = document.createElement("div");
+    blankShade.className = "journal-leaf-shade";
+    el.appendChild(blankShade);
     return { el, settle() {} };
   }
   const clone = strip.cloneNode(true) as HTMLElement;
@@ -61,6 +64,12 @@ function face(
   clone.style.width = `${strip.clientWidth}px`;
   clone.style.left = `${-regionLeft}px`;
   el.appendChild(clone);
+  // The travelling shade lives on its own layer: a filter on a 3D
+  // face flattens it out of the preserve-3d context and breaks
+  // backface culling mid-rotation (a see-through leaf).
+  const shade = document.createElement("div");
+  shade.className = "journal-leaf-shade";
+  el.appendChild(shade);
   return {
     el,
     settle() {
@@ -163,11 +172,13 @@ export function beginTurn(options: TurnOptions): TurnController {
     // The travelling shade: whichever face is lifting dims, the
     // landing face brightens.
     const lift = from === 0 ? progress : 1 - progress;
-    if (front) {
-      front.style.filter = `brightness(${(1 - lift * 0.45).toFixed(3)})`;
+    const frontShade = front?.querySelector<HTMLElement>(".journal-leaf-shade");
+    const backShade = backFace?.querySelector<HTMLElement>(".journal-leaf-shade");
+    if (frontShade) {
+      frontShade.style.opacity = (lift * 0.45).toFixed(3);
     }
-    if (backFace) {
-      backFace.style.filter = `brightness(${(0.55 + lift * 0.45).toFixed(3)})`;
+    if (backShade) {
+      backShade.style.opacity = ((1 - lift) * 0.45).toFixed(3);
     }
   }
   set(0);
