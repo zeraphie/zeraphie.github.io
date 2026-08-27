@@ -305,6 +305,10 @@ const PERF_LOW = initPerfMode();
       const { clusterById, parseRoute, routePath } = createRouter(CLUSTERS);
 
       const PAD = 64;
+      /** How long the sections ignore input after the ring blooms —
+       * long enough to swallow the opening tap's own click. */
+      const BLOOM_GUARD = 420;
+      let bloomedAt = 0;
       /** Category distance from the seed along its fan direction —
        * far enough that fully-expanded neighbours never touch. */
       const D = 14;
@@ -316,6 +320,21 @@ const PERF_LOW = initPerfMode();
       const track = document.getElementById("track") as HpHextrack;
       const seedUnfold = document.getElementById("seed-unfold") as HpUnfoldList;
       const seedCell = document.getElementById("seed-cell")!;
+
+      let bloomGuardTimer = 0;
+      /** A touch opens the bloom by hover and then delivers a click
+       * from the same gesture — which would land on whichever section
+       * just arrived under the finger. Deafen them until the ring has
+       * settled. */
+      function armBloomGuard(): void {
+        bloomedAt = performance.now();
+        stage.dataset.blooming = "";
+        window.clearTimeout(bloomGuardTimer);
+        bloomGuardTimer = window.setTimeout(() => {
+          delete stage.dataset.blooming;
+        }, BLOOM_GUARD);
+      }
+
       const backEl = document.getElementById("hs-back") as HTMLButtonElement;
 
       const side = seamlessSide(100, 2.5);
@@ -639,6 +658,9 @@ const clusters = createClusterLayer(world);
         }
         const section = target.closest<HTMLElement>(".section");
         if (section?.dataset.cluster) {
+          if (performance.now() - bloomedAt < BLOOM_GUARD) {
+            return;
+          }
           go(`/${section.dataset.cluster}`);
           return;
         }
@@ -758,6 +780,12 @@ const clusters = createClusterLayer(world);
       }
       seedCell.addEventListener("pointerenter", () => {
         seedHovered = true;
+        // Arm the guard at the START of the gesture, not when the
+        // ring reports itself open: a quick tap can deliver its
+        // click before that event lands.
+        if (!seedUnfold.open) {
+          armBloomGuard();
+        }
         syncCalm();
       });
       seedCell.addEventListener("pointerleave", () => {
@@ -765,6 +793,7 @@ const clusters = createClusterLayer(world);
         syncCalm();
       });
       seedUnfold.addEventListener("hp-unfold-open", () => {
+        armBloomGuard();
         // The bloom is intent: warm every published post so any dive
         // that follows reads from cache, never the network.
         prefetchPosts(CLUSTERS.flatMap((c) => c.items.map((entry) => entry.post)));

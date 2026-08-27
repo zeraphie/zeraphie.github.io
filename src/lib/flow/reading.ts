@@ -225,8 +225,8 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     // is their position in the rail's sub list.
     const indexes: number[] = [];
     [...strip.querySelectorAll<HTMLElement>("h2[id]")].forEach((heading, index) => {
-      const page = mounted.pageOf(heading);
-      if (page >= from && page < to) {
+      const at = mounted.pageOf(heading);
+      if (at >= from && at < to) {
         indexes.push(index);
       }
     });

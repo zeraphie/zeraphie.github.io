@@ -63,6 +63,12 @@ body {
   isolation: isolate;
 }
 
+/* While the ring is blooming, the sections are deaf — the tap that
+   opened them must not also choose one. */
+#hs-stage[data-blooming] .section {
+  pointer-events: none;
+}
+
 /* The world's one piece of chrome: back walks up a level, and it
    only exists when there is somewhere to go. */
 .hs-back {
