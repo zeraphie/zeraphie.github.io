@@ -170,11 +170,11 @@ hp-hextrack {
   --hp-hextrack-width: min(380px, 92vw);
 }
 
-/* Software-compositor degrade: every layer is CPU-composited,
-   so drop the second GL sim and the long full-viewport fades. */
-body[data-perf="low"] #bg {
-  display: none;
-}
+/* Software-compositor degrade: every layer is CPU-composited, so
+   drop the long full-viewport fades. The backdrop is NOT hidden —
+   it detects a software rasterizer itself and swaps its own canvas
+   for a static tile that composites as ordinary paint. Hiding it
+   here would suppress a degrade that has already happened. */
 body[data-perf="low"] .page,
 body[data-perf="low"] #hs-stage,
 body[data-perf="low"] hp-cluster .hx-reveal {
