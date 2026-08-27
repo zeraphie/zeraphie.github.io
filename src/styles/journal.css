@@ -315,13 +315,16 @@ body {
    the pair paginates as ordinary content — always page one. */
 .journal-meta {
   float: left;
-  width: 150px;
+  /* The column fits its widest run — in practice the title — so a
+     long one-word name never clips; short titles keep the floor. */
+  width: min-content;
+  min-width: 150px;
+  max-width: 45%;
   height: 100%;
   margin-right: 28px;
   border-right: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
   padding-right: 24px;
   box-sizing: border-box;
-  min-width: 0;
 }
 .journal-meta-icon {
   display: block;
