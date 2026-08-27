@@ -1,6 +1,6 @@
 ---
 title: Sanguine Pact
-icon: comment_outlined
+icon: droplets
 description: "A Warlock Subclass suited for 5th edition D&D"
 date: 2024-09-22
 ---

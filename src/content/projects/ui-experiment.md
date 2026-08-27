@@ -1,6 +1,6 @@
 ---
 title: UI Experiment
-icon: view_quilt
+icon: layout-dashboard
 description: A fancy UI experiment and proof of concept for gravitating content towards the mouse
 draft: true
 date: 2017-03-08

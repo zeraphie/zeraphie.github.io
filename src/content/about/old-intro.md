@@ -1,6 +1,6 @@
 ---
 title: Zeraphie
-icon: dashboard
+icon: layout-dashboard
 date: 2022-10-20
 description: Just another developer writing about their projects and research
 draft: true

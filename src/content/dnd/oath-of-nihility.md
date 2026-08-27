@@ -1,6 +1,6 @@
 ---
 title: Oath of Nihility
-icon: comment_outlined
+icon: eclipse
 description: "A Paladin Subclass suited for 5th edition D&D inspired by Acheron from Honkai: Star Rail"
 date: 2024-09-22
 ---

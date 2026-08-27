@@ -1,6 +1,6 @@
 ---
 title: PasswordGen
-icon: security
+icon: key-round
 description: A PHP project to create a cryptographically secure password generator (also has a JS port)
 date: 2017-03-10
 ---

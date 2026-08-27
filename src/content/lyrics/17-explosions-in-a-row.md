@@ -1,6 +1,6 @@
 ---
 title: Explosions
-icon: music_note
+icon: music
 description: A light hearted parody of 17 girls in a row by Steel Panther based on Black Mages in FFXIV
 draft: true
 date: 2017-03-17

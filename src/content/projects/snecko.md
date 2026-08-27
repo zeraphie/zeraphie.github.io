@@ -1,5 +1,6 @@
 ---
 title: snecko
+icon: worm
 description: "A browser snake with opinions. Playable in the arcade, embedded from its own deployment."
 date: 2026-08-26
 ---

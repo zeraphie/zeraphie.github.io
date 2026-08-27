@@ -1,6 +1,6 @@
 ---
 title: Merlin's Claw
-icon: comment_outlined
+icon: wand-sparkles
 description: "A Fighter Subclass suited for 5th edition D&D inspired by Feixiao from Honkai: Star Rail"
 date: 2024-09-22
 ---

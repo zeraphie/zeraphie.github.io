@@ -1,6 +1,6 @@
 ---
 title: Potency
-icon: apps
+icon: calculator
 description: A potency calculator for Final Fantasy XIV based on the patch 3.4 weightings
 draft: true
 date: 2017-03-08

@@ -1,6 +1,6 @@
 ---
 title: Aetherblade
-icon: comment_outlined
+icon: sword
 description: "A homebrew class suited for 5th edition D&D, Aetherblade is themed about inheritence of primordial power"
 date: 2024-09-22
 ---

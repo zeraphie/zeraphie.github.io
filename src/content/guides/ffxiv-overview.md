@@ -1,6 +1,6 @@
 ---
 title: FFXIV Overview
-icon: assignment
+icon: clipboard-list
 description: This guide will be focussed on the general ethos that is used to play the game in a general sense, focussing primarily on Raiding (i.e. savage), but can be readily transferred to other fights, i.e. dungeons/trials/normal raids/extreme trials etc
 draft: true
 date: 2017-05-24

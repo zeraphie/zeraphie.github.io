@@ -1,6 +1,6 @@
 ---
 title: My Home Rules
-icon: comment_outlined
+icon: gavel
 description: A set of home rules that I apply to Dungeons and Dragons 5th Edition games I run
 date: 2022-12-03
 ---

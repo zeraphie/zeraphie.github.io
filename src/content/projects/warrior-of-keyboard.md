@@ -1,5 +1,6 @@
 ---
 title: warrior of keyboard
+icon: keyboard
 description: "A keyboard battle game. Bring your fastest fingers and a mechanical conscience."
 date: 2026-08-26
 ---

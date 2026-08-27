@@ -1,5 +1,6 @@
 ---
 title: hexpunk
+icon: hexagon
 description: "Wireframe-cyberpunk Lit components — the system this very site is built from. Hexagonal-first, honest geometry, tokens all the way down."
 date: 2026-08-26
 ---

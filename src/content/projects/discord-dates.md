@@ -1,6 +1,6 @@
 ---
 title: Discord Dates
-icon: today_outlined
+icon: calendar-clock
 description: A walkthrough of how the discord date formatter was made, a tool that gives an easy to use interface to send localised datetimes in discord.
 date: 2022-10-23
 ---

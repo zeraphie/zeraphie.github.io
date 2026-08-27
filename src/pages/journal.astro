@@ -15,6 +15,8 @@ import { getEntry, render } from "astro:content";
 import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 
+import { iconFor } from "../lib/icons";
+
 import "../styles/journal.css";
 
 const title = "the journal · izelya.me";
@@ -25,6 +27,19 @@ if (!entry) {
   throw new Error("the workbench post is missing");
 }
 const { Content } = await render(entry);
+
+const words = (entry.body ?? "").split(/\s+/).filter(Boolean).length;
+const meta = {
+  title: entry.data.title,
+  sub: entry.data.description,
+  crumb: `// ${entry.collection} · ${entry.id}`,
+  glyph: iconFor(entry.collection, entry.data.icon),
+  date: entry.data.date.toISOString().slice(0, 10).replaceAll("-", "."),
+  reading: `≈ ${Math.max(1, Math.round(words / 220))} min`,
+  words: words >= 1000 ? `≈ ${(words / 1000).toFixed(1)}k` : String(words),
+  collection: entry.collection,
+  status: entry.data.draft ? "draft" : "live",
+};
 ---
 
 <!doctype html>
@@ -55,7 +70,7 @@ const { Content } = await render(entry);
 
       <header class="journal-band journal-band--head">
         <span class="journal-site">izelya.me</span>
-        <span class="journal-crumb">// dnd · aetherblade</span>
+        <span class="journal-crumb">{meta.crumb}</span>
         <span class="journal-mode">read<i class="journal-dot"></i></span>
       </header>
 
@@ -77,22 +92,21 @@ const { Content } = await render(entry);
               fill="none"
               stroke="currentColor"
               stroke-width="1.4"></polygon>
+            <g transform="translate(18 23)" set:html={meta.glyph} />
           </svg>
-          <h1 class="journal-meta-title">Aetherblade</h1>
-          <p class="journal-meta-sub">
-            A homebrew class themed about inheritance of primordial power
-          </p>
+          <h1 class="journal-meta-title">{meta.title}</h1>
+          <p class="journal-meta-sub">{meta.sub}</p>
           <dl class="journal-meta-stats">
             <dt>Date</dt>
-            <dd>2024.09.22</dd>
+            <dd>{meta.date}</dd>
             <dt>Reading</dt>
-            <dd>&approx; 33 min</dd>
+            <dd>{meta.reading}</dd>
             <dt>Words</dt>
-            <dd>&approx; 7.3k</dd>
+            <dd>{meta.words}</dd>
             <dt>Collection</dt>
-            <dd>dnd</dd>
+            <dd>{meta.collection}</dd>
             <dt>Status</dt>
-            <dd class="live">v0 · wip</dd>
+            <dd class:list={{ live: meta.status === "live" }}>{meta.status}</dd>
           </dl>
         </aside>
         <div class="journal-prose">
