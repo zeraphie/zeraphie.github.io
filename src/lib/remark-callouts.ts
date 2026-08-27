@@ -47,6 +47,13 @@ function walk(node: Node): void {
   if (node.type === "blockquote") {
     mark(node);
   }
+  // Content dividers wear hexpunk's separator (centre hex glyph).
+  if (node.type === "thematicBreak") {
+    node.data = {
+      ...node.data,
+      hProperties: { ...node.data?.hProperties, className: "hp-separator" },
+    };
+  }
   for (const child of node.children ?? []) {
     walk(child);
   }

@@ -16,8 +16,17 @@
   widows: 2;
   counter-reset: journal-section;
 }
+/* elements.css colours loose p/strong for the app shell; inside the
+   journal the prose dress owns text colour and emphasis. */
 .journal-prose p {
   margin: 0 0 1em;
+  color: inherit;
+}
+.journal-prose strong {
+  border: 0;
+  padding: 0;
+  font-style: inherit;
+  color: inherit;
 }
 .journal-prose > :first-child {
   margin-top: 0;
@@ -121,12 +130,11 @@
   margin: 0 0 0.4em;
 }
 
+/* Content dividers are hexpunk's hr (classed by the remark layer);
+   only rhythm and float behaviour are ours. */
 .journal-prose hr {
   display: flow-root;
-  border: 0;
-  height: 1px;
   margin: 1.4em 0;
-  background: color-mix(in srgb, var(--hp-outline-variant) 45%, transparent);
 }
 
 /* ── tables: hairline grid under an azure header rule; oversize
@@ -193,6 +201,7 @@
   border: 1px solid color-mix(in srgb, var(--hp-outline-variant) 45%, transparent);
   border-left: 2px solid color-mix(in srgb, var(--hp-primary) 45%, transparent);
   color: var(--hp-on-surface-variant);
+  font-style: normal;
   break-inside: avoid;
 }
 .journal-prose blockquote p {

@@ -48,10 +48,23 @@ body {
 
 /* ── the cover ─────────────────────────────────────────────────── */
 
+/* A dimmed ambient lattice lives UNDER the vessel: the pages are
+   opaque paper, so it only ever shows on the cover margins, the
+   bands, and the spine gutter — and because the cover layer never
+   snapshots during a turn, the fold happens over live ambience.
+   elements.css gives html its own background, which buries the
+   default z:-1 canvas; lift it to 0 and keep the vessel clear. */
+#journal-bg {
+  --hp-bg-z: 0;
+  --hp-bg-faint-opacity: 0.1;
+  --hp-bg-bright-opacity: 0.32;
+  --hp-bg-hot-opacity: 0.55;
+}
+
 .journal {
   position: fixed;
   inset: 0;
-  background: var(--iz-cover);
+  z-index: 1;
   display: grid;
   grid-template:
     "head head head head head" var(--journal-band-head)
@@ -360,10 +373,13 @@ body {
   color: var(--hp-on-surface-variant);
   opacity: 0.7;
 }
+.journal-meta hr.hp-separator {
+  margin: 10px 0;
+}
 .journal-meta-stats dd {
   margin: 2px 0 0;
   padding-bottom: 7px;
-  border-bottom: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
+  border-bottom: 1px solid var(--hp-outline-faint);
   color: var(--hp-on-surface);
 }
 .journal-meta-stats dd + dt {
@@ -382,6 +398,8 @@ body {
   .journal-meta {
     float: none;
     width: auto;
+    min-width: 0;
+    max-width: none;
     height: auto;
     margin-right: 0;
     display: grid;
