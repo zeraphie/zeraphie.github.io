@@ -4,12 +4,14 @@
 
   A standalone route holding the longform reading vessel while it
   is built out: the full-viewport book — cover, bands, spine, two
-  leaves with their stack — at its three responsive tiers, with
-  hand-placed stand-in content. The pagination engine, real
-  metadata, content patterns, the turn, and the dive integration
-  land here step by step; then the vessel folds into the flow and
-  this route retires.
+  leaves with their stack — with the aetherblade post flowing
+  through the multicol page engine as the worst-case content.
+  Real metadata, content patterns, the turn animation, and the
+  dive integration land here step by step; then the vessel folds
+  into the flow and this route retires.
 */
+import { getEntry, render } from "astro:content";
+
 import "@hexpunk/core/tokens.dark.css";
 import "@hexpunk/core/tokens.light.css";
 
@@ -18,13 +20,11 @@ import "../styles/journal.css";
 const title = "the journal · izelya.me";
 const description = "The longform reading vessel, under construction.";
 
-const FILLER = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-  "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt, neque porro quisquam est qui dolorem ipsum.",
-  "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
-];
+const entry = await getEntry("dnd", "aetherblade");
+if (!entry) {
+  throw new Error("the workbench post is missing");
+}
+const { Content } = await render(entry);
 ---
 
 <!doctype html>
@@ -59,54 +59,46 @@ const FILLER = [
         <span class="journal-mode">read<i class="journal-dot"></i></span>
       </header>
 
-      <section class="journal-page journal-page--verso">
-        <div class="journal-page__inner journal-page__inner--first">
-          <aside class="journal-meta">
-            <svg
-              class="journal-meta-icon"
-              width="60"
-              height="70"
-              viewBox="0 0 60 70"
-              aria-hidden="true"
-            >
-              <polygon
-                points="30,2 58,18.5 58,51.5 30,68 2,51.5 2,18.5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.4"></polygon>
-            </svg>
-            <h1 class="journal-meta-title">Aetherblade</h1>
-            <p class="journal-meta-sub">
-              A homebrew class themed about inheritance of primordial power
-            </p>
-            <dl class="journal-meta-stats">
-              <dt>Date</dt>
-              <dd>2024.09.22</dd>
-              <dt>Reading</dt>
-              <dd>&approx; 33 min</dd>
-              <dt>Words</dt>
-              <dd>&approx; 7.3k</dd>
-              <dt>Collection</dt>
-              <dd>dnd</dd>
-              <dt>Status</dt>
-              <dd class="live">v0 · wip</dd>
-            </dl>
-          </aside>
-          <div class="journal-prose">
-            {FILLER.slice(0, 4).map((p) => <p>{p}</p>)}
-          </div>
-        </div>
-      </section>
-
+      <section class="journal-page journal-page--verso" aria-hidden="true"></section>
       <div class="journal-spine" aria-hidden="true"></div>
+      <section class="journal-page journal-page--recto" aria-hidden="true"></section>
 
-      <section class="journal-page journal-page--recto">
-        <div class="journal-page__inner">
-          <div class="journal-prose">
-            {FILLER.map((p) => <p>{p}</p>)}
-          </div>
+      <div class="journal-pages" id="journal-pages">
+        <aside class="journal-meta">
+          <svg
+            class="journal-meta-icon"
+            width="60"
+            height="70"
+            viewBox="0 0 60 70"
+            aria-hidden="true"
+          >
+            <polygon
+              points="30,2 58,18.5 58,51.5 30,68 2,51.5 2,18.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"></polygon>
+          </svg>
+          <h1 class="journal-meta-title">Aetherblade</h1>
+          <p class="journal-meta-sub">
+            A homebrew class themed about inheritance of primordial power
+          </p>
+          <dl class="journal-meta-stats">
+            <dt>Date</dt>
+            <dd>2024.09.22</dd>
+            <dt>Reading</dt>
+            <dd>&approx; 33 min</dd>
+            <dt>Words</dt>
+            <dd>&approx; 7.3k</dd>
+            <dt>Collection</dt>
+            <dd>dnd</dd>
+            <dt>Status</dt>
+            <dd class="live">v0 · wip</dd>
+          </dl>
+        </aside>
+        <div class="journal-prose">
+          <Content />
         </div>
-      </section>
+      </div>
 
       <footer class="journal-band journal-band--foot">
         <span class="journal-site">izelya.me</span>
@@ -119,8 +111,110 @@ const FILLER = [
           <circle class="ring" cx="10" cy="11" r="4" fill="none" stroke-width="0.9"></circle>
           <circle cx="10" cy="11" r="1.3" fill="currentColor"></circle>
         </svg>
-        <span class="journal-pager">page — of —<span class="arrows">‹‹ · ››</span></span>
+        <span class="journal-pager">
+          <span id="journal-pager-label">page — of —</span>
+          <button class="journal-turn" id="journal-turn-prev" type="button" aria-label="previous">
+            ‹‹
+          </button>
+          <span class="arrows">·</span>
+          <button class="journal-turn" id="journal-turn-next" type="button" aria-label="next">
+            ››
+          </button>
+        </span>
       </footer>
     </main>
+
+    <script>
+      // Reading is turning: the clipped column strip scrolls by whole
+      // spreads, never freely. Wheel and keys arm the turn; resize and
+      // font arrival re-derive the geometry keeping the leading page.
+      const pages = document.getElementById("journal-pages")!;
+      const label = document.getElementById("journal-pager-label")!;
+      const prev = document.getElementById("journal-turn-prev") as HTMLButtonElement;
+      const next = document.getElementById("journal-turn-next") as HTMLButtonElement;
+
+      let perView = 2;
+      let unit = 0;
+      let count = 1;
+      let lead = 0;
+
+      function measure(): void {
+        const style = getComputedStyle(pages);
+        perView = Math.max(1, Number(style.columnCount) || 1);
+        const gap = Number.parseFloat(style.columnGap) || 0;
+        const column = (pages.clientWidth - gap * (perView - 1)) / perView;
+        unit = column + gap;
+        count = Math.max(1, Math.round((pages.scrollWidth + gap) / unit));
+      }
+
+      function apply(): void {
+        lead = Math.max(0, Math.min(lead, count - 1));
+        lead -= lead % perView;
+        pages.scrollTo({ left: lead * unit, top: 0, behavior: "instant" });
+        const last = Math.min(count, lead + perView);
+        label.textContent =
+          last > lead + 1
+            ? `page ${lead + 1}–${last} of ${count}`
+            : `page ${lead + 1} of ${count}`;
+        prev.disabled = lead === 0;
+        next.disabled = last >= count;
+      }
+
+      function turn(dir: number): void {
+        lead += dir * perView;
+        apply();
+      }
+
+      prev.addEventListener("click", () => turn(-1));
+      next.addEventListener("click", () => turn(1));
+
+      // One wheel notch is one turn — a cooldown soaks up the tail of
+      // inertial deltas so a flick doesn't skip three spreads.
+      let wheelAt = 0;
+      window.addEventListener(
+        "wheel",
+        (event) => {
+          event.preventDefault();
+          const now = performance.now();
+          if (now - wheelAt < 320 || Math.abs(event.deltaY) < 4) {
+            return;
+          }
+          wheelAt = now;
+          turn(Math.sign(event.deltaY));
+        },
+        { passive: false }
+      );
+
+      window.addEventListener("keydown", (event) => {
+        const forward =
+          event.key === "ArrowRight" || event.key === "PageDown" ||
+          (event.key === " " && !event.shiftKey);
+        const back =
+          event.key === "ArrowLeft" || event.key === "PageUp" ||
+          (event.key === " " && event.shiftKey);
+        if (event.key === "Home") {
+          lead = 0;
+        } else if (event.key === "End") {
+          lead = count;
+        } else if (forward) {
+          lead += perView;
+        } else if (back) {
+          lead -= perView;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        apply();
+      });
+
+      const refresh = (): void => {
+        measure();
+        apply();
+      };
+      new ResizeObserver(refresh).observe(pages);
+      window.addEventListener("resize", refresh);
+      document.fonts.ready.then(refresh);
+      refresh();
+    </script>
   </body>
 </html>

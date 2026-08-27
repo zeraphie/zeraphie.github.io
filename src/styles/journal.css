@@ -177,6 +177,19 @@ body {
   color: var(--hp-primary-bright);
   letter-spacing: 0.1em;
 }
+.journal-turn {
+  background: none;
+  border: 0;
+  padding: 0 2px;
+  font: inherit;
+  letter-spacing: 0.1em;
+  color: var(--hp-primary-bright);
+  cursor: pointer;
+}
+.journal-turn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
 
 /* ── the spine ─────────────────────────────────────────────────── */
 
@@ -252,23 +265,39 @@ body {
   background: linear-gradient(270deg, transparent, rgb(0 0 0 / 0.5));
 }
 
-.journal-page__inner {
-  height: 100%;
-  box-sizing: border-box;
-  padding: 28px;
+/* ── the page flow — the multicol engine ───────────────────────────
+      One element spans both leaves: its two columns land exactly on
+      the pages' content areas (column = leaf − 2×28 inset, gap =
+      spine + both insets), and overflow lays further columns to the
+      right. Turning is scrolling this clipped strip by whole
+      spreads — content never scrolls, it adds pages. */
+.journal-pages {
+  grid-row: 2;
+  grid-column: 2 / 5;
+  margin: 28px;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
   overflow: hidden;
-}
-.journal-page__inner--first {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 28px;
+  columns: 2;
+  column-gap: calc(var(--journal-spine) + 56px);
+  column-fill: auto;
 }
 
 /* ── the metadata panel (page one) ─────────────────────────────── */
 
+/* First element in the flow, floated: line boxes in the first
+   column narrow around it, so the prose runs beside the panel and
+   the pair paginates as ordinary content — always page one. */
 .journal-meta {
+  float: left;
+  width: 150px;
+  height: 100%;
+  margin-right: 28px;
   border-right: 1px solid color-mix(in srgb, var(--hp-outline-variant) 35%, transparent);
   padding-right: 24px;
+  box-sizing: border-box;
   min-width: 0;
 }
 .journal-meta-icon {
@@ -318,26 +347,82 @@ body {
   color: var(--hp-secondary);
 }
 
-/* ── placeholder prose (the real patterns arrive with the content
-      step; this only proves the page holds a text column) ───────── */
+/* ── prose in the flow (deliberately plain — the journal's real
+      content patterns land in their own step; this only keeps the
+      post readable while the engine is proven) ──────────────────── */
 
 .journal-prose {
   min-width: 0;
   font-size: 15px;
   line-height: 1.55;
   color: var(--hp-on-surface);
+  orphans: 2;
+  widows: 2;
 }
 .journal-prose p {
   margin: 0 0 1em;
+}
+.journal-prose > :first-child {
+  margin-top: 0;
+}
+.journal-prose h2,
+.journal-prose h3 {
+  break-after: avoid;
+  color: var(--hp-primary-bright);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.journal-prose h2 {
+  font-size: 16px;
+  margin: 1.6em 0 0.7em;
+}
+.journal-prose h3 {
+  font-size: 13.5px;
+  margin: 1.4em 0 0.6em;
+}
+.journal-prose li {
+  margin: 0 0 0.4em;
+}
+.journal-prose blockquote {
+  margin: 0 0 1em;
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid color-mix(in srgb, var(--hp-primary) 45%, transparent);
+  color: var(--hp-on-surface-variant);
+}
+.journal-prose code {
+  font-family: "Fira Code", ui-monospace, monospace;
+  font-size: 0.85em;
+}
+
+/* The one sanctioned scroll exception: an oversize table lives in
+   its own contained box instead of growing or breaking the page. */
+.journal-prose table {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  break-inside: avoid;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.journal-prose th,
+.journal-prose td {
+  padding: 3px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+.journal-prose th {
+  color: var(--hp-primary-bright);
 }
 
 /* ── tier 2: the metadata folds to a band on page one ──────────── */
 
 @media (max-width: 1100px) {
-  .journal-page__inner--first {
-    display: block;
-  }
   .journal-meta {
+    float: none;
+    width: auto;
+    height: auto;
+    margin-right: 0;
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 18px;
@@ -406,8 +491,10 @@ body {
   .journal-page--verso::after {
     display: none;
   }
-  .journal-page__inner {
-    padding: 18px;
+  .journal-pages {
+    grid-column: 2 / 3;
+    margin: 18px;
+    columns: 1;
   }
   .journal-band {
     font-size: 9px;
