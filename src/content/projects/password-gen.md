@@ -14,12 +14,14 @@ It was an interesting journey to create it since I hadn't looked into making thi
 
 In PHP 7.0.0 there is a function `random_int` which uses a few different methods for different operating systems (although this would be typically used on a linux server for this instance) in order to generate an unbiased random integer which has quite a few different uses! This one's taken directly from the php documentation
 
+> [!note]
 > Generates cryptographic random integers that are suitable for use where unbiased results are critical, such as when shuffling a deck of cards for a poker game.
 
 ---
 
 ## Deciding how to generate the password
 
+> [!note]
 > In cryptography, an algorithm's key space refers to the set of all possible permutations of a keys.
 
 In my password generator however, I decided to generate a keyspace in order to randomly select characters from, so it's slightly different to the definition, but makes it easier to program (since you don't have to store millions of keys)

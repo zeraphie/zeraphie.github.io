@@ -4,8 +4,8 @@
  * section heads (the h2s are the rail's anchors), hex bullets,
  * table and code dress with the one sanctioned scroll exception,
  * and the blockquote patterns — a wireframe callout by default,
- * parchment notes where a post asks with `[!note]`. The vessel
- * around the content lives in journal.css. */
+ * parchment notes where a post asks with `[!note]`, thin intent
+ * slips with `[!quote]`. The vessel lives in journal.css. */
 
 .journal-prose {
   min-width: 0;
@@ -219,7 +219,7 @@
    above the card so the paperclip can straddle the top edge;
    drop-shadow follows the clipped silhouette. Marking is the
    author's call — notes keep their impact by staying sparse. */
-.journal-prose blockquote[data-callout="note"] {
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"]) {
   position: relative;
   border: 0;
   background: var(--iz-parchment);
@@ -246,10 +246,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.journal-prose blockquote[data-callout="note"]:nth-of-type(even) {
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"]):nth-of-type(even) {
   transform: rotate(0.9deg);
 }
-.journal-prose blockquote[data-callout="note"]::before {
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"])::before {
   content: "";
   position: absolute;
   top: 0;
@@ -260,7 +260,7 @@
 }
 /* The paperclip: a Gem-clip wire drawn as a mask so the token
    colours it, straddling the top edge at the note's middle. */
-.journal-prose blockquote[data-callout="note"]::after {
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"])::after {
   content: "";
   position: absolute;
   top: -12px;
@@ -272,11 +272,24 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
     center / contain no-repeat;
 }
-.journal-prose blockquote[data-callout="note"]:nth-of-type(even)::after {
+.journal-prose
+  blockquote:is([data-callout="note"], [data-callout="quote"]):nth-of-type(even)::after {
   transform: translateX(-50%) rotate(2.5deg);
 }
-.journal-prose blockquote[data-callout="note"] > p:first-child > strong:only-child {
+.journal-prose
+  blockquote:is([data-callout="note"], [data-callout="quote"])
+  > p:first-child
+  > strong:only-child {
   color: var(--iz-parchment-ink);
   font-style: italic;
   letter-spacing: 0.1em;
+}
+
+/* `[!quote]` — the thin flavour: a slip of speech, an intent line
+   pinned beside the feature it colours. */
+.journal-prose blockquote[data-callout="quote"] {
+  max-width: 200px;
+  font-style: italic;
+  font-size: 13.5px;
+  padding: 10px 14px;
 }

@@ -233,7 +233,8 @@ An earth-shattering quake combined with corrosive acid erupts in a **60-foot rad
 - **Lingering Effect:** The area becomes difficult terrain, and any nonmagical objects or structures in the area take damage as per the acid and earthquake effects, potentially destroying them.
 
 ## Aether Ascension
-_“I am one with the elements, a master of all creation.”_
+> [!quote]
+> _“I am one with the elements, a master of all creation.”_
 
 You fully merge with the primordial forces within you, transcending mortal limitations. As a bonus action, you enter an ascended state for 1 minute. While in this state, you gain the following benefits:
 - **Primordial Mastery:** You gain immunity to all elemental damage types (fire, cold, lightning, acid, poison, and thunder).
@@ -296,7 +297,8 @@ Your control over Aether and the Weave has advanced into combining it with the p
 
 You have fully inherited the power gifted to you when you first became an Aetherblade. With the skills you've learnt and interaction with the weave, you can now transform into the Inferno Archon.
 
-*“I am the firestorm incarnate, blazing through my foes.”*
+> [!quote]
+> *“I am the firestorm incarnate, blazing through my foes.”*
 
 As a bonus action, you ignite your body in a fiery aura, transforming into a living embodiment of flame for 1 minute. While transformed, you gain the following benefits:
 - **Elemental Immunity:** You are immune to fire damage.
@@ -359,7 +361,8 @@ Your control over Aether and the Weave has advanced into combining it with the e
 
 You have fully inherited the power gifted to you when you first became an Aetherblade. With the skills you've learnt and interaction with the weave, you can now transform into the Winter Archon.
 
-*“The chill of eternity flows through me, freezing all in my path.”*
+> [!quote]
+> *“The chill of eternity flows through me, freezing all in my path.”*
 
 As a bonus action, you envelop yourself in a shimmering frost, transforming into a being of pure ice for 1 minute. While transformed:
 - **Elemental Immunity:** You are immune to fire damage.
@@ -421,7 +424,8 @@ Your control over Aether and the Weave has advanced into combining it with the p
 
 You have fully inherited the power gifted to you when you first became an Aetherblade. With the skills you've learnt and interaction with the weave, you can now transform into the Storm Archon.
 
-*“The storm rages within me, striking down all who stand in my way.”*
+> [!quote]
+> *“The storm rages within me, striking down all who stand in my way.”*
 
 As a bonus action, you surge with lightning and thunder, transforming into a living storm for 1 minute. While transformed:
 - **Elemental Immunity:** You are immune to fire damage.
@@ -482,7 +486,8 @@ Your control over Aether and the Weave has advanced into combining it with the p
 
 You have fully inherited the power gifted to you when you first became an Aetherblade. With the skills you've learnt and interaction with the weave, you can now transform into the Titanic Archon.
 
-*“The strength of the earth flows through me, unyielding and unstoppable.”*
+> [!quote]
+> *“The strength of the earth flows through me, unyielding and unstoppable.”*
 
 As a bonus action, you channel the might of the earth, transforming into a massive, earthen form for 1 minute. While transformed:
 - **Elemental Immunity:** You are immune to all bludgeoning, piercing, and slashing damage.

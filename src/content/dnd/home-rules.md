@@ -144,7 +144,6 @@ Some feats are better or more interesting than others
 ## General Play
 I like making things matter, and letting cool things happen
 
-> [!note]
 > **Light Weapon Property: Beat Parry** *(this is in testing)*
 >
 > When a creature targets you with a successful melee attack, make a contested attack roll with your offhand weapon that has the Light property in return, if you beat their roll, this attack and further attacks made as part of a multiattack are made with a -5 penalty to the attack roll, and the next attack you make on that creature has advantage
