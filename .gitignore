@@ -9,3 +9,6 @@ dist/
 # env
 .env
 .env.*
+
+# local assistant tooling — the committed AI layer is .ai/
+.claude/
