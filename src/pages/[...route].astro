@@ -361,8 +361,8 @@ const PERF_LOW = initPerfMode();
         isCurrentHead: (head) => current.head === head,
         // Every heading on screen reads as current in the rail —
         // the pages decide, the rail paints.
-        onAnchorsVisible: (labels) => {
-          track.currentSubs = labels;
+        onAnchorsVisible: (indexes) => {
+          track.currentSubs = indexes;
         },
       });
 

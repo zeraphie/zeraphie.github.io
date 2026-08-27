@@ -23,9 +23,10 @@ export interface ReadingHost {
   /** Late reflows re-land anchors only while `head` is still the
    * route's target. */
   isCurrentHead(head: string): boolean;
-  /** The headings currently on screen — a spread shows several at
-   * once, so the rail can mark them all. */
-  onAnchorsVisible?(labels: string[]): void;
+  /** Indices of the headings currently on screen — a spread shows
+   * several at once, so the rail can mark them all. Indices, not
+   * labels: a post may repeat a heading. */
+  onAnchorsVisible?(indexes: number[]): void;
 }
 
 /** A journal page that is not a post — generated content read in
@@ -218,15 +219,18 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     if (!reader || !host.onAnchorsVisible) {
       return;
     }
-    const { from, to } = reader.visibleRange();
-    const labels: string[] = [];
-    for (const heading of strip.querySelectorAll<HTMLElement>("h2[id]")) {
-      const page = reader.pageOf(heading);
+    const mounted = reader;
+    const { from, to } = mounted.visibleRange();
+    // The strip's h2s are in document order, so their position here
+    // is their position in the rail's sub list.
+    const indexes: number[] = [];
+    [...strip.querySelectorAll<HTMLElement>("h2[id]")].forEach((heading, index) => {
+      const page = mounted.pageOf(heading);
       if (page >= from && page < to) {
-        labels.push(heading.textContent?.trim() ?? "");
+        indexes.push(index);
       }
-    }
-    host.onAnchorsVisible(labels);
+    });
+    host.onAnchorsVisible(indexes);
   }
 
   function mountReader(): void {
