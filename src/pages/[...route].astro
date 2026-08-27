@@ -78,7 +78,11 @@ interface Props {
 }
 const { title, description, article } = Astro.props;
 
-const SIDE = (100 - 2.5) / Math.sqrt(3);
+// Backdrop hex side. Deliberately unrelated to the world's own hex
+// size: matching them made the ambience read as a second, coarser
+// grid competing with the real one. A fine mesh instead, so it sits
+// under the content as texture rather than structure.
+const BG_HEX_SIDE = 9;
 
 // Published posts render into inert <template>s the reading layer
 // clones on dive; their h2s become the hextrack's anchor points,
@@ -121,7 +125,7 @@ const CurrentContent = currentPost?.Content;
     <link rel="stylesheet" href="/fonts/fonts.css" />
   </head>
   <body>
-    <hp-background id="bg" page hex-size={SIDE.toFixed(2)}></hp-background>
+    <hp-background id="bg" page hex-size={String(BG_HEX_SIDE)}></hp-background>
 
     <div id="hs-stage">
       <hp-grid id="world" draggable>
