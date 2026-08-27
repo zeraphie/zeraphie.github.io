@@ -3,9 +3,9 @@
  * What a post wears inside the journal's pages: numbered hex-chip
  * section heads (the h2s are the rail's anchors), hex bullets,
  * table and code dress with the one sanctioned scroll exception,
- * and the blockquote patterns — a wireframe callout everywhere,
- * parchment handouts in the dnd collection. The vessel around the
- * content lives in journal.css. */
+ * and the blockquote patterns — a wireframe callout by default,
+ * parchment notes where a post asks with `[!note]`. The vessel
+ * around the content lives in journal.css. */
 
 .journal-prose {
   min-width: 0;
@@ -212,14 +212,14 @@
   color: var(--hp-primary-bright);
 }
 
-/* dnd posts render their callouts as parchment handouts — notes
-   placed in a scrapbook: narrower than the column, tilted, taped
-   down, alternating sides, a flat offset lift. The clip polygon
-   cuts the folded corner and reaches 10px above the card so the
-   tape can straddle the top edge; drop-shadow follows the clipped
-   silhouette. The Araitael fiction lives in content, never in the
-   vessel. */
-[data-collection="dnd"] .journal-prose blockquote {
+/* A quote marked `[!note]` is a parchment handout placed in the
+   scrapbook: narrower than the column, tilted, clipped down,
+   alternating sides, a flat offset lift. The clip polygon cuts the
+   folded corner and reaches 10px above the card so the wire clip
+   can straddle the top edge; drop-shadow follows the clipped
+   silhouette. Marking is the author's call — notes keep their
+   impact by staying sparse. */
+.journal-prose blockquote[data-callout="note"] {
   position: relative;
   border: 0;
   background: var(--iz-parchment);
@@ -246,11 +246,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-[data-collection="dnd"] .journal-prose blockquote:nth-of-type(even) {
+.journal-prose blockquote[data-callout="note"]:nth-of-type(even) {
   margin-left: 9%;
   transform: rotate(0.9deg);
 }
-[data-collection="dnd"] .journal-prose blockquote::before {
+.journal-prose blockquote[data-callout="note"]::before {
   content: "";
   position: absolute;
   top: 0;
@@ -259,7 +259,7 @@
   height: 14px;
   background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
 }
-[data-collection="dnd"] .journal-prose blockquote::after {
+.journal-prose blockquote[data-callout="note"]::after {
   content: "";
   position: absolute;
   top: -8px;
@@ -270,11 +270,11 @@
   border: 1.5px solid var(--iz-parchment-clip);
   border-radius: 8px;
 }
-[data-collection="dnd"] .journal-prose blockquote:nth-of-type(even)::after {
+.journal-prose blockquote[data-callout="note"]:nth-of-type(even)::after {
   transform: translateX(-50%) rotate(2.5deg);
   left: 40%;
 }
-[data-collection="dnd"] .journal-prose blockquote > p:first-child > strong:only-child {
+.journal-prose blockquote[data-callout="note"] > p:first-child > strong:only-child {
   color: var(--iz-parchment-ink);
   font-style: italic;
   letter-spacing: 0.1em;

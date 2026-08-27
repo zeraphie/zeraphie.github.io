@@ -5,6 +5,11 @@
 
 import { defineConfig } from "astro/config";
 
+import { remarkCallouts } from "./src/lib/remark-callouts.ts";
+
 export default defineConfig({
   site: "https://izelya.me",
+  markdown: {
+    remarkPlugins: [remarkCallouts],
+  },
 });
