@@ -355,7 +355,9 @@
       The SNES silhouette in the house language — ridged shoulders,
       a label window, and the connector lip carrying the call to
       action, so the affordance sits where the slot would take it.
-      Azure throughout: brass is never interactive. */
+      Geometry follows the design board: 260 x 150 overall, a 208
+      shell overlapping 34-wide shoulders, a 180 x 84 label. Azure
+      throughout: brass is never interactive. */
 
 .journal-cartridge {
   --cart-edge: color-mix(in srgb, var(--hp-primary) 55%, transparent);
@@ -364,14 +366,15 @@
   display: block;
   width: 260px;
   max-width: 100%;
+  box-sizing: border-box;
+  /* 26, not 34: the shell overlaps the shoulders, so they read as
+     the piece behind rather than wings beside. */
+  padding-inline: 26px;
   margin: 1.4em auto 1.8em;
+  position: relative;
   border: 0;
   text-decoration: none;
   break-inside: avoid;
-  /* The shoulders sit outside the shell, so the whole control is
-     one padded box rather than three positioned pieces. */
-  padding-inline: 34px;
-  position: relative;
   transition:
     transform 140ms ease,
     filter 140ms ease;
@@ -389,9 +392,9 @@
       no-repeat,
     repeating-linear-gradient(
       to bottom,
-      transparent 0 16px,
-      var(--cart-ridge) 16px 28px,
-      transparent 28px 36px
+      transparent 0 8px,
+      var(--cart-ridge) 8px 20px,
+      transparent 20px 28px
     ),
     var(--cart-shoulder);
 }
@@ -414,46 +417,60 @@
 }
 
 .journal-cartridge__label {
-  display: block;
-  padding: 10px 12px 12px;
-  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  height: 84px;
   box-sizing: border-box;
+  padding: 9px 11px;
   background: #16232b;
   border: 1px solid var(--cart-edge);
-  /* The label's sweep: a lattice line where the SNES swoosh was. */
+  /* The label's sweep: lattice lines where the SNES swoosh was. */
   background-image:
     linear-gradient(
       100deg,
-      transparent 0 20%,
-      color-mix(in srgb, var(--hp-primary) 30%, transparent) 20% 21%,
-      transparent 21% 100%
+      transparent 0 22%,
+      color-mix(in srgb, var(--hp-primary) 30%, transparent) 22% 22.6%,
+      transparent 22.6% 100%
     ),
     linear-gradient(
       100deg,
-      transparent 0 26%,
-      color-mix(in srgb, var(--hp-primary) 18%, transparent) 26% 27%,
-      transparent 27% 100%
+      transparent 0 30%,
+      color-mix(in srgb, var(--hp-primary) 18%, transparent) 30% 30.5%,
+      transparent 30.5% 100%
     );
+  overflow: hidden;
 }
 .journal-cartridge__glyph {
   display: block;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   color: var(--hp-primary-bright);
-  margin-bottom: 6px;
 }
 .journal-cartridge__glyph svg {
+  display: block;
   width: 100%;
   height: 100%;
 }
+/* The display line is pushed to the label's foot: name last, the
+   way a box front reads. */
 .journal-cartridge__title {
-  display: block;
+  margin-top: auto;
   font-family: Iceland, "Chakra Petch", sans-serif;
-  font-size: 22px;
-  line-height: 1.05;
+  font-size: 21px;
+  line-height: 1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--hp-on-surface);
+}
+.journal-cartridge__sub {
+  margin-top: 2px;
+  font-size: 8px;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--hp-on-surface-variant);
 }
 
 .journal-cartridge__lip {
@@ -461,8 +478,8 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
-  padding: 7px 0;
+  height: 30px;
+  margin-top: 8px;
   background: #20272c;
   border: 0.8px solid color-mix(in srgb, var(--cart-edge) 80%, transparent);
   font-size: 11px;

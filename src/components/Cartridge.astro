@@ -18,13 +18,20 @@ interface Props {
 }
 const { href, title, icon, collection } = Astro.props;
 const glyph = iconFor(collection, icon ?? undefined);
+
+// A cartridge label reads like a box: one big word, the rest small
+// beneath it — so long names stay legible without wrapping the
+// display line.
+const [lead, ...rest] = title.split(" ");
+const tail = rest.join(" ");
 ---
 
 <a class="journal-cartridge" href={href} target="_blank" rel="noopener noreferrer">
   <span class="journal-cartridge__shell">
     <span class="journal-cartridge__label">
       <span class="journal-cartridge__glyph" set:html={glyph} />
-      <span class="journal-cartridge__title">{title}</span>
+      <span class="journal-cartridge__title">{lead}</span>
+      {tail && <span class="journal-cartridge__sub">{tail}</span>}
     </span>
     <span class="journal-cartridge__lip">play<i class="journal-cartridge__out">↗</i></span>
   </span>
