@@ -616,11 +616,16 @@ a.journal-site:hover {
   :root {
     --journal-pad: 18px;
   }
+  /* The book fills the phone: the cover keeps only its trim, and
+     the bands move ONTO the leaf as fixed strips, so their height
+     stops costing reading room. */
   .journal {
+    /* The band rows are gone, but their spacing is not: the cover
+       still shows the same margin on every side. */
     grid-template:
-      "head head head" var(--journal-band-head)
+      ". . ." var(--journal-pad)
       ". body ." 1fr
-      "foot foot foot" var(--journal-band-foot)
+      ". . ." var(--journal-pad)
       / var(--journal-pad) 1fr var(--journal-pad);
   }
   .journal-body {
@@ -641,13 +646,41 @@ a.journal-site:hover {
   .journal-page--verso::after {
     display: none;
   }
+  /* Room at the top and foot of the leaf for the two strips. */
   .journal-pages {
-    padding: 18px;
+    padding: 34px 16px 30px;
     columns: 1;
   }
   .journal-band {
-    font-size: 9px;
-    gap: 10px;
+    position: absolute;
+    z-index: 2;
+    left: var(--journal-pad);
+    right: var(--journal-pad);
+    height: 26px;
+    padding-inline: 14px;
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    gap: 8px;
+  }
+  .journal-band--head {
+    top: var(--journal-pad);
+    /* clear of the back control, which shares this strip */
+    padding-right: 74px;
+  }
+  .journal-band--foot {
+    bottom: var(--journal-pad);
+    padding-bottom: 0;
+  }
+  /* The site name is already at the top; the foot carries the pager
+     alone, and the gems have no band strip to sit in. */
+  .journal-band--foot .journal-site,
+  .journal-sigil {
+    display: none;
+  }
+  .journal-pager {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
   }
   .journal-corner {
     width: 18px;

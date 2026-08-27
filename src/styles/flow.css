@@ -92,6 +92,19 @@ body {
   display: none;
 }
 
+/* On a phone the journal's bands live on the leaf, and back joins
+   them there — same strip as the breadcrumb, opposite end. */
+@media (max-width: 760px) {
+  .hs-back {
+    top: 22px;
+    right: 22px;
+    z-index: 21;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+}
+
 /* ── cluster reveal (page-side choreography, flagged for
       absorption into hp-cluster) ── */
 hp-cluster .hx-reveal {
