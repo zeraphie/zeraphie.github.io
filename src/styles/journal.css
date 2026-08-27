@@ -435,10 +435,9 @@ body {
   left: 0;
 }
 .journal-leaf-flap {
-  transform-style: preserve-3d;
   will-change: transform;
   /* Paper on the plane itself: whatever an engine does to the
-     faces, the leaf is never see-through. */
+     face, the leaf is never see-through. */
   background: var(--iz-page-verso);
 }
 .journal-leaf-flap[data-hinge="left"] {
@@ -481,7 +480,6 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  backface-visibility: hidden;
   /* The leaf is the page it lifted from — same lip, same paper. */
   border: 1px solid color-mix(in srgb, var(--hp-primary) 50%, transparent);
   box-sizing: border-box;
@@ -498,9 +496,6 @@ body {
 }
 .journal-leaf-face[data-paper="recto"] {
   background: var(--iz-page-recto);
-}
-.journal-leaf-face--back {
-  transform: rotateY(180deg);
 }
 .journal-clone {
   position: absolute;

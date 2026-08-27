@@ -3,11 +3,14 @@
  * True book physics as a per-turn overlay: the strip is scrolled to
  * the destination immediately (content lands first) and the overlay
  * supplies yesterday's pixels — a static cover holding the old page
- * on its side, and a flap rotating a half-turn at its hinge, old
- * page on the front, new page (or blank paper, one-leaf mode) on
- * the back. Faces are clones of the strip windowed to one page, so
- * the leaf is paper with words. Progress-driven: timed turns tween
- * it, a corner drag scrubs it and settles past the halfway line. */
+ * on its side, and the turning leaf. The leaf is built as two
+ * ONE-SIDED flaps that trade places at the vertical: the old page
+ * carries the first quarter-turn, the new page the second. No
+ * preserve-3d, no backfaces, nothing coplanar — engines cannot
+ * bleed one page through another. Faces are clones of the strip
+ * windowed to one page region, so the leaf is paper with words.
+ * Progress-driven: timed turns tween it, a corner drag scrubs it
+ * and settles past the halfway line. */
 
 export interface TurnOptions {
   /** The real column strip (already holding the post's flow). */
@@ -17,8 +20,8 @@ export interface TurnOptions {
   dir: 1 | -1;
   oldScroll: number;
   newScroll: number;
-  /** Pages per spread: 2 hinges the half leaf at the spine, 1
-   * turns the whole page vertically (notepad physics). */
+  /** Pages per spread: 2 hinges half leaves at the spine, 1 turns
+   * the whole page vertically (notepad physics). */
   perView: number;
   /** Applies the destination state (scroll, pager, buttons). */
   commit(): void;
@@ -38,23 +41,29 @@ export interface TurnController {
 
 const FULL_MS = 460;
 const MIN_MS = 130;
+const SHADE = 0.45;
 
+interface Flap {
+  el: HTMLElement;
+  shade: HTMLElement;
+  /** Half of the arc this one-sided flap owns. */
+  lower: number;
+  upper: number;
+  /** Flap rotation at a given overall progress. */
+  angle(progress: number): number;
+}
+
+/** A face is a window onto one page region: a clone of the strip,
+ * absolutely offset so the region lines up, scrolled to its state. */
 function face(
   strip: HTMLElement,
   regionLeft: number,
-  scroll: number | null,
-  paper: "verso" | "recto",
-  back = false
-): { el: HTMLElement; settle(): void } {
+  scroll: number,
+  paper: "verso" | "recto"
+): { el: HTMLElement; shade: HTMLElement; settle(): void } {
   const el = document.createElement("div");
-  el.className = `journal-leaf-face${back ? " journal-leaf-face--back" : ""}`;
+  el.className = "journal-leaf-face";
   el.dataset.paper = paper;
-  if (scroll === null) {
-    const blankShade = document.createElement("div");
-    blankShade.className = "journal-leaf-shade";
-    el.appendChild(blankShade);
-    return { el, settle() {} };
-  }
   const clone = strip.cloneNode(true) as HTMLElement;
   clone.removeAttribute("id");
   for (const marked of clone.querySelectorAll("[id]")) {
@@ -64,14 +73,12 @@ function face(
   clone.style.width = `${strip.clientWidth}px`;
   clone.style.left = `${-regionLeft}px`;
   el.appendChild(clone);
-  // The travelling shade lives on its own layer: a filter on a 3D
-  // face flattens it out of the preserve-3d context and breaks
-  // backface culling mid-rotation (a see-through leaf).
   const shade = document.createElement("div");
   shade.className = "journal-leaf-shade";
   el.appendChild(shade);
   return {
     el,
+    shade,
     settle() {
       // scrollLeft only takes once the clone has boxes.
       clone.scrollLeft = scroll;
@@ -90,95 +97,95 @@ export function beginTurn(options: TurnOptions): TurnController {
   const overlay = document.createElement("div");
   overlay.className = "journal-leaf";
   overlay.setAttribute("aria-hidden", "true");
+  const settles: Array<() => void> = [];
+  const flaps: Flap[] = [];
 
-  const flap = document.createElement("div");
-  flap.className = "journal-leaf-flap";
-  const faces: Array<{ el: HTMLElement; settle(): void }> = [];
-  const add = (target: HTMLElement, made: { el: HTMLElement; settle(): void }) => {
-    faces.push(made);
-    target.appendChild(made.el);
-  };
-  const cover = (side: "left" | "right", full: boolean) => {
+  function cover(
+    side: "left" | "right",
+    full: boolean,
+    regionLeft: number,
+    scroll: number,
+    paper: "verso" | "recto"
+  ): void {
     const el = document.createElement("div");
     el.className = "journal-leaf-cover";
     el.dataset.side = side;
     if (full) {
       el.dataset.span = "full";
     }
+    const made = face(strip, regionLeft, scroll, paper);
+    settles.push(made.settle);
+    el.appendChild(made.el);
     overlay.appendChild(el);
-    return el;
-  };
-
-  // Rotation runs from 0 (leaf at rest on its origin side) to ±180
-  // (landed); one-leaf turns hinge at the top and travel the same
-  // arc vertically. Backward one-leaf turns start folded above.
-  let axis: "X" | "Y";
-  let from: number;
-  let to: number;
-  if (spread) {
-    axis = "Y";
-    flap.dataset.side = dir > 0 ? "right" : "left";
-    flap.dataset.hinge = dir > 0 ? "left" : "right";
-    from = 0;
-    to = dir > 0 ? -180 : 180;
-    if (dir > 0) {
-      add(cover("left", false), face(strip, 0, oldScroll, "verso"));
-      add(flap, face(strip, half, oldScroll, "recto"));
-      add(flap, face(strip, 0, newScroll, "verso", true));
-    } else {
-      add(cover("right", false), face(strip, half, oldScroll, "recto"));
-      add(flap, face(strip, 0, oldScroll, "verso"));
-      add(flap, face(strip, half, newScroll, "recto", true));
-    }
-  } else {
-    axis = "X";
-    flap.dataset.side = "left";
-    flap.dataset.span = "full";
-    flap.dataset.hinge = "top";
-    if (dir > 0) {
-      from = 0;
-      to = -180;
-      add(flap, face(strip, 0, oldScroll, "verso"));
-      add(flap, face(strip, 0, null, "verso", true));
-    } else {
-      from = -180;
-      to = 0;
-      add(cover("left", true), face(strip, 0, oldScroll, "verso"));
-      add(flap, face(strip, 0, newScroll, "verso"));
-      add(flap, face(strip, 0, null, "verso", true));
-    }
   }
-  overlay.appendChild(flap);
+
+  function flap(
+    side: "left" | "right",
+    hinge: "left" | "right" | "top",
+    full: boolean,
+    regionLeft: number,
+    scroll: number,
+    paper: "verso" | "recto",
+    lower: number,
+    upper: number,
+    angle: (progress: number) => number
+  ): void {
+    const el = document.createElement("div");
+    el.className = "journal-leaf-flap";
+    el.dataset.side = side;
+    el.dataset.hinge = hinge;
+    if (full) {
+      el.dataset.span = "full";
+    }
+    const made = face(strip, regionLeft, scroll, paper);
+    settles.push(made.settle);
+    el.appendChild(made.el);
+    overlay.appendChild(el);
+    flaps.push({ el, shade: made.shade, lower, upper, angle });
+  }
+
+  // The arc: 0..180 degrees of one leaf. The old page owns 0..90,
+  // the new page 90..180, each as a one-sided plane on its own
+  // side of the hinge.
+  if (spread && dir > 0) {
+    cover("left", false, 0, oldScroll, "verso");
+    flap("right", "left", false, half, oldScroll, "recto", 0, 0.5, (p) => -180 * p);
+    flap("left", "right", false, 0, newScroll, "verso", 0.5, 1, (p) => 180 * (1 - p));
+  } else if (spread) {
+    cover("right", false, half, oldScroll, "recto");
+    flap("left", "right", false, 0, oldScroll, "verso", 0, 0.5, (p) => 180 * p);
+    flap("right", "left", false, half, newScroll, "recto", 0.5, 1, (p) => -180 * (1 - p));
+  } else if (dir > 0) {
+    // Notepad forward: the old page lifts from the bottom and slips
+    // over the top binder; past vertical it is out of sight.
+    flap("left", "top", true, 0, oldScroll, "verso", 0, 0.5, (p) => -180 * p);
+  } else {
+    // Notepad backward: the previous page descends from above onto
+    // the held old one.
+    cover("left", true, 0, oldScroll, "verso");
+    flap("left", "top", true, 0, newScroll, "verso", 0.5, 1, (p) => -180 * (1 - p));
+  }
+
   host.appendChild(overlay);
-  for (const made of faces) {
-    made.settle();
+  for (const settleFace of settles) {
+    settleFace();
   }
 
   // The destination is live under the overlay from the first frame.
   commit();
 
-  const front = flap.children[0] as HTMLElement | undefined;
-  const backFace = flap.children[1] as HTMLElement | undefined;
   let progress = 0;
-
   function set(value: number): void {
     progress = Math.max(0, Math.min(1, value));
-    const angle = from + (to - from) * progress;
-    flap.style.transform = `rotate${axis}(${angle.toFixed(2)}deg)`;
-    // Fully flipped, the leaf lies flat on the far side of its hinge
-    // — off the page, in the stack — so near the extreme it hides
-    // rather than painting over the cover chrome.
-    flap.style.opacity = Math.abs(angle) >= 177 ? "0" : "1";
-    // The travelling shade: whichever face is lifting dims, the
-    // landing face brightens.
-    const lift = from === 0 ? progress : 1 - progress;
-    const frontShade = front?.querySelector<HTMLElement>(".journal-leaf-shade");
-    const backShade = backFace?.querySelector<HTMLElement>(".journal-leaf-shade");
-    if (frontShade) {
-      frontShade.style.opacity = (lift * 0.45).toFixed(3);
-    }
-    if (backShade) {
-      backShade.style.opacity = ((1 - lift) * 0.45).toFixed(3);
+    for (const piece of flaps) {
+      const on = progress >= piece.lower && progress <= piece.upper;
+      piece.el.style.visibility = on ? "visible" : "hidden";
+      if (on) {
+        piece.el.style.transform = `rotate${spread ? "Y" : "X"}(${piece.angle(progress).toFixed(2)}deg)`;
+        // The shade travels with the fold: deepest at the vertical.
+        const depth = piece.lower === 0 ? progress * 2 : (1 - progress) * 2;
+        piece.shade.style.opacity = (Math.min(1, depth) * SHADE).toFixed(3);
+      }
     }
   }
   set(0);
@@ -189,12 +196,9 @@ export function beginTurn(options: TurnOptions): TurnController {
   function progressFrom(x: number, y: number): number {
     if (spread) {
       const spineX = rect.left + half;
-      const cosine = ((x - spineX) / half) * (dir > 0 ? 1 : -1);
-      return deg(cosine) / 180;
+      return deg(((x - spineX) / half) * (dir > 0 ? 1 : -1)) / 180;
     }
-    const height = rect.height;
-    const cosine = ((y - rect.top) / height) * (dir > 0 ? 1 : -1);
-    return deg(cosine) / 180;
+    return deg(((y - rect.top) / rect.height) * (dir > 0 ? 1 : -1)) / 180;
   }
 
   let finished = false;
