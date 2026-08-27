@@ -352,167 +352,157 @@
 }
 
 /* ── the cartridge: a post's playable build ───────────────────────
-      The SNES silhouette in the house language — ridged shoulders,
-      a label window, and the connector lip carrying the call to
-      action, so the affordance sits where the slot would take it.
-      Geometry follows the design board: 260 x 150 overall, a 208
-      shell overlapping 34-wide shoulders, a 180 x 84 label. Azure
-      throughout: brass is never interactive. */
+      The chassis is DRAWN (one svg, the design board's geometry at
+      260 x 168) rather than assembled from boxes — ridged shoulders,
+      screw dots, a chamfered shell, and a connector foot with
+      contact fins, so it reads as a thing that plugs in. Text rides
+      over the drawing in HTML, positioned in the same coordinate
+      space. Azure throughout: brass is never interactive. */
 
 .journal-cartridge {
   --cart-edge: color-mix(in srgb, var(--hp-primary) 55%, transparent);
-  --cart-shoulder: #20272c;
-  --cart-ridge: #2a3238;
-  display: block;
+  --cart-play: var(--hp-on-surface-variant);
+  /* inline-block, not block: page one's metadata panel is a
+     full-height float, and a block box beside it leaves an empty
+     fragment in the column it couldn't fill. An inline-block moves
+     whole, like a very large word. */
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
   width: 260px;
   max-width: 100%;
-  box-sizing: border-box;
-  /* 26, not 34: the shell overlaps the shoulders, so they read as
-     the piece behind rather than wings beside. */
-  padding-inline: 26px;
-  margin: 1.4em auto 1.8em;
-  position: relative;
+  margin: 1.4em 0 1.8em;
   border: 0;
   text-decoration: none;
   break-inside: avoid;
-  transition:
-    transform 140ms ease,
-    filter 140ms ease;
+  transition: transform 140ms ease;
 }
-.journal-cartridge::before,
-.journal-cartridge::after {
-  content: "";
-  position: absolute;
-  top: 14px;
-  bottom: 14px;
-  width: 34px;
-  background:
-    radial-gradient(circle at 50% 8px, var(--iz-silver) 1.4px, transparent 1.6px) no-repeat,
-    radial-gradient(circle at 50% calc(100% - 8px), var(--iz-silver) 1.4px, transparent 1.6px)
-      no-repeat,
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0 8px,
-      var(--cart-ridge) 8px 20px,
-      transparent 20px 28px
-    ),
-    var(--cart-shoulder);
-}
-.journal-cartridge::before {
-  left: 0;
-}
-.journal-cartridge::after {
-  right: 0;
-}
-
-.journal-cartridge__shell {
+.journal-cartridge__chassis {
   display: block;
-  padding: 14px;
-  background: #2a3238;
-  border: 1.2px solid var(--cart-edge);
-  /* Chamfered top corners — the plate language the rail speaks. */
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-  position: relative;
-  z-index: 1;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
-.journal-cartridge__label {
-  display: flex;
-  flex-direction: column;
-  height: 84px;
-  box-sizing: border-box;
-  padding: 9px 11px;
-  background: #16232b;
-  border: 1px solid var(--cart-edge);
-  /* The label's sweep: lattice lines where the SNES swoosh was. */
-  background-image:
-    linear-gradient(
-      100deg,
-      transparent 0 22%,
-      color-mix(in srgb, var(--hp-primary) 30%, transparent) 22% 22.6%,
-      transparent 22.6% 100%
-    ),
-    linear-gradient(
-      100deg,
-      transparent 0 30%,
-      color-mix(in srgb, var(--hp-primary) 18%, transparent) 30% 30.5%,
-      transparent 30.5% 100%
-    );
-  overflow: hidden;
+/* The drawn parts, in the order they stack. */
+.journal-cartridge .shoulder {
+  fill: #20272c;
 }
+.journal-cartridge .ridge {
+  fill: #39434a;
+}
+.journal-cartridge .screw {
+  fill: none;
+  stroke: var(--iz-silver);
+  stroke-width: 1;
+}
+.journal-cartridge .foot {
+  fill: #1a2024;
+  stroke: var(--cart-edge);
+  stroke-width: 0.8;
+}
+.journal-cartridge .fin {
+  fill: var(--iz-silver);
+  opacity: 0.55;
+}
+.journal-cartridge .notch {
+  fill: #1a2024;
+  stroke: var(--iz-silver);
+  stroke-width: 0.8;
+  stroke-opacity: 0.5;
+}
+.journal-cartridge .shell {
+  fill: #2a3238;
+  stroke: var(--cart-edge);
+  stroke-width: 1.2;
+}
+.journal-cartridge .window {
+  fill: #16232b;
+  stroke: var(--cart-edge);
+  stroke-width: 1;
+}
+.journal-cartridge .sweep {
+  fill: none;
+  stroke: var(--cart-edge);
+  stroke-width: 1;
+  opacity: 0.4;
+}
+.journal-cartridge .sweep--faint {
+  opacity: 0.22;
+}
+.journal-cartridge .lip {
+  fill: #20272c;
+  stroke: var(--cart-edge);
+  stroke-width: 0.8;
+  stroke-opacity: 0.8;
+}
+
+/* Text over the drawing — percentages of the 260 x 168 viewBox, so
+   the label tracks the chassis at any width. */
 .journal-cartridge__glyph {
-  display: block;
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  left: 19.2%;
+  top: 14.3%;
+  width: 7%;
   color: var(--hp-primary-bright);
 }
 .journal-cartridge__glyph svg {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
-/* The display line is pushed to the label's foot: name last, the
-   way a box front reads. */
 .journal-cartridge__title {
-  margin-top: auto;
+  position: absolute;
+  left: 19.2%;
+  right: 17.3%;
+  top: 26%;
   font-family: Iceland, "Chakra Petch", sans-serif;
   font-size: 21px;
-  line-height: 1;
+  line-height: 1.02;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  white-space: nowrap;
   color: var(--hp-on-surface);
 }
-.journal-cartridge__sub {
-  margin-top: 2px;
-  font-size: 8px;
-  line-height: 1.2;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--hp-on-surface-variant);
-}
-
-.journal-cartridge__lip {
+.journal-cartridge__play {
+  position: absolute;
+  left: 15.4%;
+  right: 15.4%;
+  top: 63.1%;
+  height: 15.5%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 30px;
-  margin-top: 8px;
-  background: #20272c;
-  border: 0.8px solid color-mix(in srgb, var(--cart-edge) 80%, transparent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-indent: 0.3em;
   text-transform: uppercase;
-  color: var(--hp-on-surface-variant);
+  color: var(--cart-play);
 }
-.journal-cartridge__out {
+.journal-cartridge__play i {
   font-style: normal;
   letter-spacing: 0;
   text-indent: 0;
   opacity: 0.7;
 }
 
-/* Hover lifts it toward you; pressing seats it. */
+/* Hover lifts it out of the slot; pressing seats it. */
 .journal-cartridge:hover,
 .journal-cartridge:focus-visible {
   --cart-edge: var(--hp-primary-bright);
+  --cart-play: var(--hp-on-surface);
   transform: translateY(-4px);
   outline: none;
 }
-.journal-cartridge:hover .journal-cartridge__lip,
-.journal-cartridge:focus-visible .journal-cartridge__lip {
-  color: var(--hp-on-surface);
+.journal-cartridge:hover .fin,
+.journal-cartridge:focus-visible .fin {
+  opacity: 0.85;
 }
 .journal-cartridge:active {
   --cart-edge: var(--hp-secondary);
+  --cart-play: var(--hp-secondary);
   transform: translateY(3px);
-}
-.journal-cartridge:active .journal-cartridge__lip {
-  color: var(--hp-secondary);
 }
 
 @media (prefers-reduced-motion: reduce) {
