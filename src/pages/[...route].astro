@@ -759,6 +759,10 @@ const clusters = createClusterLayer(world);
       );
 
       // Back walks the world up one level: post → category → home.
+      // The press is swallowed before it reaches the grid — its pan
+      // handling would otherwise capture the pointer and eat the
+      // click.
+      backEl.addEventListener("pointerdown", (event) => event.stopPropagation());
       backEl.addEventListener("click", () => {
         go(current.item ? `/${current.cat}` : "/");
       });

@@ -68,8 +68,12 @@ body {
 .hs-back {
   position: absolute;
   top: 0.9rem;
-  left: 1rem;
-  z-index: 3;
+  right: 1rem;
+  /* Above the world AND the page layer: the grid's hovered cells
+     raise their own layer tokens, and chrome must stay on top of
+     both. */
+  z-index: 20;
+  pointer-events: auto;
   font: inherit;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
@@ -79,11 +83,10 @@ body {
   color: var(--hp-on-surface-variant);
   border: 1px solid var(--hp-outline-variant);
   cursor: pointer;
-  opacity: 0.6;
 }
 .hs-back:hover {
-  opacity: 1;
   color: var(--hp-secondary);
+  border-color: var(--hp-secondary);
 }
 .hs-back[hidden] {
   display: none;

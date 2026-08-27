@@ -30,7 +30,9 @@
   --iz-page-edge-3: #24272a;
   --iz-page-edge-4: #1f2226;
 
-  --journal-pad: 30px;
+  --journal-pad: 34px;
+  /* Inset of the bronze rail from the viewport edge. */
+  --journal-rail: 6px;
   --journal-band-head: var(--journal-pad);
   --journal-band-foot: var(--journal-pad);
   --journal-spine: 64px;
@@ -91,7 +93,7 @@ body[data-journal-open] {
 .journal::before {
   content: "";
   position: absolute;
-  inset: 6px;
+  inset: var(--journal-rail);
   border: 1px solid color-mix(in srgb, var(--iz-brass) 70%, transparent);
   pointer-events: none;
 }
@@ -155,12 +157,17 @@ body[data-journal-open] {
   white-space: nowrap;
   min-width: 0;
 }
+/* The bands run from the viewport edge to the page, but their words
+   belong to the gap between the RAIL and the page — pad by the rail
+   inset so the text centres on that strip. */
 .journal-band--head {
   grid-area: head;
+  padding-top: var(--journal-rail);
 }
 .journal-band--foot {
   grid-area: foot;
   position: relative;
+  padding-bottom: var(--journal-rail);
 }
 
 .journal-site {
@@ -615,7 +622,7 @@ a.journal-site:hover {
 
 @media (max-width: 760px) {
   .journal {
-    --journal-pad: 16px;
+    --journal-pad: 18px;
     grid-template:
       "head head head" var(--journal-band-head)
       ". body ." 1fr
