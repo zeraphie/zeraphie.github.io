@@ -9,7 +9,7 @@
 
 import type { HpGrid } from "@hexpunk/core/grid";
 
-import type { Item } from "../flow-data";
+import { collectionLabel, type Item } from "../flow-data";
 import { iconFor } from "../icons";
 import { createJournalReader, type JournalReader } from "../journal-reader";
 import { contentFor } from "./content-cache";
@@ -104,7 +104,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     if (collection) {
       const cat = document.createElement("a");
       cat.href = `/${collection}`;
-      cat.textContent = collection;
+      cat.textContent = collectionLabel(collection);
       crumb.append(sep(), cat);
     }
     const here = document.createElement("span");
@@ -129,7 +129,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
           ? `~ ${(fields.words / 1000).toFixed(1)}k`
           : String(fields.words)
     );
-    setStat(stats.collection, collection || undefined);
+    setStat(stats.collection, collection ? collectionLabel(collection) : undefined);
     // With every stat gone, the rule above them has nothing to
     // divide.
     const rule = page.querySelector<HTMLElement>(".journal-meta hr");

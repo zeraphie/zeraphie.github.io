@@ -359,12 +359,13 @@ const clusters = createClusterLayer(world);
       /** The sitemap is the world written out: every collection and
        * every post it holds, as ordinary links. */
       function buildSitemap(): JournalDoc {
+        const esc = (s: string) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
         const list = CLUSTERS.map((cluster) => {
           const items = cluster.items
             .filter((item) => !item.ghost)
-            .map((item) => `<li><a href="${itemPath(item)}">${item.label}</a></li>`)
+            .map((item) => `<li><a href="${itemPath(item)}">${esc(item.label)}</a></li>`)
             .join("");
-          return `<li><h2 id="${cluster.id}"><a href="/${cluster.id}">${cluster.label}</a></h2><ul>${items}</ul></li>`;
+          return `<li><h2 id="${cluster.id}"><a href="/${cluster.id}">${esc(cluster.label)}</a></h2><ul>${items}</ul></li>`;
         }).join("");
         return {
           id: "sitemap",

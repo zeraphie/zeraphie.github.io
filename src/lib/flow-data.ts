@@ -36,6 +36,16 @@ export function itemPath(item: Item): string {
 
 /** Resolve a pathname back to world state. Returns {} for home,
  * null for paths this world doesn't know. */
+/** Collection ids are URL slugs; a few read differently in prose.
+ * Labels are lowercase — the surfaces that want caps uppercase them
+ * in CSS, so "d&d" becomes "D&D" in a heading and stays "d&d" in a
+ * stat line. */
+const COLLECTION_LABELS: Record<string, string> = { dnd: "d&d" };
+
+export function collectionLabel(id: string): string {
+  return COLLECTION_LABELS[id] ?? id;
+}
+
 /** Standalone journal documents: world states that are neither a
  * cluster nor a post, read in the vessel like anything else. */
 export const DOC_ROUTES = ["sitemap"] as const;

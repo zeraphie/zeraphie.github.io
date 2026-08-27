@@ -9,17 +9,10 @@
 
 import { getCollection } from "astro:content";
 
-import type { Cluster } from "./flow-data";
+import { collectionLabel, type Cluster } from "./flow-data";
 
 // Order here is bloom order and the number-key row.
-const COLLECTION_ORDER = [
-  { id: "dnd", label: "dnd" },
-  { id: "projects", label: "projects" },
-  { id: "arcade", label: "arcade" },
-  { id: "lyrics", label: "lyrics" },
-  { id: "guides", label: "guides" },
-  { id: "about", label: "about" },
-] as const;
+const COLLECTION_ORDER = ["dnd", "projects", "arcade", "lyrics", "guides", "about"] as const;
 
 export async function buildWorld() {
   const published = [
@@ -30,16 +23,16 @@ export async function buildWorld() {
     ...(await getCollection("guides", ({ data }) => !data.draft)),
     ...(await getCollection("about", ({ data }) => !data.draft)),
   ];
-  const clusters: Cluster[] = COLLECTION_ORDER.map(({ id, label }) => ({
+  const clusters: Cluster[] = COLLECTION_ORDER.map((id) => ({
     id,
-    label,
+    label: collectionLabel(id),
     key: "",
     items: published
       .filter((entry) => entry.collection === id)
       .map((entry) => ({
         id: entry.id,
         label: entry.data.title.toLowerCase(),
-        sub: label,
+        sub: collectionLabel(id),
         post: `${id}/${entry.id}`,
       })),
   }))
