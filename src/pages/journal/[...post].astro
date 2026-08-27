@@ -54,8 +54,8 @@ const meta = {
   sub: entry.data.description,
   glyph: iconFor(entry.collection, entry.data.icon),
   date: entry.data.date.toISOString().slice(0, 10).replaceAll("-", "."),
-  reading: `≈ ${Math.max(1, Math.round(words / 220))} min`,
-  words: words >= 1000 ? `≈ ${(words / 1000).toFixed(1)}k` : String(words),
+  reading: `~ ${Math.max(1, Math.round(words / 220))} min`,
+  words: words >= 1000 ? `~ ${(words / 1000).toFixed(1)}k` : String(words),
   collection: entry.collection,
 };
 ---

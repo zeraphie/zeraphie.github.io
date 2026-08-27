@@ -119,14 +119,14 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
       stats.time,
       fields.words === undefined
         ? undefined
-        : `≈ ${Math.max(1, Math.round(fields.words / 220))} min`
+        : `~ ${Math.max(1, Math.round(fields.words / 220))} min`
     );
     setStat(
       stats.words,
       fields.words === undefined
         ? undefined
         : fields.words >= 1000
-          ? `≈ ${(fields.words / 1000).toFixed(1)}k`
+          ? `~ ${(fields.words / 1000).toFixed(1)}k`
           : String(fields.words)
     );
     setStat(stats.collection, collection || undefined);
