@@ -352,14 +352,24 @@ const PERF_LOW = initPerfMode();
       };
 
       // ── framing math (viewport-derived each time) ──
+      const vw = () => stage.clientWidth;
       const vh = () => stage.clientHeight;
-      /** Arrival: the seed hex fills the viewport height minus equal
-       * padding above and below. */
-      const zSeed = () => ((vh() - 2 * PAD) / cellH) * 0.78;
-      /** Bloomed: seed + its ring framed the same way. */
-      const zBloom = () => (vh() - 2 * PAD) / (cellH + 3 * side);
-      /** A category cluster (ring 2) framed the same way. */
-      const zCluster = () => (vh() - 2 * PAD) / (cellH + 6 * side);
+      /** Framing inset scales with the smaller axis: a fixed 64px
+       * eats a third of a phone's width. */
+      const pad = () => Math.min(PAD, Math.round(Math.min(vw(), vh()) * 0.09));
+      /** Fit a world extent to BOTH axes. Height alone was enough
+       * while every screen was landscape; on a narrow one it frames
+       * a view that overflows sideways. */
+      const fit = (w: number, h: number) =>
+        Math.min((vw() - 2 * pad()) / w, (vh() - 2 * pad()) / h);
+      /** Arrival: the lone seed, sat a little short of filling the
+       * frame so the bloom is a short move away. */
+      const zSeed = () => fit(cellW, cellH) * 0.78;
+      /** Bloomed: the seed and its ring — 3 cells across, 5 sides
+       * tall. */
+      const zBloom = () => fit(3 * cellW, cellH + 3 * side);
+      /** A category cluster (ring 2): 5 cells across, 8 sides tall. */
+      const zCluster = () => fit(5 * cellW, cellH + 6 * side);
 
 // ── the dived page layer ──
       const page = document.getElementById("page")!;
