@@ -251,9 +251,30 @@ const meta = {
         });
       }
 
+      // ?hold=0.4 freezes a timed turn at that progress so the
+      // mid-flight frame can be inspected; the next press finishes.
+      const HOLD = Number(new URLSearchParams(location.search).get("hold")) || 0;
+      let held: TurnController | null = null;
+
       function go(target: number, dir: 1 | -1): void {
+        if (held) {
+          const holding = held;
+          held = null;
+          holding.settle(true).finally(() => {
+            busy = false;
+          });
+          return;
+        }
         const controller = startTurn(target, dir);
-        controller?.settle(true).finally(() => {
+        if (!controller) {
+          return;
+        }
+        if (HOLD > 0) {
+          controller.set(HOLD);
+          held = controller;
+          return;
+        }
+        controller.settle(true).finally(() => {
           busy = false;
         });
       }
