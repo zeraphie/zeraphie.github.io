@@ -358,8 +358,15 @@ const clusters = createClusterLayer(world);
       let suppressSurfaceSync = false;
 
 
+      /** Back exists whenever there is a level to leave: a post, a
+       * category, or the bloom itself. */
+      function syncBack(): void {
+        backEl.hidden = !current.cat && !seedUnfold.open;
+      }
+
       function setPath(route: Route): void {
-        backEl.hidden = !route.cat;
+        void route;
+        syncBack();
         const item = clusterById(route.cat)?.items.find((entry) => entry.id === route.item);
         document.title = item
           ? `${item.label} · izelya.me`
@@ -681,6 +688,7 @@ const clusters = createClusterLayer(world);
         syncSectionTabs(true);
         // The bloom needs room: ease the camera back to frame the
         // ring, only when we are sitting at the arrival framing.
+        syncBack();
         if (!current.cat && !world.dived) {
           world.flyTo({ q: 0, r: 0 }, zBloom());
         }
@@ -688,6 +696,7 @@ const clusters = createClusterLayer(world);
       seedUnfold.addEventListener("hp-unfold-close", () => {
         syncCalm();
         syncSectionTabs(false);
+        syncBack();
         if (!current.cat && !world.dived) {
           world.flyTo({ q: 0, r: 0 }, zSeed());
         }
@@ -764,7 +773,14 @@ const clusters = createClusterLayer(world);
       // click.
       backEl.addEventListener("pointerdown", (event) => event.stopPropagation());
       backEl.addEventListener("click", () => {
-        go(current.item ? `/${current.cat}` : "/");
+        if (current.item) {
+          go(`/${current.cat}`);
+        } else if (current.cat) {
+          go("/");
+        } else {
+          // Home, bloomed: fold the sections back to the lone seed.
+          seedUnfold.open = false;
+        }
       });
 
       installDebugHud(
