@@ -18,6 +18,7 @@
   --iz-parchment: #d9cdb4;
   --iz-parchment-ink: #443a28;
   --iz-parchment-fold: #c4b795;
+  --iz-parchment-clip: #8a8070;
   --iz-cover: #0f1113;
   --iz-page-verso: #1e2124;
   --iz-page-recto: #1b1e20;
@@ -291,7 +292,11 @@ body {
 .journal-pages {
   grid-row: 2;
   grid-column: 2 / 5;
-  margin: 28px;
+  /* Padding, not margin: the clip boundary then sits at the page
+     edges, so tilted inserts and their lifts can poke a few px
+     past a column without being sheared off. */
+  padding: 28px;
+  box-sizing: border-box;
   min-width: 0;
   min-height: 0;
   position: relative;
@@ -445,7 +450,7 @@ body {
   }
   .journal-pages {
     grid-column: 2 / 3;
-    margin: 18px;
+    padding: 18px;
     columns: 1;
   }
   .journal-band {

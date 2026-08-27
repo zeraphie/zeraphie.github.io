@@ -90,6 +90,10 @@
 /* ── lists: hex bullets ────────────────────────────────────────── */
 
 .journal-prose ul {
+  /* flow-root: lists, quotes, and rules must sit BESIDE the floated
+     metadata panel like line boxes do — an ordinary block slides
+     underneath it and paints over its text. */
+  display: flow-root;
   list-style: none;
   padding-left: 18px;
   margin: 0 0 1em;
@@ -109,6 +113,7 @@
   background: color-mix(in srgb, var(--hp-primary-bright) 55%, transparent);
 }
 .journal-prose ol {
+  display: flow-root;
   padding-left: 22px;
   margin: 0 0 1em;
 }
@@ -117,6 +122,7 @@
 }
 
 .journal-prose hr {
+  display: flow-root;
   border: 0;
   height: 1px;
   margin: 1.4em 0;
@@ -181,6 +187,7 @@
 /* ── blockquotes: the callout, and its dnd parchment flavour ───── */
 
 .journal-prose blockquote {
+  display: flow-root;
   margin: 0 0 1em;
   padding: 10px 14px;
   border: 1px solid color-mix(in srgb, var(--hp-outline-variant) 45%, transparent);
@@ -205,17 +212,43 @@
   color: var(--hp-primary-bright);
 }
 
-/* dnd posts render their callouts as parchment handouts — the
-   Araitael fiction lives in content, never in the vessel. The cut
-   corner lets the page show through; the fold sits on top. */
+/* dnd posts render their callouts as parchment handouts — notes
+   placed in a scrapbook: narrower than the column, tilted, taped
+   down, alternating sides, a flat offset lift. The clip polygon
+   cuts the folded corner and reaches 10px above the card so the
+   tape can straddle the top edge; drop-shadow follows the clipped
+   silhouette. The Araitael fiction lives in content, never in the
+   vessel. */
 [data-collection="dnd"] .journal-prose blockquote {
   position: relative;
   border: 0;
   background: var(--iz-parchment);
   color: var(--iz-parchment-ink);
+  /* auto width lets a card shrink to fit beside the metadata float
+     on page one; the cap keeps it a placed note everywhere else. */
+  width: auto;
+  max-width: 87%;
+  margin: 1em 0 1.6em 3%;
   padding: 12px 16px;
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-  transform: rotate(-0.35deg);
+  clip-path: polygon(
+    0 -10px,
+    calc(100% - 14px) -10px,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    0 100%
+  );
+  transform: rotate(-1.1deg);
+  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.3));
+  /* Rotated text shimmers under hinted subpixel AA: position the
+     glyphs geometrically and fall back to grayscale smoothing. */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[data-collection="dnd"] .journal-prose blockquote:nth-of-type(even) {
+  margin-left: 9%;
+  transform: rotate(0.9deg);
 }
 [data-collection="dnd"] .journal-prose blockquote::before {
   content: "";
@@ -225,6 +258,21 @@
   width: 14px;
   height: 14px;
   background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
+}
+[data-collection="dnd"] .journal-prose blockquote::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 22px;
+  height: 15px;
+  transform: translateX(-50%) rotate(-3deg);
+  border: 1.5px solid var(--iz-parchment-clip);
+  border-radius: 8px;
+}
+[data-collection="dnd"] .journal-prose blockquote:nth-of-type(even)::after {
+  transform: translateX(-50%) rotate(2.5deg);
+  left: 40%;
 }
 [data-collection="dnd"] .journal-prose blockquote > p:first-child > strong:only-child {
   color: var(--iz-parchment-ink);

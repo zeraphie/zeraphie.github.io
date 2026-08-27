@@ -175,9 +175,12 @@ const meta = {
         const style = getComputedStyle(pages);
         perView = Math.max(1, Number(style.columnCount) || 1);
         const gap = Number.parseFloat(style.columnGap) || 0;
-        const column = (pages.clientWidth - gap * (perView - 1)) / perView;
+        const padX =
+          (Number.parseFloat(style.paddingLeft) || 0) +
+          (Number.parseFloat(style.paddingRight) || 0);
+        const column = (pages.clientWidth - padX - gap * (perView - 1)) / perView;
         unit = column + gap;
-        count = Math.max(1, Math.round((pages.scrollWidth + gap) / unit));
+        count = Math.max(1, Math.round((pages.scrollWidth - padX + gap) / unit));
       }
 
       function apply(): void {
