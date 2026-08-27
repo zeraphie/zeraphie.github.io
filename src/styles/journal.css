@@ -231,25 +231,44 @@ a.journal-site:hover {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   color: var(--hp-on-surface-variant);
 }
+/* The two hexes carry the separation themselves. */
 .journal-pager .arrows {
-  color: var(--hp-primary-bright);
-  letter-spacing: 0.1em;
+  display: none;
 }
+/* Turning is the vessel's primary control, so it gets a real
+   target: a hex chip, in the house's own silhouette. */
 .journal-turn {
-  background: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 34.6px;
+  padding: 0;
   border: 0;
-  padding: 0 2px;
   font: inherit;
-  letter-spacing: 0.1em;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0;
+  clip-path: var(--journal-hex);
+  background: color-mix(in srgb, var(--hp-primary) 14%, transparent);
   color: var(--hp-primary-bright);
   cursor: pointer;
+  transition: background 140ms ease;
+}
+.journal-turn:hover:not(:disabled),
+.journal-turn:focus-visible:not(:disabled) {
+  background: color-mix(in srgb, var(--hp-primary) 34%, transparent);
+  outline: none;
 }
 .journal-turn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: default;
+}
+/* Label left, the pair together on the right. */
+#journal-turn-prev {
+  margin-left: 6px;
 }
 
 /* ── the spine ─────────────────────────────────────────────────── */
@@ -680,7 +699,16 @@ a.journal-site:hover {
   .journal-pager {
     margin-left: 0;
     width: 100%;
-    justify-content: space-between;
+  }
+  /* Thumb-sized on a phone: the pair sits at the right, the count
+     stays left. */
+  #journal-turn-prev {
+    margin-left: auto;
+  }
+  .journal-turn {
+    width: 38px;
+    height: 44px;
+    font-size: 13px;
   }
   .journal-corner {
     width: 18px;
