@@ -359,6 +359,11 @@ const PERF_LOW = initPerfMode();
         bg,
         perfLow: PERF_LOW,
         isCurrentHead: (head) => current.head === head,
+        // Every heading on screen reads as current in the rail —
+        // the pages decide, the rail paints.
+        onAnchorsVisible: (labels) => {
+          track.currentSubs = labels;
+        },
       });
 
 const clusters = createClusterLayer(world);

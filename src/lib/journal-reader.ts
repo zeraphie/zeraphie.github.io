@@ -23,11 +23,16 @@ export interface JournalReaderHost {
   animate: boolean;
   /** Debug: freeze a timed turn at this progress (?hold=). */
   hold?: number;
+  /** Fires whenever the visible pages change — turns, resizes,
+   * repagination. */
+  onChange?(): void;
 }
 
 export interface JournalReader {
   /** Re-derive geometry (resize, fonts, content swap). */
   refresh(): void;
+  /** The pages on screen right now, as a half-open range. */
+  visibleRange(): { from: number; to: number };
   /** Turn to the spread containing a page index. */
   goTo(page: number): void;
   /** The page index an element inside the strip lives on. */
@@ -71,6 +76,7 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
       last > lead + 1 ? `page ${lead + 1}–${last} of ${count}` : `page ${lead + 1} of ${count}`;
     prev.disabled = lead === 0;
     next.disabled = last >= count;
+    host.onChange?.();
   }
 
   function startTurn(target: number, dir: 1 | -1): TurnController | null {
@@ -212,6 +218,7 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
 
   return {
     refresh,
+    visibleRange: () => ({ from: lead, to: Math.min(count, lead + perView) }),
     goTo(page: number): void {
       const target = clampLead(page);
       go(target, target >= lead ? 1 : -1);

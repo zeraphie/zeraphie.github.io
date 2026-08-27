@@ -23,6 +23,9 @@ export interface ReadingHost {
   /** Late reflows re-land anchors only while `head` is still the
    * route's target. */
   isCurrentHead(head: string): boolean;
+  /** The headings currently on screen — a spread shows several at
+   * once, so the rail can mark them all. */
+  onAnchorsVisible?(labels: string[]): void;
 }
 
 /** A journal page that is not a post — generated content read in
@@ -209,6 +212,23 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     });
   }
 
+  /** A spread can show several headings at once; report every one
+   * whose page is on screen. */
+  function syncVisibleAnchors(): void {
+    if (!reader || !host.onAnchorsVisible) {
+      return;
+    }
+    const { from, to } = reader.visibleRange();
+    const labels: string[] = [];
+    for (const heading of strip.querySelectorAll<HTMLElement>("h2[id]")) {
+      const page = reader.pageOf(heading);
+      if (page >= from && page < to) {
+        labels.push(heading.textContent?.trim() ?? "");
+      }
+    }
+    host.onAnchorsVisible(labels);
+  }
+
   function mountReader(): void {
     reader ??= createJournalReader({
       strip,
@@ -220,6 +240,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
       // — instant turns, no drag grips, until it gets its own pass.
       zones: [],
       animate: false,
+      onChange: syncVisibleAnchors,
     });
   }
 
