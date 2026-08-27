@@ -3,9 +3,8 @@
  * Owns pagination and turning for one mounted journal: measures the
  * column geometry, keeps the pager honest, and drives the two-leaf
  * turn from every input — pager buttons, wheel, keys, and corner
- * drags that scrub the leaf and settle past halfway. Shared by the
- * workbench route and the flow's dive layer; destroy() detaches the
- * window listeners so the flow can unmount cleanly. */
+ * drags that scrub the leaf and settle past halfway. destroy()
+ * detaches the window listeners so the dive can unmount cleanly. */
 
 import { beginTurn, type TurnController } from "./journal-turn";
 

@@ -11,11 +11,9 @@ import { remarkCallouts } from "./src/lib/remark-callouts.ts";
 export default defineConfig({
   site: "https://izelya.me",
   integrations: [
-    sitemap({
-      // Only live destinations: drafts never build, and the journal
-      // workbench is scaffolding, not a page anyone should land on.
-      filter: (page) => !page.includes("/journal/"),
-    }),
+    // Drafts never build, so every generated page is a live
+    // destination.
+    sitemap(),
   ],
   markdown: {
     remarkPlugins: [remarkCallouts],

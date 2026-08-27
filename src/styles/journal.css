@@ -41,8 +41,7 @@
 }
 
 /* While a journal is open, the page ground is the cover — the
-   ambience canvas sits above it, the opaque leaves above that.
-   The workbench sets this for good; the flow toggles it per dive. */
+   world's ambience sits above it, the opaque leaves above that. */
 body[data-journal-open] {
   background: var(--iz-cover);
 }
@@ -50,18 +49,6 @@ body[data-journal-open] {
 /* ── the cover ─────────────────────────────────────────────────── */
 
 /* A dimmed ambient lattice lives UNDER the vessel: the pages are
-   opaque paper, so it only ever shows on the cover margins, the
-   bands, and the spine gutter — and because the cover layer never
-   snapshots during a turn, the fold happens over live ambience.
-   elements.css gives html its own background, which buries the
-   default z:-1 canvas; lift it to 0 and keep the vessel clear. */
-#journal-bg {
-  --hp-bg-z: 0;
-  --hp-bg-faint-opacity: 0.1;
-  --hp-bg-bright-opacity: 0.32;
-  --hp-bg-hot-opacity: 0.55;
-}
-
 .journal {
   position: fixed;
   inset: 0;
