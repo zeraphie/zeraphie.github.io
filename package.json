@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "test": "bun test --pass-with-no-tests",
+    "test": "bun test",
     "lint": "oxlint src/",
     "lint:fix": "oxlint --fix src/",
     "format": "oxfmt",

@@ -59,6 +59,12 @@ library code, hexpunk wins — this file governs site code).
 - Fixtures live in `tests/fixtures/`; a committed fixture whose
   date derives from git history doubles as the shallow-clone
   canary — it fails on a depth-1 clone by design.
+- Snapshots are inline (`toMatchInlineSnapshot`) and small —
+  snapshot the projection that is the contract (tree-shaped
+  transforms like the remark plugin), never sprawling raw
+  structures.
+- A snapshot update is committed only after reading its diff; an
+  unread update turns the test into a rubber stamp.
 - Test behaviour, not implementation; names describe the
   scenario.
 
