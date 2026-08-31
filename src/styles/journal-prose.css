@@ -14,7 +14,7 @@
   color: var(--hp-on-surface);
   orphans: 2;
   widows: 2;
-  counter-reset: journal-section journal-entry;
+  counter-reset: journal-section;
   /* A bare URL is one unbreakable word. `anywhere` rather than
      `break-word` because it also lowers the min-content width — the
      column can then be as narrow as the page needs, instead of a
@@ -95,7 +95,6 @@
       The date is written by the reading layer from the post index,
       and is simply absent until the entry has been committed. */
 .journal-prose h2[data-heading="log"] {
-  counter-increment: journal-entry;
   break-before: column;
   position: relative;
   display: block;
@@ -119,32 +118,34 @@
     )
     no-repeat 0 26px / 100% 2px;
 }
-/* The slip is two type sizes — a big dotted date over a small
-   letterspaced entry line — and one `content` string can only carry
-   one. So ::before is the paper and the date, ::after is the entry
-   line laid over it: identical boxes and identical rotation, so
-   they move as one, with padding placing each line. Both sit INSIDE
-   the heading's box, because an entry always opens a column and a
-   negative offset lands in the column break, where the strip's clip
-   slices whatever it finds. */
+/* The plate is a real element (built in reading.ts), because two
+   type sizes need two boxes and a `content` string only carries one
+   — which is what pinned the date and the entry line to ::before and
+   ::after, leaving the paper sharing a layer with its own text.
+   `filter` rasterises that layer and the slip's rotation resamples
+   it, so the type came out soft no matter what smoothing asked for.
+   The heading's own pseudos go quiet: they belong to the section
+   head, and a devlog entry is not one. */
 .journal-prose h2[data-heading="log"]::before,
 .journal-prose h2[data-heading="log"]::after {
-  content: "";
-  display: block;
+  content: none;
+}
+.journal-log-plate {
   position: absolute;
   top: 8px;
   right: 0;
   width: 156px;
   /* 12px taller than the paper. The paper's top edge is cut in by
-     the clip-path below, which leaves that strip free for the wire
-     to straddle — a background cannot paint outside its own box, so
-     the box has to be the thing that is bigger. Both layers keep
-     IDENTICAL boxes so one transform-origin rotates them as one. */
+     the clip below, which leaves that strip free for the wire to
+     straddle — a background cannot paint outside its own box, so the
+     box has to be the thing that is bigger. */
   height: 96px;
   box-sizing: border-box;
   font-family: "Chakra Petch", sans-serif;
+  /* h2 is bold by default and the plate inherits it; these lines
+     want their authority from size, not weight. */
+  font-weight: 300;
   text-transform: none;
-  white-space: pre;
   color: var(--iz-parchment-ink);
   transform: rotate(-3.2deg);
   transform-origin: 50% 50%;
@@ -152,16 +153,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* The paper, and the date it carries. */
-.journal-prose h2[data-heading="log"]::before {
-  content: attr(data-date);
-  padding: 30px 16px 0 22px;
-  font-size: 19px;
-  /* h2 is bold by default and the pseudo-elements inherit it; the
-     date wants its authority from size, not weight. */
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
+/* The paper, its folded corner and its shadow — a SIBLING of the two
+   lines rather than their ancestor, so the filter never reaches the
+   type. */
+.journal-log-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background:
     linear-gradient(45deg, var(--iz-parchment-fold) 0 13px, transparent 13px) bottom left / 26px
       26px no-repeat,
@@ -170,34 +169,48 @@
   clip-path: polygon(0 12px, 100% 12px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
   filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.34));
 }
-/* The entry line, and the wire, riding the same plate. ::after paints
-   after ::before, so the wire drawn here sits ON the paper rather
-   than behind it — and it travels with the slip's rotation for free.
-   The section head's rule is drawn by masking ::after down to a
-   hairline and a diamond; that mask has to go, or it clips this
-   text away to nothing. */
-.journal-prose h2[data-heading="log"]::after {
-  content: "DEVLOG " counter(journal-entry, decimal-leading-zero);
-  padding: 62px 16px 0 23px;
+/* The wire, riding the free strip above the paper. */
+.journal-log-plate::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%2376858f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center 0 / 16px 24px;
+}
+.journal-log-plate__date {
+  position: absolute;
+  top: 30px;
+  left: 22px;
+  right: 16px;
+  font-size: 19px;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.journal-log-plate__entry {
+  position: absolute;
+  top: 62px;
+  left: 23px;
+  right: 16px;
   font-size: 10px;
   line-height: 1.1;
   letter-spacing: 0.2em;
   color: color-mix(in srgb, var(--iz-parchment-ink) 70%, transparent);
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%2376858f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
-    no-repeat center 0 / 16px 24px;
-  /* Against the PADDING box the wire would sit 62px down and off to
-     one side, since this element's padding places the entry line
-     rather than the clip. Measure it from the box's own edge, where
-     the free strip above the paper is. */
-  background-origin: border-box;
-  mask: none;
+  white-space: nowrap;
 }
-/* An entry with no commit behind it yet has no date to show — it is
-   not unknown, it does not exist — so the entry line takes the
-   plate's upper line instead of sitting under a blank. */
-.journal-prose h2[data-heading="log"]:not([data-date])::after {
-  padding-top: 34px;
-  font-size: 12px;
+/* An entry with no commit behind it yet renders no date at all — it
+   is not unknown, it does not exist — so the entry line takes the
+   plate's upper line instead of sitting under a blank. Scoped to the
+   wide tier so `:has()` cannot outrank the narrow rules below, the
+   way the old `:not([data-date])` had to be undone by hand. */
+@media (min-width: 1101px) {
+  .journal-log-plate:not(:has(.journal-log-plate__date)) .journal-log-plate__entry {
+    top: 34px;
+    font-size: 12px;
+  }
 }
 
 /* From tier 2 down the column cannot carry a title and a pinned slip
@@ -220,8 +233,20 @@
       )
       no-repeat 0 15px / 100% 2px;
   }
-  /* The tab: level, not tilted — it reads as fixed to the edge. */
-  .journal-prose h2[data-heading="log"]::before {
+  /* The tab: level, not tilted — it reads as fixed to the edge. The
+     plate stops being a box here (`display: contents`) so its two
+     lines lay out directly in the heading: the date becomes the
+     pennant, the number rejoins the flow behind the title. Its
+     pseudos go with it — out here the date carries its own paper,
+     and there is no wire. */
+  .journal-log-plate {
+    display: contents;
+  }
+  .journal-log-plate::before,
+  .journal-log-plate::after {
+    content: none;
+  }
+  .journal-log-plate__date {
     top: 0;
     right: auto;
     left: 0;
@@ -234,14 +259,17 @@
     clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%);
     transform: none;
   }
-  /* The entry number rejoins the flow as a suffix on the title. */
-  .journal-prose h2[data-heading="log"]::after {
-    content: "DEVLOG " counter(journal-entry, decimal-leading-zero);
+  /* The entry number rejoins the flow as a suffix on the title —
+     which is why the plate is APPENDED to the heading rather than
+     prepended: in the DOM it already sits after the words. */
+  .journal-log-plate__entry {
     position: static;
     display: inline;
+    top: auto;
+    left: auto;
+    right: auto;
     width: auto;
     height: auto;
-    padding: 0;
     /* A margin, not a leading space in the content — whitespace at
        the start of an inline box is at the mercy of collapsing. */
     margin-left: 0.7em;
@@ -252,16 +280,6 @@
     transform: none;
     filter: none;
     white-space: normal;
-  }
-  /* No commit behind it yet means no date, and an empty pennant is
-     worse than none. `:not()` outranks the rules above it, so its
-     wide-tier placement has to be undone explicitly. */
-  .journal-prose h2[data-heading="log"]:not([data-date])::before {
-    display: none;
-  }
-  .journal-prose h2[data-heading="log"]:not([data-date])::after {
-    padding: 0;
-    font-size: 11px;
   }
 }
 

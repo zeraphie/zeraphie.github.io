@@ -23,6 +23,36 @@ function journalDate(iso: string | undefined): string | undefined {
   return iso?.replaceAll("-", "/");
 }
 
+/** The devlog plate — the date git found for an entry, over the
+ * entry's number. Two type sizes need two boxes, and a `content`
+ * string only ever carries one, which is what used to pin these to
+ * ::before and ::after and left the paper sharing a layer with its
+ * own text: `filter` rasterises that layer, the slip's rotation
+ * resamples it, and the type came out soft.
+ *
+ * Built here rather than in the markdown because Astro reads a
+ * heading's text AFTER remark runs — anything the plugin injected
+ * would end up in the rail's labels and in the slug. Appended, not
+ * prepended, so the title still comes first when read aloud and the
+ * number can fall in behind it as a suffix at the narrow tier. */
+function logPlate(entry: number, date: string | undefined): HTMLElement {
+  const plate = document.createElement("span");
+  plate.className = "journal-log-plate";
+  // An entry with no commit behind it yet has no date to show — it
+  // is not unknown, it does not exist, so nothing is rendered for it.
+  if (date) {
+    const stamp = document.createElement("span");
+    stamp.className = "journal-log-plate__date";
+    stamp.textContent = date;
+    plate.append(stamp);
+  }
+  const number = document.createElement("span");
+  number.className = "journal-log-plate__entry";
+  number.textContent = `DEVLOG ${String(entry).padStart(2, "0")}`;
+  plate.append(number);
+  return plate;
+}
+
 export interface ReadingHost {
   page: HTMLElement;
   world: HpGrid;
@@ -176,14 +206,17 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
         // Devlog entries wear the date git found for them. The h2s
         // are in document order, which is the order the index lists
         // its anchors in — the same join the visible-anchor walk
-        // makes. An entry with no commit yet gets no attribute, and
-        // its slip shows only the entry number.
+        // makes, and the same index devlogDates keys by, which counts
+        // every h2 and not just the logged ones. The entry NUMBER
+        // counts only logs, the way the css counter it replaces did.
         const anchors = info?.anchors ?? [];
+        let logs = 0;
         prose.querySelectorAll<HTMLElement>("h2[id]").forEach((heading, index) => {
-          const date = anchors[index]?.date;
-          if (date) {
-            heading.dataset.date = journalDate(date)!;
+          if (heading.dataset.heading !== "log") {
+            return;
           }
+          logs += 1;
+          heading.append(logPlate(logs, journalDate(anchors[index]?.date ?? undefined)));
         });
       })
       .catch(() => {
