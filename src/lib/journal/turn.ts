@@ -1,16 +1,15 @@
 /* ─ journal-turn — the two-leaf page turn ─
  *
- * True book physics as a per-turn overlay: the strip is scrolled to
- * the destination immediately (content lands first) and the overlay
- * supplies yesterday's pixels — a static cover holding the old page
- * on its side, and the turning leaf. The leaf is built as two
- * ONE-SIDED flaps that trade places at the vertical: the old page
- * carries the first quarter-turn, the new page the second. No
- * preserve-3d, no backfaces, nothing coplanar — engines cannot
- * bleed one page through another. Faces are clones of the strip
- * windowed to one page region, so the leaf is paper with words.
+ * A per-turn overlay: the strip scrolls to the destination
+ * immediately (content lands first) and the overlay supplies the
+ * old pixels — a static cover holding the old page, plus the
+ * turning leaf. The leaf is two ONE-SIDED flaps that trade places
+ * at the vertical: the old page owns the first quarter-turn, the
+ * new page the second. No preserve-3d, no backfaces, nothing
+ * coplanar — engines cannot bleed one page through another. Faces
+ * are clones of the strip windowed to one page region.
  * Progress-driven: timed turns tween it, a corner drag scrubs it
- * and settles past the halfway line. */
+ * and settles past halfway. */
 
 import { dragProgress, easeOutCubic, flapVisible, foldDepth, type TurnGeometry } from "./math";
 
@@ -166,8 +165,8 @@ export function beginTurn(options: TurnOptions): TurnController {
     flap("left", "right", false, 0, oldScroll, "verso", 0, 0.5, (p) => 180 * p);
     flap("right", "left", false, half, newScroll, "recto", 0.5, 1, (p) => -180 * (1 - p));
   } else if (dir > 0) {
-    // Notepad forward: the old page lifts from the bottom and slips
-    // over the top binder; past vertical it is out of sight.
+    // Notepad forward: the old page lifts from the bottom edge;
+    // past vertical it is out of sight.
     flap("left", "top", true, 0, oldScroll, "verso", 0, 0.5, (p) => -180 * p);
   } else {
     // Notepad backward: the previous page descends from above onto

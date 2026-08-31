@@ -1,10 +1,10 @@
-/* ─ journal-reader — the vessel's reading controller ─
+/* ─ journal-reader — the journal's reading controller ─
  *
- * Owns pagination and turning for one mounted journal: measures the
- * column geometry, keeps the pager honest, and drives the two-leaf
- * turn from every input — pager buttons, wheel, keys, and corner
- * drags that scrub the leaf and settle past halfway. destroy()
- * detaches the window listeners so the dive can unmount cleanly. */
+ * Owns pagination and turning for one mounted journal: measures
+ * the column geometry, updates the pager, and drives the two-leaf
+ * turn from every input — buttons, wheel, keys, and corner drags
+ * that scrub the leaf and settle past halfway. destroy() detaches
+ * the window listeners so the dive can unmount cleanly. */
 
 import {
   clampLead,
@@ -176,7 +176,7 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
   }
 
   // One wheel notch is one turn — the cooldown covers the leaf and
-  // soaks inertial deltas so a flick doesn't skip spreads.
+  // absorbs inertial deltas so a flick doesn't skip spreads.
   let wheelAt = 0;
   const onWheel = (event: WheelEvent) => {
     event.preventDefault();
