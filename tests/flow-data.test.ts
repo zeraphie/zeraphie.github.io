@@ -1,4 +1,4 @@
-/* ─ flow-data tests — paths in, world state out ─ */
+/* ─ flow-data tests ─ */
 
 import { describe, expect, it } from "bun:test";
 

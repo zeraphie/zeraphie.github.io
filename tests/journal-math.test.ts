@@ -1,8 +1,7 @@
-/* ─ journal-math tests — the journal's numbers, sans DOM ─
+/* ─ journal-math tests ─
  *
- * Real layout is verified in the browser; these pin the arithmetic
- * the reader and the turn delegate to: geometry, clamping, the
- * pager's words, input mappings, and the drag physics' arc. */
+ * Real layout is checked in the browser; these pin the arithmetic:
+ * geometry, clamping, pager text, input mappings, drag physics. */
 
 import { describe, expect, it } from "bun:test";
 

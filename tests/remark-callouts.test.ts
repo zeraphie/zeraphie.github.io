@@ -1,10 +1,9 @@
-/* ─ remark-callouts tests — markers in, dressed trees out ─
+/* ─ remark-callouts tests ─
  *
- * The plugin walks plain mdast-shaped objects, so scenarios build
- * tiny trees by hand and assert the transformation — targeted
- * checks for single facts, inline snapshots where the whole
- * resulting shape is the contract (stripping is half the job, so
- * "nothing else changed" matters). */
+ * Trees are built by hand and run through the plugin. Inline
+ * snapshots cover the cases where the whole output shape is the
+ * contract: the plugin removes nodes, so "nothing else changed"
+ * is part of the assertion. */
 
 import { describe, expect, it } from "bun:test";
 
@@ -17,7 +16,6 @@ const blockquote = (...children: unknown[]) => ({ type: "blockquote", children }
 const heading = (depth: number, ...children: unknown[]) => ({ type: "heading", depth, children });
 const root = (...children: unknown[]) => ({ type: "root", children });
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const run = (tree: any) => {
   remarkCallouts()(tree);
   return tree;

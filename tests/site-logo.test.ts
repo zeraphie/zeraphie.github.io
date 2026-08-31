@@ -1,10 +1,8 @@
-/* ─ site-logo tests — the invader's documented invariants, enforced ─
+/* ─ site-logo tests ─
  *
- * The sprite's file header declares its load-bearing rules: the two
- * poses are index-aligned 46-entry lists (CSS interpolates
- * box-shadow pairwise), twelve pixels move between them, and every
- * offset sits on the 11x8 grid's convention — whole x, half-step y.
- * These tests turn that documentation into enforcement. */
+ * The sprite header declares its rules: two index-aligned 46-entry
+ * poses (box-shadow interpolates pairwise), twelve moving pixels,
+ * whole-x half-step-y coordinates. Enforce them. */
 
 import { describe, expect, it } from "bun:test";
 

@@ -1,9 +1,8 @@
-/* ─ journal-math — the measurable half of reading ─
+/* ─ journal-math — the journal's pure arithmetic ─
  *
- * The pure arithmetic under the journal's pagination and turning,
- * lifted out of the DOM closures so it can be tested without a
- * browser: column geometry, the spread-aligned clamp, the pager's
- * words, the input mappings, and the free-edge drag physics. The
+ * Lifted out of the reader's and the turn's DOM closures so it can
+ * run without a browser: column geometry, the spread-aligned
+ * clamp, pager text, input mappings, and the drag physics. The
  * reader and the turn own the DOM; this file owns the numbers. */
 
 /** The strip's numbers, as read from computed style and layout. */
@@ -27,8 +26,7 @@ export interface ColumnMetrics {
 }
 
 /** Column geometry → page geometry. NaN inputs (a `columnCount` of
- * "auto", an unset pad) fall back the way the style reads always
- * did: one column, zero length. */
+ * "auto", an unset pad) fall back to one column and zero length. */
 export function measureColumns(box: ColumnBox): ColumnMetrics {
   const perView = Math.max(1, box.columnCount || 1);
   const gap = box.columnGap || 0;
@@ -51,7 +49,7 @@ export function visibleTo(lead: number, count: number, perView: number): number 
   return Math.min(count, lead + perView);
 }
 
-/** The pager's words: a range on a spread, a single page otherwise. */
+/** Pager text: a range on a spread, a single page otherwise. */
 export function pageLabel(lead: number, count: number, perView: number): string {
   const last = visibleTo(lead, count, perView);
   return last > lead + 1 ? `page ${lead + 1}–${last} of ${count}` : `page ${lead + 1} of ${count}`;
@@ -101,10 +99,10 @@ export interface TurnGeometry {
 
 const deg = (cosine: number) => (Math.acos(Math.max(-1, Math.min(1, cosine))) * 180) / Math.PI;
 
-/** Free-edge physics: the pointer rides the leaf's moving edge, so
- * progress is the arc angle recovered from its position — around
- * the spine on a spread, over the top edge in notepad mode. The
- * cosine clamp keeps a pointer past the physical edge on the arc. */
+/** The pointer rides the leaf's free edge, so progress is the arc
+ * angle recovered from its position — around the spine on a
+ * spread, over the top edge in notepad mode. The cosine clamp
+ * keeps a pointer past the physical edge on the arc. */
 export function dragProgress(geometry: TurnGeometry, x: number, y: number): number {
   const sign = geometry.dir > 0 ? 1 : -1;
   if (geometry.spread) {

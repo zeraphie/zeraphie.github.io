@@ -1,10 +1,9 @@
-/* ─ devlog-dates tests — discovered dates, explicit and from git ─
+/* ─ devlog-dates tests ─
  *
- * Parsing and the explicit-date path run against committed fixtures
- * and throwaway temp files (untracked → git answers null). The one
- * git-backed case is the shallow-clone canary: `git-dated.md` has no
- * explicit date, so its date must be discovered from the commit that
- * added it — null on a depth-1 clone, failing this suite by design. */
+ * Committed fixtures cover parsing; temp files cover the untracked
+ * paths, where git answers null. git-dated.md is the shallow-clone
+ * canary: its date comes from the commit that added it, so a
+ * depth-1 clone fails this suite by design. */
 
 import { afterAll, describe, expect, it } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -41,8 +40,8 @@ describe("explicit dates", () => {
   });
 
   it("treats a malformed date option as absent", () => {
-    // Falls back to history; untracked, so no date at all — a typo
-    // never shows a broken date.
+    // Falls back to history (untracked → none): a typo never shows
+    // a broken date.
     const file = tmpFile("malformed.md", "## [!log date:03-03-2026] Wrong shape\n");
     expect(devlogDates(file)).toEqual(new Map());
   });
