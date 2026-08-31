@@ -165,6 +165,18 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     return contentFor(key)
       .then((template) => {
         prose.appendChild(template.content.cloneNode(true));
+        // Devlog entries wear the date git found for them. The h2s
+        // are in document order, which is the order the index lists
+        // its anchors in — the same join the visible-anchor walk
+        // makes. An entry with no commit yet gets no attribute, and
+        // its slip shows only the entry number.
+        const anchors = info?.anchors ?? [];
+        prose.querySelectorAll<HTMLElement>("h2[id]").forEach((heading, index) => {
+          const date = anchors[index]?.date;
+          if (date) {
+            heading.dataset.date = date;
+          }
+        });
       })
       .catch(() => {
         prose.insertAdjacentHTML(
