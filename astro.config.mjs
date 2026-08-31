@@ -17,5 +17,15 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [remarkCallouts],
+    /* Two themes and no default: Shiki then writes each token's
+       colours as CSS custom properties instead of inline `style`
+       attributes. Inline styles outrank the stylesheet, so with a
+       single theme the block is stuck on that theme's palette AND
+       its background — the journal could never sink it into the
+       page. As variables, the sheet picks. */
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark" },
+      defaultColor: false,
+    },
   },
 });

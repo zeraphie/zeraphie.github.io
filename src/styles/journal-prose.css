@@ -15,6 +15,12 @@
   orphans: 2;
   widows: 2;
   counter-reset: journal-section journal-entry;
+  /* A bare URL is one unbreakable word. `anywhere` rather than
+     `break-word` because it also lowers the min-content width — the
+     column can then be as narrow as the page needs, instead of a
+     long link setting a floor and shoving the spread sideways.
+     Code keeps its own rule: there, a long line scrolls. */
+  overflow-wrap: anywhere;
 }
 /* elements.css colours loose p/strong for the app shell; inside the
    journal the prose dress owns text colour and emphasis. */
@@ -353,7 +359,7 @@
 }
 .journal-prose pre {
   margin: 0 0 1em;
-  padding: 12px 14px;
+  padding: 12px 14px 12px 12px;
   font-family: "Fira Code", ui-monospace, monospace;
   /* A well sunk into the page, not a raised slab — the journal's
      paper is already darker than the theme's lowest surface. */
@@ -368,6 +374,117 @@
 }
 .journal-prose pre code {
   font-size: inherit;
+}
+
+/* `[!code ref:…]` above a fence: a caption bar seated on the block's
+   top edge, so the reference reads as belonging to the code rather
+   than to the paragraph before it. Modelled on hp-demo's action bar
+   — a quiet strip on the container's own surface — but as a header,
+   and carrying a filename rather than controls. The label is NOT
+   uppercased the way that bar's are: this is a path, and `LAYERS.JS`
+   is harder to read than the thing it names. */
+.journal-prose .journal-code-ref {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 1em 0 0;
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--hp-outline-variant) 40%, transparent);
+  border-bottom: 0;
+  background: rgb(0 0 0 / 0.32);
+  font-family: "Fira Code", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  color: var(--hp-on-surface-variant);
+  /* The bar is meaningless without the block it captions. */
+  break-after: avoid;
+}
+/* A page glyph, so the bar reads as a file even before the name. */
+.journal-prose .journal-code-ref::before {
+  content: "";
+  flex: none;
+  width: 11px;
+  height: 13px;
+  background: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v5h6'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  opacity: 0.75;
+}
+.journal-prose .journal-code-ref a {
+  color: inherit;
+}
+.journal-prose .journal-code-ref a:hover {
+  color: var(--hp-primary-bright);
+}
+/* The arrow sits at the far end, as an out-of-page link should. */
+.journal-prose .journal-code-ref a::after {
+  content: "↗";
+  margin-left: 6px;
+  opacity: 0.7;
+}
+.journal-prose .journal-code-ref + pre {
+  margin-top: 0;
+}
+
+/* No horizontal padding on the block itself — the inset moves onto
+   each line, where it sits INSIDE the line's own background. The
+   hover stripe then runs the full width of the well rather than
+   stopping short of it, which is how hp-code reads. */
+.journal-prose .astro-code {
+  padding: 4px 0;
+}
+.journal-prose .astro-code .line {
+  padding: 0 14px 0 12px;
+}
+
+/* Shiki writes each token's colours as custom properties (see the
+   markdown config), so the sheet chooses which theme applies rather
+   than inheriting whatever was baked in at build time. */
+.journal-prose .astro-code,
+.journal-prose .astro-code span {
+  color: var(--shiki-dark);
+  /* The theme's own background is ignored — the block is a well sunk
+     into the page, not a slab with a palette of its own. */
+  background: transparent;
+}
+:root[data-theme="light"] .journal-prose .astro-code,
+:root[data-theme="light"] .journal-prose .astro-code span {
+  color: var(--shiki-light);
+}
+
+/* Numbered lines, from the structure Shiki already emits: one
+   `.line` span per line. Grid on the code element makes each of
+   them a row and swallows the newlines between them, which a plain
+   block layout would render as blank lines. */
+.journal-prose .astro-code code {
+  display: grid;
+  counter-reset: journal-code-line;
+}
+.journal-prose .astro-code .line {
+  counter-increment: journal-code-line;
+}
+.journal-prose .astro-code .line::before {
+  content: counter(journal-code-line);
+  display: inline-block;
+  /* Sized in `ch` against the monospace face, so the gutter is as
+     wide as the digits it holds and no wider — `em` left a visible
+     hole to the left of every single-digit line. */
+  width: 2.4ch;
+  margin-right: 0.9em;
+  text-align: right;
+  color: color-mix(in srgb, var(--hp-on-surface-variant) 55%, transparent);
+  user-select: none;
+}
+/* Every other number dims — a reading stripe for tracking a line
+   across the block, without the gutter competing with the code.
+   hp-code's own value, so the two match. */
+.journal-prose .astro-code .line:nth-child(even)::before {
+  opacity: 0.55;
+}
+/* The line under the pointer lifts, so a long block stays readable
+   across its width. */
+.journal-prose .astro-code .line:hover {
+  background: rgb(255 255 255 / 0.045);
 }
 
 /* ── blockquotes: the callout, and its dnd parchment flavour ───── */
@@ -415,7 +532,10 @@
      on page one; the cap keeps it a placed note everywhere else. */
   width: auto;
   max-width: 87%;
-  margin: 1em auto 1.6em;
+  /* The clip straddles the top edge, overhanging the box by 12px, so
+     a 1em gap reads as barely any — measured from the paper, not
+     from the metal. The extra buys the clip its own room. */
+  margin: 2em auto 1.6em;
   padding: 12px 16px;
   clip-path: polygon(
     0 -14px,
