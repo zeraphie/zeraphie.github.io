@@ -1,11 +1,11 @@
 /* ─ reading — the dived journal ─
  *
- * Once the camera lands in a cell, the world fades beneath this
- * layer and the JOURNAL opens: the full-viewport book, its metadata
- * panel filled from the post index, the post's flow cloned into the
- * column strip, and the shared reader driving pagination. Reading
- * is turning — a heading resolves to the page that contains it,
- * never to a scroll position. */
+ * When the camera lands in a cell, the world fades under this
+ * layer and the journal opens: the metadata panel filled from the
+ * post index, the post's flow cloned into the column strip, the
+ * shared reader driving pagination. Reading is turning — a heading
+ * resolves to the page that contains it, never to a scroll
+ * position. */
 
 import type { HpGrid } from "@hexpunk/core/grid";
 
@@ -16,30 +16,29 @@ import { createJournalReader, type JournalReader } from "../journal/reader";
 import { contentFor } from "./content-cache";
 import { postMeta } from "./posts";
 
-/** Every date the journal SHOWS reads YYYY/MM/DD. The ISO form is
- * what travels — the post index, `article:published_time`, the
- * JSON-LD — and is left alone; this is only the display shape. */
+/** Displayed dates read YYYY/MM/DD. The ISO form travels (post
+ * index, `article:published_time`, JSON-LD) and is left alone. */
 function journalDate(iso: string | undefined): string | undefined {
   return iso?.replaceAll("-", "/");
 }
 
 /** The devlog plate — the date git found for an entry, over the
  * entry's number. Two type sizes need two boxes, and a `content`
- * string only ever carries one, which is what used to pin these to
- * ::before and ::after and left the paper sharing a layer with its
- * own text: `filter` rasterises that layer, the slip's rotation
- * resamples it, and the type came out soft.
+ * string carries only one: pinning these to ::before/::after left
+ * the paper sharing a layer with its own text, where `filter`
+ * rasterises and the slip's rotation resamples, so the type came
+ * out soft.
  *
  * Built here rather than in the markdown because Astro reads a
- * heading's text AFTER remark runs — anything the plugin injected
- * would end up in the rail's labels and in the slug. Appended, not
- * prepended, so the title still comes first when read aloud and the
- * number can fall in behind it as a suffix at the narrow tier. */
+ * heading's text AFTER remark runs — anything injected there ends
+ * up in the rail's labels and in the slug. Appended, not
+ * prepended, so the title reads first aloud and the number falls
+ * in behind as a suffix at the narrow tier. */
 function logPlate(entry: number, date: string | undefined): HTMLElement {
   const plate = document.createElement("span");
   plate.className = "journal-log-plate";
-  // An entry with no commit behind it yet has no date to show — it
-  // is not unknown, it does not exist, so nothing is rendered for it.
+  // An entry with no commit behind it has no date: nothing is
+  // rendered, not a placeholder.
   if (date) {
     const stamp = document.createElement("span");
     stamp.className = "journal-log-plate__date";
@@ -108,7 +107,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
    * is invisible when prefetch did its job. */
   let currentFilled: Promise<void> = Promise.resolve();
 
-  /** A stat with nothing to say leaves — its label goes with it. */
+  /** An empty stat is hidden, label included. */
   function setStat(dd: HTMLElement, value: string | undefined): void {
     const dt = dd.previousElementSibling as HTMLElement | null;
     dd.textContent = value ?? "";
@@ -154,17 +153,15 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     crumb.append(sep(), here);
     metaTitle.textContent = fields.title;
     metaSub.textContent = fields.sub;
-    // A project's own mark wins over the icon vocabulary: it says
-    // which thing this is, not which kind of thing. A mark also
-    // stands on its own — the hexagon is the icon set's frame, and
-    // the glyph host re-centres for the bigger drawing.
+    // A project's own mark wins over the icon: it names the thing,
+    // not the kind. The glyph host re-centres for the bigger
+    // drawing.
     const mark = logoFor(fields.logo);
     glyph.innerHTML = mark ?? iconFor(collection, fields.icon);
     glyph.parentElement?.toggleAttribute("data-logo", mark !== undefined);
     setStat(stats.date, journalDate(fields.date));
-    // Word count survives as the reading time's input, not as a stat
-    // of its own — the minutes are what a reader acts on. Collection
-    // is the crumb's job, one line above.
+    // Word count only feeds the reading time — the minutes are what
+    // a reader acts on. Collection is the crumb's job, above.
     setStat(
       stats.time,
       fields.words === undefined
@@ -203,12 +200,11 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     return contentFor(key)
       .then((template) => {
         prose.appendChild(template.content.cloneNode(true));
-        // Devlog entries wear the date git found for them. The h2s
-        // are in document order, which is the order the index lists
-        // its anchors in — the same join the visible-anchor walk
-        // makes, and the same index devlogDates keys by, which counts
-        // every h2 and not just the logged ones. The entry NUMBER
-        // counts only logs, the way the css counter it replaces did.
+        // Devlog entries get the date git found for them. The h2s
+        // are in document order — the same order the index lists
+        // anchors in and the same index devlogDates keys by (every
+        // h2 counts, not just logs). The entry NUMBER counts only
+        // logs, like the css counter it replaced.
         const anchors = info?.anchors ?? [];
         let logs = 0;
         prose.querySelectorAll<HTMLElement>("h2[id]").forEach((heading, index) => {

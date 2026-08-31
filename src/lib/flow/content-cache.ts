@@ -1,10 +1,9 @@
-// ─ content-cache — posts arrive before they're wanted ─
+// ─ content-cache — posts fetched ahead of need ─
 //
 // Slim pages inline only their own post; every other post's content
 // is fetched from its real page and kept as a template to clone.
-// Prefetching on bloom warms the whole world's reading matter before
-// any dive can want it — the no-sidebar version of the showcase's
-// revealed-links strategy.
+// Prefetching on bloom warms every post before a dive can want it
+// (the showcase's revealed-links strategy, minus the sidebar).
 
 const cache = new Map<string, Promise<HTMLTemplateElement>>();
 
