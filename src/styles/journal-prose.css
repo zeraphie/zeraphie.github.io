@@ -99,67 +99,81 @@
   letter-spacing: 0.01em;
   text-transform: none;
   color: var(--hp-on-surface);
-  border-top: 2px solid color-mix(in srgb, var(--hp-primary) 55%, transparent);
   margin: 0 0 0.9em;
-  padding: 22px 158px 0 0;
-  min-height: 92px;
+  padding: 52px 172px 0 0;
+  min-height: 112px;
   box-sizing: border-box;
+  /* The rule is painted rather than bordered, so it can sit LOWER
+     than the box edge and let the slip cross it — a border-top is
+     pinned to y=0, and anything above that lands in the column
+     break. The wire hangs from the same layer for the same reason. */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%2376858f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
+      no-repeat calc(100% - 132px) 4px / 14px 21px,
+    linear-gradient(
+        color-mix(in srgb, var(--hp-primary) 55%, transparent),
+        color-mix(in srgb, var(--hp-primary) 55%, transparent)
+      )
+      no-repeat 0 26px / 100% 2px;
 }
-/* The slip, and the wire over its top edge. Both stay INSIDE the
-   heading's box: an entry always opens a column, so anything with a
+/* The slip is two type sizes — a big dotted date over a small
+   letterspaced entry line — and one `content` string can only carry
+   one. So ::before is the paper and the date, ::after is the entry
+   line laid over it: identical boxes and identical rotation, so
+   they move as one, with padding placing each line. Both sit INSIDE
+   the heading's box, because an entry always opens a column and a
    negative offset lands in the column break, where the strip's clip
-   slices it — a masked wire loses its mask and paints as a bar, with
-   the offcut surfacing at the foot of the previous page. */
-.journal-prose h2[data-heading="log"]::before {
-  content: attr(data-date) "\A" "ENTRY " counter(journal-entry, decimal-leading-zero);
-  white-space: pre;
-  /* The section head's chip is a centring grid; the slip is two
-     lines of text and must not inherit that, or they collapse into
-     one zero-height row and spill outside the paper. */
+   slices whatever it finds. */
+.journal-prose h2[data-heading="log"]::before,
+.journal-prose h2[data-heading="log"]::after {
+  content: "";
   display: block;
   position: absolute;
-  top: 18px;
+  top: 8px;
   right: 0;
-  width: 142px;
-  /* The chip is a fixed 23px box; the slip is sized by its text. */
-  height: auto;
-  /* The clipped corner eats the lower left, so the text needs to
-     start inside it — hence the asymmetric inset. */
-  padding: 12px 14px 14px 20px;
+  width: 156px;
+  height: 84px;
   box-sizing: border-box;
-  background: var(--iz-parchment);
-  color: var(--iz-parchment-ink);
   font-family: "Chakra Petch", sans-serif;
-  font-size: 13px;
-  line-height: 1.62;
-  letter-spacing: 0.08em;
   text-transform: none;
-  /* Clipped corner on the outer edge, as the handouts wear it. */
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-  transform: rotate(-2.6deg);
-  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.34));
+  white-space: pre;
+  color: var(--iz-parchment-ink);
+  transform: rotate(-3.2deg);
+  transform-origin: 50% 50%;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* An entry with no commit behind it yet carries only its number —
-   the date is not unknown, it does not exist. */
-.journal-prose h2[data-heading="log"]:not([data-date])::before {
-  content: "ENTRY " counter(journal-entry, decimal-leading-zero);
-  font-size: 11px;
+/* The paper, and the date it carries. */
+.journal-prose h2[data-heading="log"]::before {
+  content: attr(data-date);
+  padding: 18px 16px 0 22px;
+  font-size: 19px;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  background:
+    linear-gradient(45deg, var(--iz-parchment-fold) 0 13px, transparent 13px) bottom left / 26px
+      26px no-repeat,
+    var(--iz-parchment);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.34));
 }
+/* The entry line, riding the same plate. */
 .journal-prose h2[data-heading="log"]::after {
-  content: "";
-  position: absolute;
-  top: 6px;
-  right: 34px;
-  width: 17px;
-  height: 24px;
-  flex: none;
-  background: var(--iz-silver);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
-    center / contain no-repeat;
-  transform: rotate(-4deg);
+  content: "ENTRY " counter(journal-entry, decimal-leading-zero);
+  padding: 48px 16px 0 22px;
+  font-size: 10px;
+  line-height: 1.1;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--iz-parchment-ink) 68%, transparent);
+  background: none;
+}
+/* An entry with no commit behind it yet has no date to show — it is
+   not unknown, it does not exist — so the entry line takes the
+   plate's upper line instead of sitting under a blank. */
+.journal-prose h2[data-heading="log"]:not([data-date])::after {
+  padding-top: 22px;
+  font-size: 12px;
 }
 
 /* Below the spread's full width the column cannot carry a title and
@@ -169,17 +183,21 @@
    keep it paper at this size. */
 @media (max-width: 1100px) {
   .journal-prose h2[data-heading="log"] {
-    /* The reserve must clear the slip's full two lines, not guess. */
-    padding: 20px 0 80px;
+    /* The reserve must clear the slip's full height, not guess. */
+    padding: 34px 0 96px;
     min-height: 0;
     font-size: 23px;
+    /* No wire down here — the plate and its lift are enough paper. */
+    background: linear-gradient(
+        color-mix(in srgb, var(--hp-primary) 55%, transparent),
+        color-mix(in srgb, var(--hp-primary) 55%, transparent)
+      )
+      no-repeat 0 14px / 100% 2px;
   }
-  .journal-prose h2[data-heading="log"]::before {
+  .journal-prose h2[data-heading="log"]::before,
+  .journal-prose h2[data-heading="log"]::after {
     top: auto;
     bottom: 0;
-  }
-  .journal-prose h2[data-heading="log"]::after {
-    display: none;
   }
 }
 

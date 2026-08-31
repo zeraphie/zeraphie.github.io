@@ -174,7 +174,8 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
         prose.querySelectorAll<HTMLElement>("h2[id]").forEach((heading, index) => {
           const date = anchors[index]?.date;
           if (date) {
-            heading.dataset.date = date;
+            // Dotted, as the metadata panel writes dates.
+            heading.dataset.date = date.replaceAll("-", ".");
           }
         });
       })
