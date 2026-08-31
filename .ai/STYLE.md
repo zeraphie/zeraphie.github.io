@@ -10,6 +10,15 @@ library code, hexpunk wins — this file governs site code).
 - Split files early: ~250 lines look for a seam, ~400 finding one
   is a priority. Page scripts that outgrow their page move to
   `src/lib/`.
+- Colours only via `--hp-*` tokens; no hardcoded palette values.
+  Visual state is state-driven: CSS custom properties + attribute
+  selectors, never inline `el.style.*` writes for visual state
+  (geometry positioning is exempt, per hexpunk's applier
+  pattern).
+- No emoji in technical writing.
+
+## Comments
+
 - Comments exist for exactly three reasons: intent of a file or
   function; reference for new maintainers; explaining genuinely
   complex code. Never narrate what the code says, never reference
@@ -34,12 +43,6 @@ library code, hexpunk wins — this file governs site code).
   the nearest docblock wins — so a file's first declaration always
   keeps a docblock of its own, and a preamble never masquerades as
   hover docs. `//` is for inline comments only.
-- Colours only via `--hp-*` tokens; no hardcoded palette values.
-  Visual state is state-driven: CSS custom properties + attribute
-  selectors, never inline `el.style.*` writes for visual state
-  (geometry positioning is exempt, per hexpunk's applier
-  pattern).
-- No emoji in technical writing.
 
 ## Astro pages
 
