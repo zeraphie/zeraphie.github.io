@@ -532,6 +532,16 @@
   text-align: center;
   margin: 1.4em 0 1.8em;
 }
+/* On the phone the header band is a strip ON the leaf, a few pixels
+   above this — and the cartridge is the prose's first child, so the
+   flow's `:first-child { margin-top: 0 }` leaves it squashed under
+   the band. It needs the air back at that tier only; on the wider
+   tiers the band is out on the cover and there is nothing to crowd. */
+@media (max-width: 760px) {
+  .journal-prose > .journal-cartridge-slot:first-child {
+    margin-top: 20px;
+  }
+}
 
 /* ── the cartridge: a post's playable build ───────────────────────
       The chassis is DRAWN (one svg, the design board's geometry at
