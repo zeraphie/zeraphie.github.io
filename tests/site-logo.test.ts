@@ -1,4 +1,4 @@
-/* ─ invader tests — the documented invariants, enforced ─
+/* ─ site-logo tests — the invader's documented invariants, enforced ─
  *
  * The sprite's file header declares its load-bearing rules: the two
  * poses are index-aligned 46-entry lists (CSS interpolates
@@ -8,7 +8,7 @@
 
 import { describe, expect, it } from "bun:test";
 
-import { INVADER_HOVER, INVADER_IDLE } from "../src/lib/invader";
+import { INVADER_HOVER, INVADER_IDLE } from "../src/lib/site-logo";
 
 describe("the invader's poses", () => {
   it("keeps both poses index-aligned at 46 entries", () => {
