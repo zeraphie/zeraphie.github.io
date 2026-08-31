@@ -1,12 +1,11 @@
 /* ─ remark-callouts — the `[!name]` markers ─
  *
- * A marker on the first line asks for a treatment the dress cannot
- * infer. On a blockquote it is a deliberate, placed note —
- * data-callout="name", where `note` is the parchment handout and
- * `quote` its thin flavour for intent lines; unmarked quotes keep
- * the quiet wireframe callout. On a heading it names the kind of
- * heading — data-heading="log" opens a devlog entry. The marker
- * text is always removed, so slugs and rail labels never see it. */
+ * A first-line marker requests styling the markdown alone cannot
+ * express. On a blockquote it sets data-callout="name" (`note` is
+ * the parchment handout, `quote` its thin variant; unmarked quotes
+ * keep the default callout). On an h2 it sets data-heading="name"
+ * — "log" opens a devlog entry. The marker text is always removed,
+ * so slugs and rail labels never see it. */
 
 interface Node {
   type: string;
@@ -20,9 +19,9 @@ interface Node {
 /** `[!code ref:https://…]` alone on the line above a fence. */
 const CODE_REF = /^\[!code\s+ref:(\S+)\]$/i;
 
-/** The marker's own text, rebuilt from the nodes it became. By the
- * time this runs the URL has been autolinked, so the line is a text
- * node, a link, and a text node — and a link's label IS its url. */
+/** Rebuild the marker line's text from its nodes. The URL has been
+ * autolinked by now, so the line is text + link + text — and a
+ * link's label is its url. */
 function flatten(node: Node): string {
   if (node.type === "link") {
     return node.url ?? "";
@@ -33,9 +32,8 @@ function flatten(node: Node): string {
   return node.value ?? "";
 }
 
-/** `.../src/core/grid/layers.js#L29` → `layers.js#L29`. The full URL
- * is unreadable in a caption and wraps badly; the file and line are
- * the part a reader actually wants. */
+/** `.../src/core/grid/layers.js#L29` → `layers.js#L29`: captions
+ * want the file and line, not the full URL. */
 function refLabel(url: string): string {
   const [path, hash] = url.split("#");
   const file = (path ?? "").split("/").filter(Boolean).pop() ?? url;
@@ -63,10 +61,9 @@ function markCodeRef(node: Node): boolean {
   return true;
 }
 
-/** `[!name]`, or `[!name key:value]` — the marker may carry options
- * for whoever consumes the kind (a devlog heading takes `date:`).
- * The whole marker is stripped either way, so slugs and rail labels
- * never see it; the options are read from the SOURCE, not the tree. */
+/** `[!name]` or `[!name key:value]`. Options are read from the
+ * source, not the tree (a devlog heading takes `date:`); the whole
+ * marker is stripped either way. */
 const MARKER = /^\[!([a-z]+)(?:\s+[^\]]*)?\]\s*/i;
 
 function mark(quote: Node): void {
@@ -96,9 +93,8 @@ function mark(quote: Node): void {
   };
 }
 
-/** Strips a leading `[!name]` from a heading and records the kind.
- * Only h2 carries one: h2s are the rail's anchors, so a marked
- * heading is a navigable thing, not a flourish. */
+/** Strip a leading `[!name]` from an h2 and record the kind. Only
+ * h2s carry markers — they are the rail's anchors. */
 function markHeading(heading: Node): void {
   if (heading.depth !== 2) {
     return;
@@ -128,7 +124,7 @@ function walk(node: Node): void {
   if (node.type === "paragraph") {
     markCodeRef(node);
   }
-  // Content dividers wear hexpunk's separator (centre hex glyph).
+  // Dividers get hexpunk's separator (centre hex glyph).
   if (node.type === "thematicBreak") {
     node.data = {
       ...node.data,

@@ -1,22 +1,19 @@
 /* ─ devlog-dates — when an entry was written ─
  *
- * A devlog entry's date is not authored, it is discovered: the
- * commit that ADDED the entry is the day it was written. An entry
- * is identified by its heading LINE, and `git log -S` finds the
- * commit where that line first entered the file — so the date is
- * tied to the entry itself rather than to where it happens to sit.
+ * A devlog entry's date is discovered, not authored: the commit
+ * that added the entry is the day it was written. The entry is
+ * identified by its heading line; `git log -S` finds the commit
+ * where that line first entered the file, so the date follows the
+ * entry rather than its position.
  *
- * Line ranges were the obvious first attempt and are wrong: `git
- * log -L` traces line POSITIONS, so an entry inserted where other
- * text used to live inherits that text's history and reports a date
- * from before it existed. Only an entry appended at the end of a
- * file traced correctly, which is exactly the case that hides the
- * bug.
+ * `git log -L` was the first attempt and is wrong: it traces line
+ * positions, so an entry inserted where other text used to live
+ * inherits that text's history. Only entries appended at the end
+ * traced correctly — exactly the case that hides the bug.
  *
- * Renaming an entry re-dates it, which is the one accepted cost:
- * the heading is the identity, so changing it makes a new one.
- * An uncommitted entry has no date, which is right — it is not
- * published yet. Build-time only; needs full history. */
+ * Renaming an entry re-dates it: the heading is the identity. An
+ * uncommitted entry has no date — it is not published yet.
+ * Build-time only; needs full history. */
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";

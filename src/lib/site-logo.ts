@@ -1,22 +1,19 @@
-/* ─ invader ─ the mark from the 2016 pen ─
+/* ─ site-logo — the invader from the 2016 pen ─
  *
- * Two poses of a box-shadow sprite, ported from codepen QEEeJq: arms
- * down at rest, arms up and feet drawn in on engagement. The pen was
- * an @keyframes that swapped one box-shadow list for another, which
- * is the mechanism hp-pixel formalises — its file header names that
- * pen as the reference for its CSS-driven hover pattern.
+ * Two poses of a box-shadow sprite, ported from codepen QEEeJq:
+ * arms down at rest, arms up and feet drawn in on engagement. The
+ * pen swapped one box-shadow list for another in @keyframes — the
+ * mechanism hp-pixel formalises.
  *
- * Both lists are 46 entries and index-aligned, because CSS
- * interpolates box-shadow pairwise: entry N of one list animates to
- * entry N of the other. The pen reached 46 by listing two foot pixels
- * TWICE as filler, and hp-pixel asserts the same rule ("all states
- * must have the same length") — so that padding is load-bearing and
- * has to survive the port. Twelve pixels move: six arms sweeping up
- * the sides, four feet collapsing into two pairs.
+ * Both lists are 46 entries and index-aligned: CSS interpolates
+ * box-shadow pairwise, entry N to entry N. The pen reached 46 by
+ * listing two foot pixels twice, and hp-pixel requires equal
+ * lengths, so the padding is load-bearing. Twelve pixels move: six
+ * arms, four feet collapsing into two pairs.
  *
- * Coordinates are centred on (0, 0), which is hp-pixel's own
- * convention. An 11x8 grid puts a half-step on y, so the pixel size
- * wants to be even for every offset to land on a whole pixel. */
+ * Coordinates centre on (0, 0), hp-pixel's convention. The 11x8
+ * grid puts a half-step on y, so use an even pixel size to land
+ * every offset on a whole pixel. */
 
 import type { HpPixelPosition } from "@hexpunk/core";
 

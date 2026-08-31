@@ -37,13 +37,12 @@ export function itemPath(item: Item): string {
 /** Resolve a pathname back to world state. Returns {} for home,
  * null for paths this world doesn't know. */
 /** Collection ids are URL slugs; a few read differently in prose.
- * Collection labels are lowercase — the surfaces that want caps
- * uppercase them in CSS, so "d&d" becomes "D&D" in a heading and
- * stays "d&d" in a stat line. ITEM labels are the post's `title`
- * verbatim: hp-cell uppercases its own label, so the flow reads the
- * same either way, while the surfaces that don't transform — the
- * hextrack rail, page titles, the sitemap — were left showing a
- * lowercased title with no way to recover the author's casing. */
+ * Labels are lowercase — surfaces that want caps uppercase them in
+ * CSS ("d&d" becomes "D&D" in a heading, stays "d&d" in a stat
+ * line). Item labels are the post's `title` verbatim: hp-cell
+ * uppercases its own label anyway, and the surfaces that don't
+ * transform (rail, page titles, sitemap) cannot recover casing
+ * from a lowercased title. */
 const COLLECTION_LABELS: Record<string, string> = { dnd: "d&d" };
 
 export function collectionLabel(id: string): string {
@@ -51,7 +50,7 @@ export function collectionLabel(id: string): string {
 }
 
 /** Standalone journal documents: world states that are neither a
- * cluster nor a post, read in the vessel like anything else. */
+ * cluster nor a post. */
 export const DOC_ROUTES = ["sitemap"] as const;
 
 export function resolvePath(
