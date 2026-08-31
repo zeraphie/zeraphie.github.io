@@ -746,9 +746,9 @@ a.journal-site:hover {
 
 /* Below the tab's width the slip lands on page one directly above a
    playable post's cartridge — two centred blocks before a word of
-   prose. The cartridge wins that argument: it is the thing the post
-   is FOR, and its label takes the slip's two stats. Mirrors the
-   1500 above; `:has` because only the flow knows a post is playable. */
+   prose. The cartridge wins: it is the thing the post is FOR, and
+   its label takes the slip's two stats. Mirrors the 1500 above;
+   `:has` because only the flow knows a post is playable. */
 @media (max-width: 1499px) {
   .journal-pages:has(.journal-cartridge) .journal-meta {
     display: none;

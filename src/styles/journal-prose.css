@@ -1,8 +1,8 @@
-/* ─ journal-prose.css — the content's language ─
+/* ─ journal-prose.css — the content's styling ─
  *
- * What a post wears inside the journal's pages: numbered hex-chip
+ * What a post gets inside the journal's pages: numbered hex-chip
  * section heads (the h2s are the rail's anchors), hex bullets,
- * table and code dress with the one sanctioned scroll exception,
+ * table and code styling with the one sanctioned scroll exception,
  * and the blockquote patterns — a wireframe callout by default,
  * parchment notes where a post asks with `[!note]`, thin intent
  * slips with `[!quote]`. The vessel lives in journal.css. */
@@ -23,7 +23,7 @@
   overflow-wrap: anywhere;
 }
 /* elements.css colours loose p/strong for the app shell; inside the
-   journal the prose dress owns text colour and emphasis. */
+   journal this sheet owns text colour and emphasis. */
 .journal-prose p {
   margin: 0 0 1em;
   color: inherit;
@@ -620,8 +620,8 @@
   letter-spacing: 0.1em;
 }
 
-/* `[!quote]` — the thin flavour: a slip of speech, an intent line
-   pinned beside the feature it colours. */
+/* `[!quote]` — the thin variant: an intent line pinned beside the
+   feature it annotates. */
 .journal-prose blockquote[data-callout="quote"] {
   max-width: 200px;
   font-style: italic;
@@ -695,7 +695,7 @@
       The chassis is DRAWN (one svg, the design board's geometry at
       260 x 168) rather than assembled from boxes — ridged shoulders,
       screw dots, a chamfered shell, and a connector foot with
-      contact fins, so it reads as a thing that plugs in. Text rides
+      contact fins, so it reads as a cartridge. Text rides
       over the drawing in HTML, positioned in the same coordinate
       space. Azure throughout: brass is never interactive. */
 

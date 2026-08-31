@@ -63,8 +63,8 @@ body {
   isolation: isolate;
 }
 
-/* While the ring is blooming, the sections are deaf — the tap that
-   opened them must not also choose one. */
+/* While the ring is blooming, the sections ignore input — the tap
+   that opened them must not also choose one. */
 #hs-stage[data-blooming] .section {
   pointer-events: none;
 }
@@ -196,12 +196,12 @@ body[data-perf="low"] hp-cluster .hx-reveal {
    is a wide gap nothing here can close from outside the shadow root.
    Wrapped, the label centres one item and the spacing is ours.
 
-   The swap is the consumer-CSS pattern rather than hp-pixel own
-   `interactive` attribute: that keys off the element own :hover, and
-   hp-cell draws its label with pointer-events:none, so the pixel can
-   never be hovered. Keying off the CELL is what we want anyway — the
-   mark answers the hex, not itself. `:focus-within` covers the
-   keyboard, since focus lands inside hp-cell shadow root.
+   The swap is the consumer-CSS pattern rather than hp-pixel's own
+   `interactive` attribute: that keys off the element's own :hover,
+   and hp-cell draws its label with pointer-events:none, so the pixel
+   can never be hovered. Keying off the CELL is what we want anyway —
+   the mark answers the hex, not itself. `:focus-within` covers the
+   keyboard, since focus lands inside hp-cell's shadow root.
 
    Motion on engagement, stillness otherwise: an endless march would
    be exactly the ambient motion the design system rules out. */
@@ -212,7 +212,7 @@ body[data-perf="low"] hp-cluster .hx-reveal {
   gap: 3px;
   line-height: 1.2;
 }
-/* No colour of its own: slotted content inherits from hp-cell own
+/* No colour of its own: slotted content inherits from hp-cell's
    label, so the sprite is whatever --hp-cell-label-color is — white
    here, at rest and engaged alike, since the cell holds its fill. */
 /* The centre pixel. Every pixel is an OUTER box-shadow, and an outer
