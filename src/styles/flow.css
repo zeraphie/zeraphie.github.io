@@ -188,3 +188,64 @@ body[data-perf="low"] hp-cluster .hx-reveal {
     transition: none;
   }
 }
+
+/* ── the invader under the wordmark ─────────────────────────────────
+   Wordmark and sprite are ONE grid item, not two. hp-cell draws its
+   label as a grid with auto rows, and auto rows STRETCH to fill the
+   100px cell — two items would each be centred in a 42px band, which
+   is a wide gap nothing here can close from outside the shadow root.
+   Wrapped, the label centres one item and the spacing is ours.
+
+   The swap is the consumer-CSS pattern rather than hp-pixel own
+   `interactive` attribute: that keys off the element own :hover, and
+   hp-cell draws its label with pointer-events:none, so the pixel can
+   never be hovered. Keying off the CELL is what we want anyway — the
+   mark answers the hex, not itself. `:focus-within` covers the
+   keyboard, since focus lands inside hp-cell shadow root.
+
+   Motion on engagement, stillness otherwise: an endless march would
+   be exactly the ambient motion the design system rules out. */
+.seed-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  line-height: 1.2;
+}
+/* No colour of its own: slotted content inherits from hp-cell own
+   label, so the sprite is whatever --hp-cell-label-color is — white
+   here, at rest and engaged alike, since the cell holds its fill. */
+/* The centre pixel. Every pixel is an OUTER box-shadow, and an outer
+   shadow is clipped inside its own element box — so nothing can paint
+   across the anchor square at dead centre, and art lit there comes out
+   holed. DESIGN.md says the host IS that pixel ("background:
+   currentColor"); the implementation paints it transparent. Stopgap
+   until hexpunk closes that, and safe only because this sprite is lit
+   at the centre in BOTH poses — art with a hollow middle would want
+   the opposite. */
+#seed-invader::part(canvas) {
+  background: currentColor;
+}
+#seed-cell:is(:hover, :focus-within, [aria-pressed="true"]) #seed-invader {
+  --hp-pixel-shadow: var(--hp-pixel-hover);
+}
+
+/* The seed cell holds its colour in EVERY state. Every other hex
+   answers a pointer with hexpunk blue-to-green hue swap; this one
+   answers with the invader instead, so the swap would be a second,
+   redundant signal — and a worse one, since a hue change is the thing
+   colour vision deficiency degrades and a shape change is not.
+   DESIGN.md asks that colour never be the only state indicator; here
+   it stops being an indicator at all.
+
+   Unscoped on purpose. hp-cell swaps on :hover, :focus-visible AND
+   [aria-pressed="true"], and hp-unfold-list mirrors its open state
+   onto the source as aria-pressed — so an expanded fan turned the hex
+   green too. Rather than chase each state, this holds all of them:
+   a rule from the outer document beats any :host() rule for the same
+   element, whatever the :host selector matches. */
+#seed-cell {
+  --hp-hex-fill: var(--hp-primary);
+  --hp-stroke-color: var(--hp-primary);
+  --hp-cell-label-color: var(--hp-on-primary);
+}

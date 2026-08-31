@@ -138,7 +138,12 @@ const CurrentContent = currentPost?.Content;
     <div id="hs-stage">
       <hp-grid id="world" draggable>
         <hp-unfold-list id="seed-unfold" unordered hover q="0" r="0" draggable="false">
-          <hp-cell variant="anchor" filled slot="source" id="seed-cell">izelya</hp-cell>
+          <hp-cell variant="anchor" filled slot="source" id="seed-cell">
+            <span class="seed-mark">
+              izelya
+              <hp-pixel id="seed-invader" pixel-size="4"></hp-pixel>
+            </span>
+          </hp-cell>
           {
             clusters.map((cluster) => (
               <hp-cell class="section" data-cluster={cluster.id} variant="action">
@@ -292,7 +297,7 @@ const CurrentContent = currentPost?.Content;
         type AxialCoord,
         type HpGrid,
       } from "@hexpunk/core/grid";
-      import type { HpBackground } from "@hexpunk/core";
+      import type { HpBackground, HpPixel } from "@hexpunk/core";
       import type {
         HpHextrack,
         HpHextrackActivateDetail,
@@ -307,6 +312,7 @@ const CurrentContent = currentPost?.Content;
       import { anchorsOf, slug } from "../lib/flow/posts";
       import { createReadingLayer, type JournalDoc } from "../lib/flow/reading";
       import { createRouter, type Route } from "../lib/flow/router";
+      import { INVADER_HOVER, INVADER_IDLE } from "../lib/invader";
 
 const PERF_LOW = initPerfMode();
 
@@ -329,6 +335,16 @@ const PERF_LOW = initPerfMode();
       const stage = document.getElementById("hs-stage")!;
       const world = document.getElementById("world") as HpGrid;
       const bg = document.getElementById("bg") as HpBackground;
+      /* The invader under the wordmark. States are a property, not an
+         attribute, so it is wired here; `state` is deliberately left
+         unset, because setting it pins --hp-pixel-shadow INLINE and
+         inline style would beat the hover rule in flow.css. The cell's
+         label is pointer-events:none, so the pixel can never be
+         hovered itself — the swap has to key off the cell. */
+      const invader = document.getElementById("seed-invader") as HpPixel | null;
+      if (invader) {
+        invader.states = { idle: INVADER_IDLE, hover: INVADER_HOVER };
+      }
       const track = document.getElementById("track") as HpHextrack;
       const seedUnfold = document.getElementById("seed-unfold") as HpUnfoldList;
       const seedCell = document.getElementById("seed-cell")!;
