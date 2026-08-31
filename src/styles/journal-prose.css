@@ -526,7 +526,6 @@
 .journal-prose blockquote:is([data-callout="note"], [data-callout="quote"]) {
   position: relative;
   border: 0;
-  background: var(--iz-parchment);
   color: var(--iz-parchment-ink);
   /* auto width lets a card shrink to fit beside the metadata float
      on page one; the cap keeps it a placed note everywhere else. */
@@ -537,6 +536,35 @@
      from the metal. The extra buys the clip its own room. */
   margin: 2em auto 1.6em;
   padding: 12px 16px;
+  transform: rotate(-1.1deg);
+  /* The paper, its fold, and its shadow are all ::before — see there
+     for why the text does not live on the filtered layer. */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"]):nth-of-type(even) {
+  transform: rotate(0.9deg);
+}
+/* The paper itself: parchment, its folded corner, the clipped
+   silhouette, and the shadow that follows it.
+   All of it lives here rather than on the blockquote because
+   `filter` rasterises its whole subtree into a buffer, and the
+   rotation then resamples that buffer — text included, which is
+   what made the glyphs mushy no matter what smoothing asked for.
+   A pseudo-element is a SIBLING of the text, not an ancestor, so
+   filtering it leaves the type to render directly. `z-index: -1`
+   drops it behind the content; the blockquote's own background is
+   gone so there is nothing left to hide it. */
+.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%) top right / 14px 14px
+      no-repeat,
+    var(--iz-parchment);
   clip-path: polygon(
     0 -14px,
     calc(100% - 14px) -14px,
@@ -545,25 +573,7 @@
     100% 100%,
     0 100%
   );
-  transform: rotate(-1.1deg);
   filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.3));
-  /* Rotated text shimmers under hinted subpixel AA: position the
-     glyphs geometrically and fall back to grayscale smoothing. */
-  text-rendering: geometricPrecision;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"]):nth-of-type(even) {
-  transform: rotate(0.9deg);
-}
-.journal-prose blockquote:is([data-callout="note"], [data-callout="quote"])::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 14px;
-  height: 14px;
-  background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
 }
 /* The paperclip: a Gem-clip wire drawn as a mask so the token
    colours it, straddling the top edge at the note's middle. */

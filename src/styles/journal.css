@@ -400,8 +400,27 @@ a.journal-site:hover {
   margin: 0 auto 1.7em;
   padding: 14px 18px;
   box-sizing: border-box;
-  background: var(--iz-parchment);
   color: var(--iz-parchment-ink);
+  transform: rotate(-0.8deg);
+  /* Paper, fold and shadow are all ::before — same fix the handout
+     notes carry, and for the same reason. */
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* The paper: parchment, folded corner, clipped silhouette, shadow.
+   Kept off the slip itself because `filter` rasterises its subtree
+   and the rotation resamples it — text and all. A pseudo-element is
+   a sibling of the text, so the type never joins that layer. */
+.journal-meta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%) top right / 14px 14px
+      no-repeat,
+    var(--iz-parchment);
   clip-path: polygon(
     0 -14px,
     calc(100% - 14px) -14px,
@@ -410,23 +429,7 @@ a.journal-site:hover {
     100% 100%,
     0 100%
   );
-  transform: rotate(-0.8deg);
   filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.3));
-  /* Rotated text shimmers under hinted subpixel AA — same fix the
-     handout notes carry. */
-  text-rendering: geometricPrecision;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-/* The folded corner, and the wire that straddles the top edge. */
-.journal-meta::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 14px;
-  height: 14px;
-  background: linear-gradient(225deg, transparent 0 50%, var(--iz-parchment-fold) 50%);
 }
 .journal-meta::after {
   content: "";
@@ -448,6 +451,29 @@ a.journal-site:hover {
   height: auto;
   color: var(--iz-parchment-ink);
   margin: 0;
+}
+/* A logo drops the hexagon. The frame belongs to the icon set — it
+   is what gives a borrowed glyph a hexpunk silhouette — but a mark
+   arrives with a silhouette of its own, and ringing it reads as a
+   badge rather than an identity. Losing the frame frees the whole
+   60x70 box, so the mark draws at 44 (the files declare it) and the
+   host re-centres from the 24-glyph seat to match. */
+.journal-meta-icon[data-logo] > polygon {
+  display: none;
+}
+.journal-meta-icon[data-logo] .journal-meta-glyph {
+  transform: translate(8px, 13px);
+}
+/* Ink, not light. A mark that carries its own palette arrives at
+   screen saturation — snecko's #00e5ff against warm parchment is
+   maximum chroma contrast with nothing mediating it, and it reads
+   as a sticker lit from behind. Multiply is what ink on paper
+   actually does: the tan multiplies through, the electric cyan
+   settles to a teal and the red to brick, and the mark sits IN the
+   page. A wireframe mark already inherits the slip's ink, so this
+   only has to reach the ones that don't. */
+.journal-meta-icon[data-logo] {
+  mix-blend-mode: multiply;
 }
 .journal-meta-title {
   margin: 0;
@@ -662,6 +688,10 @@ a.journal-site:hover {
        the object. The tilt stays on the in-flow card, which is a
        placed thing. */
     transform: translateY(-50%);
+    /* Square to the book, the slip never rotates here — so nothing
+       resamples the filtered layer and the paper can go back on the
+       element itself, freeing ::before for the seated band. */
+    background: var(--iz-parchment);
     filter: drop-shadow(-3px 3px 0 rgb(0 0 0 / 0.38));
     /* Upright text wants the platform's own hinting back — the
        geometric fallback only earns its place under rotation. */
@@ -673,6 +703,10 @@ a.journal-site:hover {
   }
   /* Seated end: a darker band where the cover overlaps the paper. */
   .journal-meta::before {
+    inset: auto;
+    z-index: auto;
+    clip-path: none;
+    filter: none;
     top: 0;
     right: 0;
     width: var(--journal-tab-seat);
