@@ -12,6 +12,14 @@
  * Progress-driven: timed turns tween it, a corner drag scrubs it
  * and settles past the halfway line. */
 
+import {
+  dragProgress,
+  easeOutCubic,
+  flapVisible,
+  foldDepth,
+  type TurnGeometry,
+} from "./journal-math";
+
 export interface TurnOptions {
   /** The real column strip (already holding the post's flow). */
   strip: HTMLElement;
@@ -93,6 +101,14 @@ export function beginTurn(options: TurnOptions): TurnController {
   const width = strip.clientWidth;
   const half = width / 2;
   const spread = perView > 1;
+  const geometry: TurnGeometry = {
+    spread,
+    dir,
+    left: rect.left,
+    top: rect.top,
+    width,
+    height: rect.height,
+  };
 
   const overlay = document.createElement("div");
   overlay.className = "journal-leaf";
@@ -178,27 +194,19 @@ export function beginTurn(options: TurnOptions): TurnController {
   function set(value: number): void {
     progress = Math.max(0, Math.min(1, value));
     for (const piece of flaps) {
-      const on = progress >= piece.lower && progress <= piece.upper;
+      const on = flapVisible(piece.lower, piece.upper, progress);
       piece.el.style.visibility = on ? "visible" : "hidden";
       if (on) {
         piece.el.style.transform = `rotate${spread ? "Y" : "X"}(${piece.angle(progress).toFixed(2)}deg)`;
         // The shade travels with the fold: deepest at the vertical.
-        const depth = piece.lower === 0 ? progress * 2 : (1 - progress) * 2;
-        piece.shade.style.opacity = (Math.min(1, depth) * SHADE).toFixed(3);
+        piece.shade.style.opacity = (foldDepth(piece.lower, progress) * SHADE).toFixed(3);
       }
     }
   }
   set(0);
 
-  // Free-edge physics: the pointer rides the leaf's moving edge, so
-  // progress is the arc angle recovered from its position.
-  const deg = (cosine: number) => (Math.acos(Math.max(-1, Math.min(1, cosine))) * 180) / Math.PI;
   function progressFrom(x: number, y: number): number {
-    if (spread) {
-      const spineX = rect.left + half;
-      return deg(((x - spineX) / half) * (dir > 0 ? 1 : -1)) / 180;
-    }
-    return deg(((y - rect.top) / rect.height) * (dir > 0 ? 1 : -1)) / 180;
+    return dragProgress(geometry, x, y);
   }
 
   let finished = false;
@@ -230,7 +238,7 @@ export function beginTurn(options: TurnOptions): TurnController {
           return;
         }
         const t = Math.min(1, (now - startAt) / duration);
-        const eased = 1 - (1 - t) ** 3;
+        const eased = easeOutCubic(t);
         set(start + (target - start) * eased);
         if (t < 1) {
           requestAnimationFrame(tick);

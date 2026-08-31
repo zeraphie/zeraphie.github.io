@@ -6,6 +6,15 @@
  * drags that scrub the leaf and settle past halfway. destroy()
  * detaches the window listeners so the dive can unmount cleanly. */
 
+import {
+  clampLead,
+  dirForCorner,
+  keyIntent,
+  measureColumns,
+  pageAt,
+  pageLabel,
+  visibleTo,
+} from "./journal-math";
 import { beginTurn, type TurnController } from "./journal-turn";
 
 export interface JournalReaderHost {
@@ -53,33 +62,31 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
 
   function measure(): void {
     const style = getComputedStyle(strip);
-    perView = Math.max(1, Number(style.columnCount) || 1);
-    const gap = Number.parseFloat(style.columnGap) || 0;
-    padLeft = Number.parseFloat(style.paddingLeft) || 0;
-    const padX = padLeft + (Number.parseFloat(style.paddingRight) || 0);
-    const column = (strip.clientWidth - padX - gap * (perView - 1)) / perView;
-    unit = column + gap;
-    count = Math.max(1, Math.round((strip.scrollWidth - padX + gap) / unit));
-  }
-
-  function clampLead(value: number): number {
-    const clamped = Math.max(0, Math.min(value, count - 1));
-    return clamped - (clamped % perView);
+    const metrics = measureColumns({
+      columnCount: Number(style.columnCount),
+      columnGap: Number.parseFloat(style.columnGap),
+      paddingLeft: Number.parseFloat(style.paddingLeft),
+      paddingRight: Number.parseFloat(style.paddingRight),
+      clientWidth: strip.clientWidth,
+      scrollWidth: strip.scrollWidth,
+    });
+    perView = metrics.perView;
+    unit = metrics.unit;
+    count = metrics.count;
+    padLeft = metrics.padLeft;
   }
 
   function apply(): void {
-    lead = clampLead(lead);
+    lead = clampLead(lead, count, perView);
     strip.scrollTo({ left: lead * unit, top: 0, behavior: "instant" });
-    const last = Math.min(count, lead + perView);
-    label.textContent =
-      last > lead + 1 ? `page ${lead + 1}–${last} of ${count}` : `page ${lead + 1} of ${count}`;
+    label.textContent = pageLabel(lead, count, perView);
     prev.disabled = lead === 0;
-    next.disabled = last >= count;
+    next.disabled = visibleTo(lead, count, perView) >= count;
     host.onChange?.();
   }
 
   function startTurn(target: number, dir: 1 | -1): TurnController | null {
-    const next_ = clampLead(target);
+    const next_ = clampLead(target, count, perView);
     if (next_ === lead || busy) {
       return null;
     }
@@ -139,9 +146,7 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
   const zoneDowns = new Map<HTMLElement, (event: PointerEvent) => void>();
   for (const zone of zones) {
     const down = (event: PointerEvent) => {
-      const corner = zone.dataset.corner ?? "";
-      const dir: 1 | -1 =
-        perView > 1 ? (corner.endsWith("r") ? 1 : -1) : corner.startsWith("b") ? 1 : -1;
+      const dir = dirForCorner(zone.dataset.corner ?? "", perView);
       const controller = startTurn(lead + dir * perView, dir);
       if (!controller) {
         return;
@@ -183,19 +188,14 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
     turn(event.deltaY > 0 ? 1 : -1);
   };
   const onKeydown = (event: KeyboardEvent) => {
-    const forward =
-      event.key === "ArrowRight" ||
-      event.key === "PageDown" ||
-      (event.key === " " && !event.shiftKey);
-    const back =
-      event.key === "ArrowLeft" || event.key === "PageUp" || (event.key === " " && event.shiftKey);
-    if (event.key === "Home") {
+    const intent = keyIntent(event.key, event.shiftKey);
+    if (intent === "home") {
       go(0, -1);
-    } else if (event.key === "End") {
+    } else if (intent === "end") {
       go(count, 1);
-    } else if (forward) {
+    } else if (intent === "forward") {
       turn(1);
-    } else if (back) {
+    } else if (intent === "back") {
       turn(-1);
     } else {
       return;
@@ -217,9 +217,9 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
 
   return {
     refresh,
-    visibleRange: () => ({ from: lead, to: Math.min(count, lead + perView) }),
+    visibleRange: () => ({ from: lead, to: visibleTo(lead, count, perView) }),
     goTo(page: number): void {
-      const target = clampLead(page);
+      const target = clampLead(page, count, perView);
       go(target, target >= lead ? 1 : -1);
     },
     pageOf(target: Element): number {
@@ -228,7 +228,7 @@ export function createJournalReader(host: JournalReaderHost): JournalReader {
       const stripRect = strip.getBoundingClientRect();
       const rect = target.getBoundingClientRect();
       const x = rect.left - stripRect.left - padLeft + strip.scrollLeft;
-      return Math.max(0, Math.min(count - 1, Math.floor((x + 1) / unit)));
+      return pageAt(x, unit, count);
     },
     destroy(): void {
       prev.removeEventListener("click", onPrev);
