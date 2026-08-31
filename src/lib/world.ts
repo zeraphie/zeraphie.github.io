@@ -31,7 +31,7 @@ export async function buildWorld() {
       .filter((entry) => entry.collection === id)
       .map((entry) => ({
         id: entry.id,
-        label: entry.data.title.toLowerCase(),
+        label: entry.data.title,
         sub: collectionLabel(id),
         post: `${id}/${entry.id}`,
       })),

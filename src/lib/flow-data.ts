@@ -37,9 +37,13 @@ export function itemPath(item: Item): string {
 /** Resolve a pathname back to world state. Returns {} for home,
  * null for paths this world doesn't know. */
 /** Collection ids are URL slugs; a few read differently in prose.
- * Labels are lowercase — the surfaces that want caps uppercase them
- * in CSS, so "d&d" becomes "D&D" in a heading and stays "d&d" in a
- * stat line. */
+ * Collection labels are lowercase — the surfaces that want caps
+ * uppercase them in CSS, so "d&d" becomes "D&D" in a heading and
+ * stays "d&d" in a stat line. ITEM labels are the post's `title`
+ * verbatim: hp-cell uppercases its own label, so the flow reads the
+ * same either way, while the surfaces that don't transform — the
+ * hextrack rail, page titles, the sitemap — were left showing a
+ * lowercased title with no way to recover the author's casing. */
 const COLLECTION_LABELS: Record<string, string> = { dnd: "d&d" };
 
 export function collectionLabel(id: string): string {
