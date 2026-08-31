@@ -16,7 +16,11 @@ interface Node {
   data?: { hProperties?: Record<string, string> };
 }
 
-const MARKER = /^\[!([a-z]+)\]\s*/i;
+/** `[!name]`, or `[!name key:value]` — the marker may carry options
+ * for whoever consumes the kind (a devlog heading takes `date:`).
+ * The whole marker is stripped either way, so slugs and rail labels
+ * never see it; the options are read from the SOURCE, not the tree. */
+const MARKER = /^\[!([a-z]+)(?:\s+[^\]]*)?\]\s*/i;
 
 function mark(quote: Node): void {
   const paragraph = quote.children?.[0];

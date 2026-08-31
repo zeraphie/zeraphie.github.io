@@ -21,8 +21,13 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-/** `## [!log] Title` — the marker the remark plugin strips later. */
-const LOG_HEADING = /^##\s+\[!log\]/i;
+/** `## [!log] Title`, or `## [!log date:2026-08-30] Title` — the
+ * marker the remark plugin strips later. */
+const LOG_HEADING = /^##\s+\[!log(?:\s+[^\]]*)?\]/i;
+/** An explicit date on the marker wins over history. Only the strict
+ * shape counts: anything else falls back to the commit, so a typo
+ * shows a real date rather than a broken one. */
+const DATE_OPTION = /\[!log[^\]]*\bdate:(\d{4}-\d{2}-\d{2})/i;
 const ANY_H2 = /^##\s+(?!#)/;
 const FENCE = /^\s*(```|~~~)/;
 
@@ -89,7 +94,7 @@ export function devlogDates(file: string): Map<number, string> {
   }
   const dates = new Map<number, string>();
   for (const [index, line] of logHeadings(text)) {
-    const date = addedAt(file, line);
+    const date = DATE_OPTION.exec(line)?.[1] ?? addedAt(file, line);
     if (date) {
       dates.set(index, date);
     }
