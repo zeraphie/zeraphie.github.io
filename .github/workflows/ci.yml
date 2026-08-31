@@ -41,6 +41,12 @@ jobs:
     needs: install
     steps:
       - uses: actions/checkout@v6
+        with:
+          # Devlog entry dates are traced out of history at build
+          # time; the default depth-1 clone cannot answer that, and
+          # fails silently by dating nothing. Only this job builds,
+          # so only this job pays for the full history.
+          fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version-file: ".nvmrc"

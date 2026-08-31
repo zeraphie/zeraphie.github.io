@@ -14,7 +14,9 @@ export interface PostMeta {
   /** ISO date, journal-formatted client-side. */
   date: string;
   words: number;
-  anchors: { head: string; label: string }[];
+  /** `date` is set only on devlog entries, and only once the commit
+   * that added the entry exists — a draft entry carries null. */
+  anchors: { head: string; label: string; date: string | null }[];
 }
 /** Server-rendered post metadata: titles, descriptions, and
  * the h2 anchor points the rail and router navigate by. */
@@ -27,11 +29,11 @@ export const slug = (s: string) => s.replaceAll(" ", "-");
 /** An item's anchor points: real h2s for post items, declared
  * subs for the rest. `head` is the route segment AND the DOM
  * id scrollMain lands on. */
-export function anchorsOf(item: Item): { head: string; label: string }[] {
+export function anchorsOf(item: Item): PostMeta["anchors"] {
   if (item.post) {
     return POST_INDEX[item.post]?.anchors ?? [];
   }
-  return (item.subs ?? []).map((s) => ({ head: `h-${slug(s)}`, label: s }));
+  return (item.subs ?? []).map((s) => ({ head: `h-${slug(s)}`, label: s, date: null }));
 }
 
 /** Metadata for a post ref ("collection/slug"), if it is published. */

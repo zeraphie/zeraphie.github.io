@@ -19,6 +19,7 @@ import "@hexpunk/core/elements.css";
 
 import Cartridge from "../components/Cartridge.astro";
 import Seo from "../components/Seo.astro";
+import { devlogDates } from "../lib/devlog-dates";
 import { buildWorld } from "../lib/world";
 
 import "../styles/flow.css";
@@ -91,6 +92,10 @@ const { published, clusters } = await buildWorld();
 const rendered = await Promise.all(
   published.map(async (entry) => {
     const { Content, headings } = await render(entry);
+    const h2s = headings.filter((h) => h.depth === 2);
+    // Devlog entries date from the commit that added them, so the
+    // dates are read out of git rather than out of the frontmatter.
+    const logged = devlogDates(entry.filePath ?? `src/content/${entry.collection}/${entry.id}.md`);
     return {
       key: `${entry.collection}/${entry.id}`,
       Content,
@@ -101,9 +106,11 @@ const rendered = await Promise.all(
         game: entry.data.game ?? null,
         date: entry.data.date.toISOString().slice(0, 10),
         words: (entry.body ?? "").split(/\s+/).filter(Boolean).length,
-        anchors: headings
-          .filter((h) => h.depth === 2)
-          .map((h) => ({ head: h.slug, label: h.text })),
+        anchors: h2s.map((h, i) => ({
+          head: h.slug,
+          label: h.text,
+          date: logged.get(i) ?? null,
+        })),
       },
     };
   })
