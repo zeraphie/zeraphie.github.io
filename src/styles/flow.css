@@ -232,6 +232,170 @@ body[data-perf="low"] hp-cluster .hx-reveal {
   --hp-pixel-shadow: var(--hp-pixel-hover);
 }
 
+/* ── the world's controls, restyled over hp-grid's chrome ──
+   The stock buttons stay (they work); their `part` handles restyle
+   them into hex chips — the journal pager's silhouette — reordered
+   into a column: zoom in, center, zoom out. The hex paints on
+   ::before because clip-path on the button itself would clip the
+   tooltip ::after. Tooltips sit left of the chip; center's text
+   comes from --world-center-tip, which the page keeps pointed at
+   the route's focus. */
+#world::part(controls) {
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  right: 14px;
+  bottom: 14px;
+  opacity: 1;
+}
+#world::part(zoom-in),
+#world::part(zoom-out),
+#world::part(recenter) {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--hp-primary-bright);
+  font-size: 15px;
+}
+#world::part(zoom-in),
+#world::part(zoom-out) {
+  width: 40px;
+  height: 46px;
+}
+#world::part(recenter) {
+  width: 52px;
+  height: 60px;
+}
+#world::part(zoom-in) {
+  order: 1;
+}
+#world::part(recenter) {
+  order: 2;
+}
+#world::part(zoom-out) {
+  order: 3;
+}
+#world::part(zoom-in)::before,
+#world::part(zoom-out)::before,
+#world::part(recenter)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--hp-primary) 14%, transparent);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  transition: background 140ms ease;
+}
+#world::part(zoom-in):hover,
+#world::part(zoom-out):hover,
+#world::part(recenter):hover,
+#world::part(zoom-in):focus-visible,
+#world::part(zoom-out):focus-visible,
+#world::part(recenter):focus-visible {
+  color: var(--hp-on-surface);
+  outline: none;
+}
+#world::part(zoom-in):hover::before,
+#world::part(zoom-out):hover::before,
+#world::part(recenter):hover::before,
+#world::part(zoom-in):focus-visible::before,
+#world::part(zoom-out):focus-visible::before,
+#world::part(recenter):focus-visible::before {
+  background: color-mix(in srgb, var(--hp-primary) 34%, transparent);
+}
+#world::part(zoom-in)::after,
+#world::part(zoom-out)::after,
+#world::part(recenter)::after {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px 9px;
+  background: var(--hp-surface-container);
+  border: 1px solid var(--hp-outline-variant);
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--hp-on-surface);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+#world::part(zoom-in)::after {
+  content: "ZOOM IN";
+}
+#world::part(zoom-out)::after {
+  content: "ZOOM OUT";
+}
+#world::part(recenter)::after {
+  content: var(--world-center-tip, "CENTER");
+}
+#world::part(zoom-in):hover::after,
+#world::part(zoom-out):hover::after,
+#world::part(recenter):hover::after,
+#world::part(zoom-in):focus-visible::after,
+#world::part(zoom-out):focus-visible::after,
+#world::part(recenter):focus-visible::after {
+  opacity: 1;
+}
+
+/* Touch has no hover: bigger targets, no tooltips, and center
+   keeps a small standing label under its chip. */
+@media (max-width: 760px) {
+  #world::part(zoom-in),
+  #world::part(zoom-out) {
+    width: 52px;
+    height: 60px;
+    font-size: 19px;
+  }
+  #world::part(recenter) {
+    width: 60px;
+    height: 69px;
+  }
+  #world::part(zoom-in)::after,
+  #world::part(zoom-out)::after {
+    content: none;
+  }
+  #world::part(recenter)::after {
+    content: "CENTER";
+    right: auto;
+    left: 50%;
+    top: calc(100% + 3px);
+    transform: translateX(-50%);
+    padding: 0;
+    background: none;
+    border: 0;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--hp-on-surface-variant);
+    opacity: 1;
+  }
+}
+
+body[data-perf="low"] #world::part(zoom-in)::before,
+body[data-perf="low"] #world::part(zoom-out)::before,
+body[data-perf="low"] #world::part(recenter)::before,
+body[data-perf="low"] #world::part(zoom-in)::after,
+body[data-perf="low"] #world::part(zoom-out)::after,
+body[data-perf="low"] #world::part(recenter)::after {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #world::part(zoom-in)::before,
+  #world::part(zoom-out)::before,
+  #world::part(recenter)::before,
+  #world::part(zoom-in)::after,
+  #world::part(zoom-out)::after,
+  #world::part(recenter)::after {
+    transition: none;
+  }
+}
+
 /* The seed cell holds its colour in EVERY state. Every other hex
    answers a pointer with hexpunk blue-to-green hue swap; this one
    answers with the invader instead, so the swap would be a second,

@@ -499,9 +499,49 @@ const clusters = createClusterLayer(world);
         backEl.hidden = !current.cat && !current.doc && !seedUnfold.open;
       }
 
+      /** Fly the camera back to the route's focus: the mounted
+       * category cluster, or the seed at home. A no-op while the
+       * journal covers the world. */
+      function centerOnRoute(): void {
+        if (world.dived) {
+          return;
+        }
+        if (current.cat && clusters.mounted) {
+          world.flyTo(clusters.mounted.el, zCluster());
+          return;
+        }
+        world.flyTo({ q: 0, r: 0 }, seedUnfold.open ? zBloom() : zSeed());
+      }
+
+      /** The center chip's tooltip names the route focus. The value
+       * is a quoted string because CSS `content` consumes it. */
+      function syncCenterTip(): void {
+        const label = current.cat ? (clusterById(current.cat)?.label ?? current.cat) : "home";
+        world.style.setProperty("--world-center-tip", JSON.stringify(`CENTER · ${label.toUpperCase()}`));
+      }
+
+      // The chrome's recenter flies home; this site centers on the
+      // route's focus instead. A capturing listener claims the click
+      // before the shadow handler runs — the `part` attribute is the
+      // contract.
+      world.addEventListener(
+        "click",
+        (event) => {
+          const hit = event
+            .composedPath()
+            .find((node) => node instanceof Element && node.getAttribute("part") === "recenter");
+          if (hit) {
+            event.stopPropagation();
+            centerOnRoute();
+          }
+        },
+        { capture: true }
+      );
+
       function setPath(route: Route): void {
         void route;
         syncBack();
+        syncCenterTip();
         const item = clusterById(route.cat)?.items.find((entry) => entry.id === route.item);
         document.title = item
           ? `${item.label} · izelya.me`
