@@ -12,6 +12,12 @@ import { remarkCallouts } from "./src/lib/remark-callouts.ts";
 
 export default defineConfig({
   site: "https://izelya.me",
+  vite: {
+    // Demo tunnels (cloudflared quick tunnels) reach `astro preview`
+    // with a trycloudflare Host header; preview answers 403 without
+    // this. Dev stays localhost-only.
+    preview: { allowedHosts: [".trycloudflare.com"] },
+  },
   integrations: [
     // Drafts never build, so every generated page is a live
     // destination.
