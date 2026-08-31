@@ -1,11 +1,13 @@
-/* ─ reading — the dived journal ─
+/**
+ * ─ reading — the dived journal ─
  *
  * When the camera lands in a cell, the world fades under this
  * layer and the journal opens: the metadata panel filled from the
  * post index, the post's flow cloned into the column strip, the
  * shared reader driving pagination. Reading is turning — a heading
  * resolves to the page that contains it, never to a scroll
- * position. */
+ * position.
+ */
 
 import type { HpGrid } from "@hexpunk/core/grid";
 

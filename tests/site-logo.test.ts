@@ -1,8 +1,10 @@
-/* ─ site-logo tests ─
+/**
+ * ─ site-logo tests ─
  *
  * The sprite header declares its rules: two index-aligned 46-entry
  * poses (box-shadow interpolates pairwise), twelve moving pixels,
- * whole-x half-step-y coordinates. Enforce them. */
+ * whole-x half-step-y coordinates. Enforce them.
+ */
 
 import { describe, expect, it } from "bun:test";
 

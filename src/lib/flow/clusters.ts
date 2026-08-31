@@ -1,9 +1,11 @@
-// ─ clusters — the category honeycombs ─
-//
-// A category is an hp-cluster honeycomb revealed at the end of a
-// tether flight: centre anchor, item cells, bloom-in choreography,
-// and the directed vein back to the seed. One cluster is mounted
-// at a time; offsets persist a session's drags.
+/**
+ * ─ clusters — the category honeycombs ─
+ *
+ * A category is an hp-cluster honeycomb revealed at the end of a
+ * tether flight: centre anchor, item cells, bloom-in choreography,
+ * and the directed vein back to the seed. One cluster is mounted
+ * at a time; offsets persist a session's drags.
+ */
 
 import type { AxialCoord, HpGrid } from "@hexpunk/core/grid";
 

@@ -1,7 +1,9 @@
-// astro.config.mjs — izelya.me site config.
-//
-// The site serves at the domain root — no base path. Deploys to
-// GitHub Pages from Actions at go-live.
+/**
+ * ─ astro.config — izelya.me site config ─
+ *
+ * The site serves at the domain root — no base path. Deploys to
+ * GitHub Pages from Actions at go-live.
+ */
 
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";

@@ -1,4 +1,5 @@
-/* ─ site-logo — the invader from the 2016 pen ─
+/**
+ * ─ site-logo — the invader from the 2016 pen ─
  *
  * Two poses of a box-shadow sprite, ported from codepen QEEeJq:
  * arms down at rest, arms up and feet drawn in on engagement. The
@@ -13,7 +14,8 @@
  *
  * Coordinates centre on (0, 0), hp-pixel's convention. The 11x8
  * grid puts a half-step on y, so use an even pixel size to land
- * every offset on a whole pixel. */
+ * every offset on a whole pixel.
+ */
 
 import type { HpPixelPosition } from "@hexpunk/core";
 

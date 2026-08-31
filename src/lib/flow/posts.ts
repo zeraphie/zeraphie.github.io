@@ -1,9 +1,11 @@
-// ─ posts — the content catalogue ─
-//
-// The server renders every published post into an inert template and
-// ships titles, descriptions, and h2 anchor points as a JSON index.
-// This module is the client's read side: metadata lookups and the
-// anchor lists the rail and router navigate by.
+/**
+ * ─ posts — the content catalogue ─
+ *
+ * The server renders every published post into an inert template and
+ * ships titles, descriptions, and h2 anchor points as a JSON index.
+ * This module is the client's read side: metadata lookups and the
+ * anchor lists the rail and router navigate by.
+ */
 
 import type { Item } from "../flow-data";
 

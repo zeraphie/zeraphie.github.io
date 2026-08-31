@@ -1,11 +1,13 @@
-/* ─ journal-prose.css — the content's styling ─
+/**
+ * ─ journal-prose.css — the content's styling ─
  *
  * What a post gets inside the journal's pages: numbered hex-chip
  * section heads (the h2s are the rail's anchors), hex bullets,
  * table and code styling with the one sanctioned scroll exception,
  * and the blockquote patterns — a wireframe callout by default,
  * parchment notes where a post asks with `[!note]`, thin intent
- * slips with `[!quote]`. The vessel lives in journal.css. */
+ * slips with `[!quote]`. The vessel lives in journal.css.
+ */
 
 .journal-prose {
   min-width: 0;

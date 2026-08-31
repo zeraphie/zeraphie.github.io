@@ -1,10 +1,12 @@
-// ─ router — paths are the state ─
-//
-// Every world state is a real URL: home, /<collection>, and each
-// post at its canonical path, with heading anchors as ordinary
-// fragments. The router reads locations back into route state and
-// prints routes back out; pushing and applying stays with the
-// page.
+/**
+ * ─ router — paths are the state ─
+ *
+ * Every world state is a real URL: home, /<collection>, and each
+ * post at its canonical path, with heading anchors as ordinary
+ * fragments. The router reads locations back into route state and
+ * prints routes back out; pushing and applying stays with the
+ * page.
+ */
 
 import { itemPath, resolvePath, type Cluster } from "../flow-data";
 

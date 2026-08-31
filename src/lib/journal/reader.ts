@@ -1,10 +1,12 @@
-/* ─ journal-reader — the journal's reading controller ─
+/**
+ * ─ journal-reader — the journal's reading controller ─
  *
  * Owns pagination and turning for one mounted journal: measures
  * the column geometry, updates the pager, and drives the two-leaf
  * turn from every input — buttons, wheel, keys, and corner drags
  * that scrub the leaf and settle past halfway. destroy() detaches
- * the window listeners so the dive can unmount cleanly. */
+ * the window listeners so the dive can unmount cleanly.
+ */
 
 import {
   clampLead,

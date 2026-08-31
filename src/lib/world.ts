@@ -1,11 +1,13 @@
-// ─ world — built from the collections ─
-//
-// The world derives from the content collections: every collection
-// with at least one published post becomes a category, its posts the
-// items at /<collection>/<slug>. Server-side only (astro:content) —
-// the client receives the result as the #world-index JSON. Imported
-// by both getStaticPaths and the page body, which Astro compiles
-// separately.
+/**
+ * ─ world — built from the collections ─
+ *
+ * The world derives from the content collections: every collection
+ * with at least one published post becomes a category, its posts the
+ * items at /<collection>/<slug>. Server-side only (astro:content) —
+ * the client receives the result as the #world-index JSON. Imported
+ * by both getStaticPaths and the page body, which Astro compiles
+ * separately.
+ */
 
 import { getCollection } from "astro:content";
 

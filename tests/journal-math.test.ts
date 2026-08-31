@@ -1,7 +1,9 @@
-/* ─ journal-math tests ─
+/**
+ * ─ journal-math tests ─
  *
  * Real layout is checked in the browser; these pin the arithmetic:
- * geometry, clamping, pager text, input mappings, drag physics. */
+ * geometry, clamping, pager text, input mappings, drag physics.
+ */
 
 import { describe, expect, it } from "bun:test";
 

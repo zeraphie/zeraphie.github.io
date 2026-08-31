@@ -1,4 +1,5 @@
-/* ─ journal-turn — the two-leaf page turn ─
+/**
+ * ─ journal-turn — the two-leaf page turn ─
  *
  * A per-turn overlay: the strip scrolls to the destination
  * immediately (content lands first) and the overlay supplies the
@@ -9,7 +10,8 @@
  * coplanar — engines cannot bleed one page through another. Faces
  * are clones of the strip windowed to one page region.
  * Progress-driven: timed turns tween it, a corner drag scrubs it
- * and settles past halfway. */
+ * and settles past halfway.
+ */
 
 import { dragProgress, easeOutCubic, flapVisible, foldDepth, type TurnGeometry } from "./math";
 

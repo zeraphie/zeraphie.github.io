@@ -1,4 +1,5 @@
-/* ─ logos — project marks ─
+/**
+ * ─ logos — project marks ─
  *
  * Marks are separate from icons: an icon is shared vocabulary
  * (Lucide), a mark stands for one project, resolves on its own
@@ -22,7 +23,8 @@
  * Lucide set draws at 24. Snecko's pixel art keeps its five
  * colours — flattening would merge the eye and tongue into the
  * head — plus `shape-rendering: crispEdges` so the 9x9 grid stays
- * square at fractional scale. */
+ * square at fractional scale.
+ */
 
 import hexpunk from "./hexpunk.svg?raw";
 import snecko from "./snecko.svg?raw";

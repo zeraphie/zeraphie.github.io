@@ -1,9 +1,11 @@
-/* ─ icons — the journal's stroke glyphs ─
+/**
+ * ─ icons — the journal's stroke glyphs ─
  *
  * Vendored from Lucide (lucide.dev, ISC — LICENSE beside this file),
  * stroke retuned from 2 to 1.5 to match the house wireframe weight.
  * A stopgap set: these move behind hexpunk's icon mirror when it
- * exists — the names already match, so the swap is an import. */
+ * exists — the names already match, so the swap is an import.
+ */
 
 export const ICONS: Record<string, string> = {
   sword:

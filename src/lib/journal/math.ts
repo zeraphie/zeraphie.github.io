@@ -1,9 +1,11 @@
-/* ─ journal-math — the journal's pure arithmetic ─
+/**
+ * ─ journal-math — the journal's pure arithmetic ─
  *
  * Lifted out of the reader's and the turn's DOM closures so it can
  * run without a browser: column geometry, the spread-aligned
  * clamp, pager text, input mappings, and the drag physics. The
- * reader and the turn own the DOM; this file owns the numbers. */
+ * reader and the turn own the DOM; this file owns the numbers.
+ */
 
 /** The strip's numbers, as read from computed style and layout. */
 export interface ColumnBox {

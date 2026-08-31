@@ -1,4 +1,5 @@
-/* ─ devlog-dates — when an entry was written ─
+/**
+ * ─ devlog-dates — when an entry was written ─
  *
  * A devlog entry's date is discovered, not authored: the commit
  * that added the entry is the day it was written. The entry is
@@ -13,7 +14,8 @@
  *
  * Renaming an entry re-dates it: the heading is the identity. An
  * uncommitted entry has no date — it is not published yet.
- * Build-time only; needs full history. */
+ * Build-time only; needs full history.
+ */
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";

@@ -1,11 +1,13 @@
-/* ─ journal.css — the reading vessel ─
+/**
+ * ─ journal.css — the reading vessel ─
  *
  * The longform journal: the book IS the viewport. The cover is the
  * darkest layer and carries every embellishment — rails, ticks,
  * corner steps, the header/footer bands, the spine — while the two
  * pages float lighter on top of it with their leaf stack showing.
  * Three tiers: metadata beside the prose, folded above it, then a
- * single leaf. Imported by the journal route; global by construction. */
+ * single leaf. Imported by the journal route; global by construction.
+ */
 
 /* Site-local palette — the one place these hex values may appear.
    Brass is deliberately not a hexpunk token yet: it earns system

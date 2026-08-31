@@ -1,9 +1,11 @@
-// ─ perf — honest degradation ─
-//
-// Software WebGL means every frame of every canvas is CPU work —
-// detect it once, degrade the page honestly, and say so in the
-// console so "is it my hardware acceleration?" has an answer.
-// ?debug installs a live state line for stuck-frame forensics.
+/**
+ * ─ perf — honest degradation ─
+ *
+ * Software WebGL means every frame of every canvas is CPU work —
+ * detect it once, degrade the page honestly, and say so in the
+ * console so "is it my hardware acceleration?" has an answer.
+ * ?debug installs a live state line for stuck-frame forensics.
+ */
 
 /** Detect + apply the degraded mode. Returns whether it is on. */
 export function initPerfMode(): boolean {

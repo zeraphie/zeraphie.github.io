@@ -1,9 +1,11 @@
-/* ─ devlog-dates tests ─
+/**
+ * ─ devlog-dates tests ─
  *
  * Committed fixtures cover parsing; temp files cover the untracked
  * paths, where git answers null. git-dated.md is the shallow-clone
  * canary: its date comes from the commit that added it, so a
- * depth-1 clone fails this suite by design. */
+ * depth-1 clone fails this suite by design.
+ */
 
 import { afterAll, describe, expect, it } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

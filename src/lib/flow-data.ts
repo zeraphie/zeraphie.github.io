@@ -1,10 +1,12 @@
-// ─ flow-data — the world's shape ─
-//
-// Types and pure path helpers for the flow's world. The world itself
-// derives from the content collections at build time (the page's
-// frontmatter) and ships to the client as the #world-index JSON —
-// every category is a collection with published posts, every item is
-// a post living at its canonical /<collection>/<slug> path.
+/**
+ * ─ flow-data — the world's shape ─
+ *
+ * Types and pure path helpers for the flow's world. The world itself
+ * derives from the content collections at build time (the page's
+ * frontmatter) and ships to the client as the #world-index JSON —
+ * every category is a collection with published posts, every item is
+ * a post living at its canonical /<collection>/<slug> path.
+ */
 
 import type { AxialCoord } from "@hexpunk/core/grid";
 

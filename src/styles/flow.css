@@ -1,11 +1,13 @@
-/* ─ flow.css — the world's chrome ─
+/**
+ * ─ flow.css — the world's chrome ─
  *
  * Everything the flow page paints outside its hexpunk elements:
  * backdrop wiring, the arrival curtain, cluster reveal choreography,
  * the dived reading layer, and the status readouts. Imported by the
  * catch-all page, so global by construction — runtime-created DOM
  * (cards, clusters) is styled here, which Astro scoped styles can't
- * reach. */
+ * reach.
+ */
 
 html,
 body {

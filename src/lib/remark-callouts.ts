@@ -1,11 +1,13 @@
-/* ─ remark-callouts — the `[!name]` markers ─
+/**
+ * ─ remark-callouts — the `[!name]` markers ─
  *
  * A first-line marker requests styling the markdown alone cannot
  * express. On a blockquote it sets data-callout="name" (`note` is
  * the parchment handout, `quote` its thin variant; unmarked quotes
  * keep the default callout). On an h2 it sets data-heading="name"
  * — "log" opens a devlog entry. The marker text is always removed,
- * so slugs and rail labels never see it. */
+ * so slugs and rail labels never see it.
+ */
 
 interface Node {
   type: string;

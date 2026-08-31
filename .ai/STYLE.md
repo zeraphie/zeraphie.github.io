@@ -24,8 +24,16 @@ library code, hexpunk wins — this file governs site code).
 - Domain vocabulary is not waffle — leaf, spread, spine, seed,
   bloom, dive are the system's real names; use them. The test is
   substitution: if a plainer word loses nothing, use it.
-- Non-obvious modules open with an intent preamble (box-drawing
-  title rule, tapered prose, max ~6 lines).
+- Non-obvious modules open with an intent preamble: a Laravel-shape
+  docblock (calebporzio.com/laravel-comments is the lineage — the
+  tapered prose comes from there too) — bare `/**` opener, a
+  `─ title ─` line, a blank gutter line, tapered prose, `*/` on its
+  own line, max ~6 prose lines. CSS and Astro frontmatter use the
+  same shape.
+- `/**` above a declaration is that symbol's hover doc (JSDoc), and
+  the nearest docblock wins — so a file's first declaration always
+  keeps a docblock of its own, and a preamble never masquerades as
+  hover docs. `//` is for inline comments only.
 - Colours only via `--hp-*` tokens; no hardcoded palette values.
   Visual state is state-driven: CSS custom properties + attribute
   selectors, never inline `el.style.*` writes for visual state

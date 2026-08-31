@@ -1,9 +1,11 @@
-/* ─ remark-callouts tests ─
+/**
+ * ─ remark-callouts tests ─
  *
  * Trees are built by hand and run through the plugin. Inline
  * snapshots cover the cases where the whole output shape is the
  * contract: the plugin removes nodes, so "nothing else changed"
- * is part of the assertion. */
+ * is part of the assertion.
+ */
 
 import { describe, expect, it } from "bun:test";
 

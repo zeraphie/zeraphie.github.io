@@ -1,4 +1,6 @@
-/* ─ flow-data tests ─ */
+/**
+ * ─ flow-data tests ─
+ */
 
 import { describe, expect, it } from "bun:test";
 
