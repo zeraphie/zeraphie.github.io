@@ -1,15 +1,17 @@
-/* ─ remark-callouts — the placed-note markers ─
+/* ─ remark-callouts — the `[!name]` markers ─
  *
- * A blockquote whose first line is `[!name]` is a deliberate,
- * placed note: the marker line is removed and the blockquote gains
- * data-callout="name" for the journal's dress to key on — `note`
- * is the parchment handout, `quote` its thin flavour for intent
- * lines. Unmarked quotes keep the quiet wireframe callout — notes
- * stay sparse because the author asks for each one. */
+ * A marker on the first line asks for a treatment the dress cannot
+ * infer. On a blockquote it is a deliberate, placed note —
+ * data-callout="name", where `note` is the parchment handout and
+ * `quote` its thin flavour for intent lines; unmarked quotes keep
+ * the quiet wireframe callout. On a heading it names the kind of
+ * heading — data-heading="log" opens a devlog entry. The marker
+ * text is always removed, so slugs and rail labels never see it. */
 
 interface Node {
   type: string;
   value?: string;
+  depth?: number;
   children?: Node[];
   data?: { hProperties?: Record<string, string> };
 }
@@ -43,9 +45,34 @@ function mark(quote: Node): void {
   };
 }
 
+/** Strips a leading `[!name]` from a heading and records the kind.
+ * Only h2 carries one: h2s are the rail's anchors, so a marked
+ * heading is a navigable thing, not a flourish. */
+function markHeading(heading: Node): void {
+  if (heading.depth !== 2) {
+    return;
+  }
+  const first = heading.children?.[0];
+  if (first?.type !== "text") {
+    return;
+  }
+  const match = MARKER.exec(first.value ?? "");
+  if (!match) {
+    return;
+  }
+  first.value = (first.value ?? "").replace(MARKER, "");
+  heading.data = {
+    ...heading.data,
+    hProperties: { ...heading.data?.hProperties, "data-heading": match[1]!.toLowerCase() },
+  };
+}
+
 function walk(node: Node): void {
   if (node.type === "blockquote") {
     mark(node);
+  }
+  if (node.type === "heading") {
+    markHeading(node);
   }
   // Content dividers wear hexpunk's separator (centre hex glyph).
   if (node.type === "thematicBreak") {
