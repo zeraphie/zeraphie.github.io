@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "demo": "cloudflared tunnel --url http://localhost:4321",
     "typecheck": "astro check",
     "test": "bun test",
     "lint": "oxlint src/",
