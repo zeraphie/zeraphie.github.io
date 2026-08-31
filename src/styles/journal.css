@@ -710,34 +710,36 @@ a.journal-site:hover {
   display: none;
 }
 
-@media (max-width: 1100px) {
-  /* The crumb already says which collection this is — the slip
-     needn't repeat it. */
-  .journal-meta-stats dt:nth-of-type(4),
-  .journal-meta-stats dd:nth-of-type(4) {
+/* Below the tab's width the slip lands on page one directly above a
+   playable post's cartridge — two centred blocks before a word of
+   prose. The cartridge wins that argument: it is the thing the post
+   is FOR, and its label takes the slip's two stats. Mirrors the
+   1500 above; `:has` because only the flow knows a post is playable. */
+@media (max-width: 1499px) {
+  .journal-pages:has(.journal-cartridge) .journal-meta {
     display: none;
   }
 }
 
 /* ── tier 3: one leaf ──────────────────────────────────────────── */
 
-@media (max-width: 760px) {
-  /* On :root, not .journal — the band heights are derived from the
-     pad at this level, so they only re-resolve when it changes here. */
+/* ── one leaf, before the phone ────────────────────────────────────
+      A spread narrower than this gives each column too few characters
+      to read, and squeezes anything of fixed width — the cartridge
+      first. So the book goes to a single leaf here, well above the
+      phone tier, which keeps the COVER as it is and changes only the
+      paper.
+
+      The measure has to be capped on the way, not just re-divided:
+      one column across an 850px leaf is 726px, far worse than the
+      two it replaced. The book takes the cap, exactly as it does
+      above 1126 — one leaf simply wants a smaller ceiling than two —
+      so the whole vessel stops widening and centres, and the world's
+      ambience shows either side of it rather than a wide leaf with
+      a narrow ribbon of text down the middle. */
+@media (max-width: 850px) {
   :root {
-    --journal-pad: 18px;
-  }
-  /* The book fills the phone: the cover keeps only its trim, and
-     the bands move ONTO the leaf as fixed strips, so their height
-     stops costing reading room. */
-  .journal {
-    /* The band rows are gone, but their spacing is not: the cover
-       still shows the same margin on every side. */
-    grid-template:
-      ". . ." var(--journal-pad)
-      ". body ." 1fr
-      ". . ." var(--journal-pad)
-      / var(--journal-pad) 1fr var(--journal-pad);
+    --journal-max: 540px;
   }
   .journal-body {
     grid-template-columns: 1fr;
@@ -757,10 +759,33 @@ a.journal-site:hover {
   .journal-page--verso::after {
     display: none;
   }
-  /* Room at the top and foot of the leaf for the two strips. */
+  .journal-pages {
+    columns: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  /* On :root, not .journal — the band heights are derived from the
+     pad at this level, so they only re-resolve when it changes here. */
+  :root {
+    --journal-pad: 18px;
+  }
+  /* The book fills the phone: the cover keeps only its trim, and
+     the bands move ONTO the leaf as fixed strips, so their height
+     stops costing reading room. */
+  .journal {
+    /* The band rows are gone, but their spacing is not: the cover
+       still shows the same margin on every side. */
+    grid-template:
+      ". . ." var(--journal-pad)
+      ". body ." 1fr
+      ". . ." var(--journal-pad)
+      / var(--journal-pad) 1fr var(--journal-pad);
+  }
+  /* Room at the top and foot of the leaf for the two strips. The
+     single-leaf layout and its measure cap already arrived above. */
   .journal-pages {
     padding: 34px 16px 30px;
-    columns: 1;
   }
   .journal-band {
     position: absolute;

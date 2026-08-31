@@ -15,6 +15,13 @@ import { createJournalReader, type JournalReader } from "../journal-reader";
 import { contentFor } from "./content-cache";
 import { postMeta } from "./posts";
 
+/** Every date the journal SHOWS reads YYYY/MM/DD. The ISO form is
+ * what travels — the post index, `article:published_time`, the
+ * JSON-LD — and is left alone; this is only the display shape. */
+function journalDate(iso: string | undefined): string | undefined {
+  return iso?.replaceAll("-", "/");
+}
+
 export interface ReadingHost {
   page: HTMLElement;
   world: HpGrid;
@@ -60,8 +67,6 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
   const stats = {
     date: stat("date"),
     time: stat("time"),
-    words: stat("words"),
-    collection: stat("collection"),
   };
 
   let pageTimer = 0;
@@ -118,22 +123,16 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     metaTitle.textContent = fields.title;
     metaSub.textContent = fields.sub;
     glyph.innerHTML = iconFor(collection, fields.icon);
-    setStat(stats.date, fields.date?.replaceAll("-", "."));
+    setStat(stats.date, journalDate(fields.date));
+    // Word count survives as the reading time's input, not as a stat
+    // of its own — the minutes are what a reader acts on. Collection
+    // is the crumb's job, one line above.
     setStat(
       stats.time,
       fields.words === undefined
         ? undefined
         : `~ ${Math.max(1, Math.round(fields.words / 220))} min`
     );
-    setStat(
-      stats.words,
-      fields.words === undefined
-        ? undefined
-        : fields.words >= 1000
-          ? `~ ${(fields.words / 1000).toFixed(1)}k`
-          : String(fields.words)
-    );
-    setStat(stats.collection, collection ? collectionLabel(collection) : undefined);
     // With every stat gone, the rule above them has nothing to
     // divide.
     const rule = page.querySelector<HTMLElement>(".journal-meta hr");
@@ -174,8 +173,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
         prose.querySelectorAll<HTMLElement>("h2[id]").forEach((heading, index) => {
           const date = anchors[index]?.date;
           if (date) {
-            // Dotted, as the metadata panel writes dates.
-            heading.dataset.date = date.replaceAll("-", ".");
+            heading.dataset.date = journalDate(date)!;
           }
         });
       })

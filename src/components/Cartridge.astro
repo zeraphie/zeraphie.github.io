@@ -17,9 +17,21 @@ interface Props {
   title: string;
   icon: string | null;
   collection: string;
+  /** ISO date; the label formats it. */
+  date: string;
+  words: number;
+  description: string;
 }
-const { href, title, icon, collection } = Astro.props;
+const { href, title, icon, collection, date, words, description } = Astro.props;
 const glyph = iconFor(collection, icon ?? undefined);
+/* Below the width where the metadata rides the book's edge, the
+   cartridge is the only header a playable post gets — so it carries
+   what the panel keeps, labelled and one stat to a row. Dates read
+   YYYY/MM/DD here as everywhere the journal shows one. */
+const stats = [
+  { label: "date", value: date.replaceAll("-", "/") },
+  { label: "time", value: `~ ${Math.max(1, Math.round(words / 220))} min` },
+];
 
 /** Contact fins along the connector foot — the PCB edge. */
 const FINS = Array.from({ length: 13 }, (_, i) => 68 + i * 10);
@@ -55,8 +67,27 @@ const RIDGES = [0, 1, 2, 3, 4];
     <rect class="lip" x="40" y="106" width="180" height="26" />
   </svg>
 
-    <span class="journal-cartridge__glyph" set:html={glyph} />
-    <span class="journal-cartridge__title">{title}</span>
+    {/* One positioned box over the label window, flowing inside:
+        a title beside its glyph, then the stats. Flow, not four
+        absolute placements — a title that wraps to two lines has to
+        push the stats down rather than land on top of them. */}
+    <span class="journal-cartridge__label">
+      <span class="journal-cartridge__head">
+        <span class="journal-cartridge__glyph" set:html={glyph} />
+        <span class="journal-cartridge__title">{title}</span>
+      </span>
+      <span class="journal-cartridge__stats">
+        {
+          stats.map((s) => (
+            <span>
+              <i>{s.label}</i>
+              {s.value}
+            </span>
+          ))
+        }
+      </span>
+    </span>
     <span class="journal-cartridge__play">play<i>↗</i></span>
   </a>
+  <span class="journal-cartridge__blurb">{description}</span>
 </span>

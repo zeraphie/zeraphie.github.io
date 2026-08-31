@@ -106,15 +106,12 @@
   /* The rule is painted rather than bordered, so it can sit LOWER
      than the box edge and let the slip cross it — a border-top is
      pinned to y=0, and anything above that lands in the column
-     break. The wire hangs from the same layer for the same reason. */
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%2376858f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
-      no-repeat calc(100% - 132px) 4px / 14px 21px,
-    linear-gradient(
-        color-mix(in srgb, var(--hp-primary) 55%, transparent),
-        color-mix(in srgb, var(--hp-primary) 55%, transparent)
-      )
-      no-repeat 0 26px / 100% 2px;
+     break, where the strip's clip slices whatever it finds. */
+  background: linear-gradient(
+      color-mix(in srgb, var(--hp-primary) 55%, transparent),
+      color-mix(in srgb, var(--hp-primary) 55%, transparent)
+    )
+    no-repeat 0 26px / 100% 2px;
 }
 /* The slip is two type sizes — a big dotted date over a small
    letterspaced entry line — and one `content` string can only carry
@@ -132,7 +129,12 @@
   top: 8px;
   right: 0;
   width: 156px;
-  height: 84px;
+  /* 12px taller than the paper. The paper's top edge is cut in by
+     the clip-path below, which leaves that strip free for the wire
+     to straddle — a background cannot paint outside its own box, so
+     the box has to be the thing that is bigger. Both layers keep
+     IDENTICAL boxes so one transform-origin rotates them as one. */
+  height: 96px;
   box-sizing: border-box;
   font-family: "Chakra Petch", sans-serif;
   text-transform: none;
@@ -147,57 +149,113 @@
 /* The paper, and the date it carries. */
 .journal-prose h2[data-heading="log"]::before {
   content: attr(data-date);
-  padding: 18px 16px 0 22px;
+  padding: 30px 16px 0 22px;
   font-size: 19px;
+  /* h2 is bold by default and the pseudo-elements inherit it; the
+     date wants its authority from size, not weight. */
+  font-weight: 300;
   line-height: 1.1;
   letter-spacing: 0.04em;
   background:
     linear-gradient(45deg, var(--iz-parchment-fold) 0 13px, transparent 13px) bottom left / 26px
       26px no-repeat,
     var(--iz-parchment);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  /* Paper starts 12px down — that strip is the wire's. */
+  clip-path: polygon(0 12px, 100% 12px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
   filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.34));
 }
-/* The entry line, riding the same plate. */
+/* The entry line, and the wire, riding the same plate. ::after paints
+   after ::before, so the wire drawn here sits ON the paper rather
+   than behind it — and it travels with the slip's rotation for free.
+   The section head's rule is drawn by masking ::after down to a
+   hairline and a diamond; that mask has to go, or it clips this
+   text away to nothing. */
 .journal-prose h2[data-heading="log"]::after {
-  content: "ENTRY " counter(journal-entry, decimal-leading-zero);
-  padding: 48px 16px 0 22px;
+  content: "DEVLOG " counter(journal-entry, decimal-leading-zero);
+  padding: 62px 16px 0 23px;
   font-size: 10px;
   line-height: 1.1;
   letter-spacing: 0.2em;
-  color: color-mix(in srgb, var(--iz-parchment-ink) 68%, transparent);
-  background: none;
+  color: color-mix(in srgb, var(--iz-parchment-ink) 70%, transparent);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 32'%3E%3Cpath d='M8 4 A4 4 0 0 1 16 4 L16 26 A5 5 0 0 1 6 26 L6 10 A3 3 0 0 1 12 10 L12 22' fill='none' stroke='%2376858f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center 0 / 16px 24px;
+  /* Against the PADDING box the wire would sit 62px down and off to
+     one side, since this element's padding places the entry line
+     rather than the clip. Measure it from the box's own edge, where
+     the free strip above the paper is. */
+  background-origin: border-box;
+  mask: none;
 }
 /* An entry with no commit behind it yet has no date to show — it is
    not unknown, it does not exist — so the entry line takes the
    plate's upper line instead of sitting under a blank. */
 .journal-prose h2[data-heading="log"]:not([data-date])::after {
-  padding-top: 22px;
+  padding-top: 34px;
   font-size: 12px;
 }
 
-/* Below the spread's full width the column cannot carry a title and
-   a slip side by side — reserving the slip's width leaves too few
-   characters to read. The slip drops beneath the title instead, and
-   gives up its wire: the clipped corner and the lift are enough to
-   keep it paper at this size. */
+/* From tier 2 down the column cannot carry a title and a pinned slip
+   side by side — reserving the slip's width leaves too few characters
+   to read. The head becomes the OUTER TAB instead: a pennant of
+   paper flush to the column's leading edge carrying only the date,
+   the title left-aligned beneath it with the room back, and the entry
+   number demoted to a dimmed suffix on the title itself. The tab
+   starts AT the edge rather than hanging past it — on the recto that
+   edge is the spine, not a margin, and the strip is one flowing
+   multicol, so a heading cannot know which leaf it landed on. */
 @media (max-width: 1100px) {
   .journal-prose h2[data-heading="log"] {
-    /* The reserve must clear the slip's full height, not guess. */
-    padding: 34px 0 96px;
+    padding: 46px 0 0;
     min-height: 0;
     font-size: 23px;
-    /* No wire down here — the plate and its lift are enough paper. */
     background: linear-gradient(
         color-mix(in srgb, var(--hp-primary) 55%, transparent),
         color-mix(in srgb, var(--hp-primary) 55%, transparent)
       )
-      no-repeat 0 14px / 100% 2px;
+      no-repeat 0 15px / 100% 2px;
   }
-  .journal-prose h2[data-heading="log"]::before,
+  /* The tab: level, not tilted — it reads as fixed to the edge. */
+  .journal-prose h2[data-heading="log"]::before {
+    top: 0;
+    right: auto;
+    left: 0;
+    width: auto;
+    height: auto;
+    padding: 7px 26px 8px 12px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    background: var(--iz-parchment);
+    clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%);
+    transform: none;
+  }
+  /* The entry number rejoins the flow as a suffix on the title. */
   .journal-prose h2[data-heading="log"]::after {
-    top: auto;
-    bottom: 0;
+    content: "DEVLOG " counter(journal-entry, decimal-leading-zero);
+    position: static;
+    display: inline;
+    width: auto;
+    height: auto;
+    padding: 0;
+    /* A margin, not a leading space in the content — whitespace at
+       the start of an inline box is at the mercy of collapsing. */
+    margin-left: 0.7em;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--hp-on-surface-variant);
+    background: none;
+    transform: none;
+    filter: none;
+    white-space: normal;
+  }
+  /* No commit behind it yet means no date, and an empty pennant is
+     worse than none. `:not()` outranks the rules above it, so its
+     wide-tier placement has to be undone explicitly. */
+  .journal-prose h2[data-heading="log"]:not([data-date])::before {
+    display: none;
+  }
+  .journal-prose h2[data-heading="log"]:not([data-date])::after {
+    padding: 0;
+    font-size: 11px;
   }
 }
 
@@ -493,7 +551,7 @@
   display: inline-block;
   vertical-align: top;
   position: relative;
-  width: 260px;
+  width: 330px;
   max-width: 100%;
   margin: 0;
   text-align: initial;
@@ -556,11 +614,24 @@
 
 /* Text over the drawing — percentages of the 260 x 168 viewBox, so
    the label tracks the chassis at any width. */
-.journal-cartridge__glyph {
+/* The label window's contents, as one flowing box. */
+.journal-cartridge__label {
   position: absolute;
   left: 19.2%;
-  top: 14.8%;
-  width: 7%;
+  right: 17.3%;
+  top: 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.journal-cartridge__head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.journal-cartridge__glyph {
+  flex: none;
+  width: 25px;
   color: var(--hp-primary-bright);
 }
 .journal-cartridge__glyph svg {
@@ -569,10 +640,7 @@
   height: auto;
 }
 .journal-cartridge__title {
-  position: absolute;
-  left: 19.2%;
-  right: 17.3%;
-  top: 27%;
+  min-width: 0;
   font-family: Iceland, "Chakra Petch", sans-serif;
   font-size: 21px;
   line-height: 1.02;
@@ -580,6 +648,45 @@
   text-transform: uppercase;
   color: var(--hp-on-surface);
 }
+/* The label's stats, and the description beneath the chassis. Both
+   are hidden while the metadata rides the book's edge — there they
+   would only repeat the tab a few centimetres away. Below that width
+   the tab becomes a slip on page one directly above this, and two
+   centred blocks fight; so the slip stands down for a playable post
+   and what it carried arrives here instead. */
+.journal-cartridge__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hp-on-surface);
+}
+/* Label column fixed, so the two values line up under each other. */
+.journal-cartridge__stats i {
+  display: inline-block;
+  width: 44px;
+  font-style: normal;
+  color: var(--hp-on-surface-variant);
+}
+/* Outside the chassis: the sentence the post leads with, quiet
+   enough that the cartridge still reads as the object. */
+.journal-cartridge__blurb {
+  display: block;
+  max-width: 330px;
+  margin: 10px auto 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--hp-on-surface-variant);
+}
+@media (min-width: 1500px) {
+  .journal-cartridge__stats,
+  .journal-cartridge__blurb {
+    display: none;
+  }
+}
+
 .journal-cartridge__play {
   position: absolute;
   left: 15.4%;

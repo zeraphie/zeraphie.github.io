@@ -211,10 +211,6 @@ const CurrentContent = currentPost?.Content;
                   <dd data-stat="date"></dd>
                   <dt>Time</dt>
                   <dd data-stat="time"></dd>
-                  <dt>Words</dt>
-                  <dd data-stat="words"></dd>
-                  <dt>Collection</dt>
-                  <dd data-stat="collection"></dd>
                 </dl>
               </aside>
               <div class="journal-prose"></div>
@@ -257,6 +253,9 @@ const CurrentContent = currentPost?.Content;
                   title={currentPost.meta.title}
                   icon={currentPost.meta.icon}
                   collection={currentPost.key.split("/")[0]!}
+                  date={currentPost.meta.date}
+                  words={currentPost.meta.words}
+                  description={currentPost.meta.description}
                 />
               )
             }
