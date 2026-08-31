@@ -1,15 +1,13 @@
 ---
 /*
-  ─ izelya.me — THE FLOW ─
+  ─ izelya.me — the flow ─
 
-  The homepage IS an hp-grid world, route-driven: arrival is one
-  viewport-filling hex with hp-background ignition crawling off
-  it; hover blooms the sections (hp-unfold-list); a section flies
-  down a directed hp-tether to its far-away category, revealed as
-  a honeycomb hp-cluster; an item opens THE JOURNAL — the
-  full-viewport book, where reading is turning. Every state is a
-  real URL; deep links restore instantly, in-session moves are
-  immediate.
+  The homepage is an hp-grid world, route-driven: arrival is one
+  viewport-filling hex with hp-background ignition; hover blooms
+  the sections (hp-unfold-list); a section flies down a directed
+  hp-tether to its category, a honeycomb hp-cluster; an item opens
+  the journal, where reading is turning. Every state is a real
+  URL; deep links restore instantly.
 */
 import { render } from "astro:content";
 
@@ -157,9 +155,8 @@ const CurrentContent = currentPost?.Content;
 
       <button type="button" class="hs-back" id="hs-back" hidden>‹ back</button>
 
-      <!-- The dived page: once the camera lands in a cell, the world
-           fades out beneath this layer and reading happens in the
-           JOURNAL — the full-viewport book. The reading layer fills
+      <!-- The dived page: the world fades beneath this layer and
+           reading happens in the journal. The reading layer fills
            the metadata panel and the flow strip per post. -->
       <div class="page" id="page">
         <main class="journal" data-turns="static">
@@ -602,9 +599,9 @@ const clusters = createClusterLayer(world);
         const cell = clusterEl.querySelector<HTMLElement>(`[data-item="${item.id}"]`)!;
 
         // Opening a post is instant: the camera is placed, not flown.
-        // The journal fills the viewport anyway, so a flight beneath
-        // it is motion nobody sees the point of — and the world's
-        // hover/relight kept surfacing through the fade.
+        // The journal fills the viewport, so a flight beneath it is
+        // invisible — and the world's hover/relight kept surfacing
+        // through the fade.
         const performDive = () => {
           prefetchPosts(cluster.items.map((entry) => entry.post));
           // The world goes pointer-dead the moment the dive starts:
@@ -794,7 +791,7 @@ const clusters = createClusterLayer(world);
         go(`${itemPath(owner)}#${head}`);
       });
 
-      // ── stage 1: the living seed ──
+      // ── the seed ──
       let seedHovered = false;
       function syncCalm(): void {
         // The page view always keeps the ambient wake; elsewhere the
@@ -852,8 +849,8 @@ const clusters = createClusterLayer(world);
         }
       }
 
-      // Ambient ignition — alive only while the lone seed is the
-      // show, and never on a software compositor.
+      // Ambient ignition — only while the lone seed is on show, and
+      // never on a software compositor.
       window.setInterval(() => {
         if (
           PERF_LOW ||
@@ -935,8 +932,8 @@ const clusters = createClusterLayer(world);
       );
 
       // ── boot: wait for the engine's first frame, read the fan's
-      //    shuffle, place categories along those directions, then
-      //    restore the route instantly and raise the curtain ──
+      //    slot assignments, place categories along those
+      //    directions, then restore the route and reveal ──
       function sectionsAssigned(): boolean {
         return [...document.querySelectorAll(".section")].every((s) =>
           s.hasAttribute("data-unfold-index")

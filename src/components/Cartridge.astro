@@ -5,8 +5,8 @@
   A post with a playable build renders one. The chassis is drawn,
   not boxed: ridged shoulders with screw dots, a chamfered shell,
   a label window, and a connector foot with contact fins — the
-  parts that say "this plugs into something". Text rides over it in
-  HTML so titles stay selectable and wrap on their own terms. Site
+  parts that make it read as a cartridge. Text rides over it in
+  HTML so titles stay selectable and wrap on their own. Site
   furniture, not a hexpunk candidate; azure throughout, because
   brass is never interactive.
 */
@@ -25,8 +25,8 @@ interface Props {
   description: string;
 }
 const { href, title, icon, logo, collection, date, words, description } = Astro.props;
-// A project's own mark wins over the icon vocabulary: it says which
-// thing this is, not which kind of thing.
+// A project's own mark wins over the icon: it names the thing, not
+// the kind.
 const glyph = logoFor(logo) ?? iconFor(collection, icon ?? undefined);
 /* Below the width where the metadata rides the book's edge, the
    cartridge is the only header a playable post gets — so it carries
