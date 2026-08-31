@@ -12,13 +12,7 @@
  * Progress-driven: timed turns tween it, a corner drag scrubs it
  * and settles past the halfway line. */
 
-import {
-  dragProgress,
-  easeOutCubic,
-  flapVisible,
-  foldDepth,
-  type TurnGeometry,
-} from "./journal-math";
+import { dragProgress, easeOutCubic, flapVisible, foldDepth, type TurnGeometry } from "./math";
 
 export interface TurnOptions {
   /** The real column strip (already holding the post's flow). */

@@ -12,7 +12,7 @@ import type { HpGrid } from "@hexpunk/core/grid";
 import { collectionLabel, type Item } from "../flow-data";
 import { iconFor } from "../icons";
 import { logoFor } from "../logos";
-import { createJournalReader, type JournalReader } from "../journal-reader";
+import { createJournalReader, type JournalReader } from "../journal/reader";
 import { contentFor } from "./content-cache";
 import { postMeta } from "./posts";
 

@@ -14,8 +14,8 @@ import {
   pageAt,
   pageLabel,
   visibleTo,
-} from "./journal-math";
-import { beginTurn, type TurnController } from "./journal-turn";
+} from "./math";
+import { beginTurn, type TurnController } from "./turn";
 
 export interface JournalReaderHost {
   /** The multicol strip holding the post's flow. */

@@ -18,7 +18,7 @@ import {
   pageAt,
   pageLabel,
   visibleTo,
-} from "../src/lib/journal-math";
+} from "../src/lib/journal/math";
 
 const spreadBox = {
   columnCount: 2,
