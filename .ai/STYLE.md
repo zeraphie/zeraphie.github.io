@@ -43,6 +43,25 @@ library code, hexpunk wins — this file governs site code).
 | Constants             | `SCREAMING_SNAKE_CASE`    |
 | Git branches          | gitflow `type/short-desc` |
 
+## Tests
+
+- Runner: `bun test` (hexpunk's), layout: top-level `tests/` with
+  `<domain>.test.ts` (snecko/wok's) — a deliberate hybrid: site
+  logic is a handful of modules, so one directory reads better
+  than hexpunk's collocation.
+- Unit-test pure logic hard — the part that runs without a
+  browser: remark transforms, path/world helpers, page math, data
+  invariants.
+- DOM-bound code is never DOM-emulated (a stub DOM measures
+  nothing real, so its tests pass vacuously): extract the math
+  into a pure module, test that, and verify real layout in the
+  browser.
+- Fixtures live in `tests/fixtures/`; a committed fixture whose
+  date derives from git history doubles as the shallow-clone
+  canary — it fails on a depth-1 clone by design.
+- Test behaviour, not implementation; names describe the
+  scenario.
+
 ## Tooling
 
 - `check` = format:check + lint + typecheck (`astro check`) +
