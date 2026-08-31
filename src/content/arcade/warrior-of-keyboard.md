@@ -1,7 +1,7 @@
 ---
 title: Warrior of Keyboard
 icon: keyboard
-description: "A co-op typing game for 1-4 players. Serverless peer-to-peer over WebRTC."
+description: "A co-op typing game for 1-4 players. Serverless peer-to-peer over WebRTC"
 date: 2026-08-27
 game: https://zeraphie.github.io/warrior-of-keyboard/
 ---
