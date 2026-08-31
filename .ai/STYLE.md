@@ -15,6 +15,15 @@ library code, hexpunk wins — this file governs site code).
   complex code. Never narrate what the code says, never reference
   plans/ADRs from shipped text — the comment carries the
   reasoning itself.
+- Comments are Plain English (the plainlanguage.gov / ISO 24495
+  sense): common words, short declarative sentences, active
+  voice. State the constraint or the reason and stop — no
+  scene-setting, no flourish, no metaphor where a literal
+  sentence does the job. One sentence is the default; a second
+  earns its place by carrying a why.
+- Domain vocabulary is not waffle — leaf, spread, spine, seed,
+  bloom, dive are the system's real names; use them. The test is
+  substitution: if a plainer word loses nothing, use it.
 - Non-obvious modules open with an intent preamble (box-drawing
   title rule, tapered prose, max ~6 lines).
 - Colours only via `--hp-*` tokens; no hardcoded palette values.
