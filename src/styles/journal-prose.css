@@ -101,25 +101,37 @@
   color: var(--hp-on-surface);
   border-top: 2px solid color-mix(in srgb, var(--hp-primary) 55%, transparent);
   margin: 0 0 0.9em;
-  padding: 22px 148px 0 0;
-  min-height: 78px;
+  padding: 22px 158px 0 0;
+  min-height: 92px;
   box-sizing: border-box;
 }
-/* The slip. Sits over the masthead's right, tilted off the rule. */
+/* The slip, and the wire over its top edge. Both stay INSIDE the
+   heading's box: an entry always opens a column, so anything with a
+   negative offset lands in the column break, where the strip's clip
+   slices it — a masked wire loses its mask and paints as a bar, with
+   the offcut surfacing at the foot of the previous page. */
 .journal-prose h2[data-heading="log"]::before {
   content: attr(data-date) "\A" "ENTRY " counter(journal-entry, decimal-leading-zero);
   white-space: pre;
+  /* The section head's chip is a centring grid; the slip is two
+     lines of text and must not inherit that, or they collapse into
+     one zero-height row and spill outside the paper. */
+  display: block;
   position: absolute;
-  top: 6px;
+  top: 18px;
   right: 0;
-  width: 132px;
-  padding: 9px 12px 10px;
+  width: 142px;
+  /* The chip is a fixed 23px box; the slip is sized by its text. */
+  height: auto;
+  /* The clipped corner eats the lower left, so the text needs to
+     start inside it — hence the asymmetric inset. */
+  padding: 12px 14px 14px 20px;
   box-sizing: border-box;
   background: var(--iz-parchment);
   color: var(--iz-parchment-ink);
   font-family: "Chakra Petch", sans-serif;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.62;
   letter-spacing: 0.08em;
   text-transform: none;
   /* Clipped corner on the outer edge, as the handouts wear it. */
@@ -136,11 +148,10 @@
   content: "ENTRY " counter(journal-entry, decimal-leading-zero);
   font-size: 11px;
 }
-/* The wire, straddling the slip's top edge. */
 .journal-prose h2[data-heading="log"]::after {
   content: "";
   position: absolute;
-  top: -6px;
+  top: 6px;
   right: 34px;
   width: 17px;
   height: 24px;
@@ -158,7 +169,8 @@
    keep it paper at this size. */
 @media (max-width: 1100px) {
   .journal-prose h2[data-heading="log"] {
-    padding: 20px 0 62px;
+    /* The reserve must clear the slip's full two lines, not guess. */
+    padding: 20px 0 80px;
     min-height: 0;
     font-size: 23px;
   }
