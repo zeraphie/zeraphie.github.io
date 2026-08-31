@@ -11,6 +11,7 @@ import type { HpGrid } from "@hexpunk/core/grid";
 
 import { collectionLabel, type Item } from "../flow-data";
 import { iconFor } from "../icons";
+import { logoFor } from "../logos";
 import { createJournalReader, type JournalReader } from "../journal-reader";
 import { contentFor } from "./content-cache";
 import { postMeta } from "./posts";
@@ -102,6 +103,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     title: string;
     sub: string;
     icon?: string;
+    logo?: string | null;
     date?: string;
     words?: number;
   }): void {
@@ -122,7 +124,13 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
     crumb.append(sep(), here);
     metaTitle.textContent = fields.title;
     metaSub.textContent = fields.sub;
-    glyph.innerHTML = iconFor(collection, fields.icon);
+    // A project's own mark wins over the icon vocabulary: it says
+    // which thing this is, not which kind of thing. A mark also
+    // stands on its own — the hexagon is the icon set's frame, and
+    // the glyph host re-centres for the bigger drawing.
+    const mark = logoFor(fields.logo);
+    glyph.innerHTML = mark ?? iconFor(collection, fields.icon);
+    glyph.parentElement?.toggleAttribute("data-logo", mark !== undefined);
     setStat(stats.date, journalDate(fields.date));
     // Word count survives as the reading time's input, not as a stat
     // of its own — the minutes are what a reader acts on. Collection
@@ -153,6 +161,7 @@ export function createReadingLayer(host: ReadingHost): ReadingLayer {
       title: info?.title ?? item.label,
       sub: info?.description ?? item.sub,
       icon: info?.icon ?? undefined,
+      logo: info?.logo,
       date: info?.date,
       words: info?.words,
     });

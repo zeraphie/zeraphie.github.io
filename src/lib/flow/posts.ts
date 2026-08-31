@@ -11,6 +11,8 @@ export interface PostMeta {
   title: string;
   description: string;
   icon: string | null;
+  /** A project's own mark, preferred over `icon` when it resolves. */
+  logo: string | null;
   /** ISO date, journal-formatted client-side. */
   date: string;
   words: number;

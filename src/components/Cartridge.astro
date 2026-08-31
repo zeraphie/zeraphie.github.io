@@ -11,19 +11,23 @@
   brass is never interactive.
 */
 import { iconFor } from "../lib/icons";
+import { logoFor } from "../lib/logos";
 
 interface Props {
   href: string;
   title: string;
   icon: string | null;
+  logo: string | null;
   collection: string;
   /** ISO date; the label formats it. */
   date: string;
   words: number;
   description: string;
 }
-const { href, title, icon, collection, date, words, description } = Astro.props;
-const glyph = iconFor(collection, icon ?? undefined);
+const { href, title, icon, logo, collection, date, words, description } = Astro.props;
+// A project's own mark wins over the icon vocabulary: it says which
+// thing this is, not which kind of thing.
+const glyph = logoFor(logo) ?? iconFor(collection, icon ?? undefined);
 /* Below the width where the metadata rides the book's edge, the
    cartridge is the only header a playable post gets — so it carries
    what the panel keeps, labelled and one stat to a row. Dates read

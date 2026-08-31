@@ -10,6 +10,8 @@ const posts = (base: string) =>
       description: z.string(),
       date: z.coerce.date(),
       icon: z.string().optional(),
+      /** A project's own mark, drawn in place of the icon. */
+      logo: z.string().optional(),
       /** A playable build — arcade posts render a cartridge to it. */
       game: z.string().url().optional(),
       draft: z.boolean().default(false),
