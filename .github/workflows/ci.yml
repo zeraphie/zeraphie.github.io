@@ -5,6 +5,9 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  # Manual runs deploy (see the deploy job's gate); the button only
+  # lists once this file is on the default branch.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -58,6 +61,10 @@ jobs:
       # astro check is the typecheck; the build proves the site compiles.
       - run: bun run typecheck
       - run: bun run build
+      - if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
 
   lint:
     name: Lint
@@ -98,5 +105,26 @@ jobs:
       - run: tar --zstd -xf node_modules.tar.zst
       - run: bun run test
 
-  # Deploy is deliberately absent: the site is local-only. It gets added
-  # explicitly at go-live, never before.
+  # The fan-in: deploy needs every check green and ships the build
+  # job's artifact — one stage per node, artifacts as the handoffs.
+  # Dispatch-gated during the migration so pushes run checks only
+  # and the first deployments are deliberate manual runs; at
+  # go-live's end this gate (and the artifact upload's) flips to
+  # plain pushes on main.
+  deploy:
+    name: Deploy
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs: [build, lint, format, test]
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
