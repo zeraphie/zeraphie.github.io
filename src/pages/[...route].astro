@@ -43,14 +43,14 @@ export async function getStaticPaths() {
     {
       params: { route: "sitemap" },
       props: {
-        title: "sitemap · izelya.me",
+        title: "sitemap - izelya.me",
         description: "Every page on izelya.me, by collection.",
       },
     },
     ...clusters.map((c) => ({
       params: { route: c.id },
       props: {
-        title: `${c.label} · izelya.me`,
+        title: `${c.label} - izelya.me`,
         description: `Everything in the ${c.label} collection on izelya.me.`,
       },
     })),
@@ -58,7 +58,7 @@ export async function getStaticPaths() {
       c.items.map((item) => ({
         params: { route: item.post! },
         props: {
-          title: `${item.label} · izelya.me`,
+          title: `${item.label} - izelya.me`,
           description: entryFor.get(item.post!)?.data.description ?? `${item.label} on izelya.me`,
           article: {
             section: c.label,
@@ -233,7 +233,7 @@ const CurrentContent = currentPost?.Content;
               >
                 ‹‹
               </button>
-              <span class="arrows">·</span>
+              <span class="arrows">-</span>
               <button class="journal-turn" id="journal-turn-next" type="button" aria-label="next">
                 ››
               </button>
@@ -585,9 +585,9 @@ const clusters = createClusterLayer(world);
         }
         const item = clusterById(route.cat)?.items.find((entry) => entry.id === route.item);
         document.title = item
-          ? `${item.label} · izelya.me`
+          ? `${item.label} - izelya.me`
           : route.cat
-            ? `${route.cat} · izelya.me`
+            ? `${route.cat} - izelya.me`
             : "izelya.me";
       }
 
@@ -1155,10 +1155,10 @@ const clusters = createClusterLayer(world);
 
       installDebugHud(
         () =>
-          `route=${location.pathname}${location.hash} · open=${page.hasAttribute("data-open")}` +
-          ` · pageOp=${getComputedStyle(page).opacity}` +
-          ` · dived=${world.dived} · worldVis=${world.style.visibility || "visible"}` +
-          ` · worldPE=${world.style.pointerEvents || "auto"} · perf=${PERF_LOW ? "low" : "full"}`
+          `route=${location.pathname}${location.hash} - open=${page.hasAttribute("data-open")}` +
+          ` - pageOp=${getComputedStyle(page).opacity}` +
+          ` - dived=${world.dived} - worldVis=${world.style.visibility || "visible"}` +
+          ` - worldPE=${world.style.pointerEvents || "auto"} - perf=${PERF_LOW ? "low" : "full"}`
       );
 
       // ── boot: wait for the engine's first frame, read the fan's
