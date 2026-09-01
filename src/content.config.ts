@@ -12,8 +12,9 @@ const posts = (base: string) =>
       icon: z.string().optional(),
       /** A project's own mark, drawn in place of the icon. */
       logo: z.string().optional(),
-      /** A playable build — arcade posts render a cartridge to it. */
-      game: z.string().url().optional(),
+      /** A playable build — arcade posts render a cartridge to it.
+       * Root-relative now that the project sites share the domain. */
+      game: z.string().optional(),
       draft: z.boolean().default(false),
     }),
   });
