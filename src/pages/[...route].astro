@@ -555,7 +555,7 @@ const clusters = createClusterLayer(world);
        * is a quoted string because CSS `content` consumes it. */
       function syncCenterTip(): void {
         const label = current.cat ? (clusterById(current.cat)?.label ?? current.cat) : "home";
-        world.style.setProperty("--world-center-tip", JSON.stringify(`CENTER · ${label.toUpperCase()}`));
+        world.style.setProperty("--world-center-tip", JSON.stringify(`CENTER - ${label.toUpperCase()}`));
       }
 
       // The chrome's recenter flies home; this site centers on the

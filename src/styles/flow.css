@@ -347,8 +347,8 @@ body[data-perf="low"] hp-cluster .hx-reveal {
   opacity: 1;
 }
 
-/* Touch has no hover: bigger targets, no tooltips, and center
-   keeps a small standing label under its chip. */
+/* Touch keeps the same tooltips — they only cost space while a
+   press holds them up. Just bigger targets here. */
 @media (max-width: 760px) {
   #world::part(zoom-in),
   #world::part(zoom-out) {
@@ -359,24 +359,6 @@ body[data-perf="low"] hp-cluster .hx-reveal {
   #world::part(recenter) {
     width: 60px;
     height: 69px;
-  }
-  #world::part(zoom-in)::after,
-  #world::part(zoom-out)::after {
-    content: none;
-  }
-  #world::part(recenter)::after {
-    content: "CENTER";
-    right: auto;
-    left: 50%;
-    top: calc(100% + 3px);
-    transform: translateX(-50%);
-    padding: 0;
-    background: none;
-    border: 0;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    color: var(--hp-on-surface-variant);
-    opacity: 1;
   }
 }
 
