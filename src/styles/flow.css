@@ -396,6 +396,168 @@ body[data-perf="low"] #world::part(recenter)::after {
   }
 }
 
+/* ── the lost toast ─────────────────────────────────────────────
+   The invader and its speech bubble, nothing else — no card, no
+   chrome. The bubble is the button: hover or focus morphs its
+   label into the action; on touch a tap simply acts. The wave is
+   driven from script (WAAPI over the two real poses) so PERF_LOW
+   and reduced motion can skip it. */
+.lost-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  animation: lost-in 240ms ease;
+}
+.lost-toast[hidden] {
+  display: none;
+}
+@keyframes lost-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+.lost-mark {
+  position: relative;
+  width: 44px;
+  height: 32px;
+  flex: none;
+}
+.lost-invader {
+  position: absolute;
+  left: 20px;
+  top: 14px;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  color: var(--hp-primary-bright);
+}
+.lost-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--hp-primary-bright);
+  opacity: 0.4;
+  animation: lost-wink 2s ease-in-out infinite;
+}
+.lost-star:nth-of-type(2) {
+  left: -10px;
+  top: -12px;
+}
+.lost-star:nth-of-type(3) {
+  left: 50px;
+  top: -6px;
+  animation-delay: 0.7s;
+}
+.lost-star:nth-of-type(4) {
+  left: 34px;
+  top: -16px;
+  animation-delay: 1.3s;
+}
+@keyframes lost-wink {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+.lost-bubble {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 44px;
+  min-width: 216px;
+  padding: 8px 14px;
+  background: var(--hp-surface-container);
+  border: 1px solid var(--hp-outline-variant);
+  border-radius: 2px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease;
+}
+/* The nub that points at the speaker. */
+.lost-bubble::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  width: 8px;
+  height: 8px;
+  background: var(--hp-surface-container);
+  border-left: 1px solid var(--hp-outline-variant);
+  border-bottom: 1px solid var(--hp-outline-variant);
+  transform: rotate(45deg);
+  transition: border-color 140ms ease;
+}
+.lost-rest {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lost-line {
+  font-size: 12px;
+  color: var(--hp-on-surface);
+}
+.lost-sub {
+  font-size: 11px;
+  color: var(--hp-on-surface-variant);
+}
+.lost-act {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--hp-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.lost-bubble:hover,
+.lost-bubble:focus-visible {
+  border-color: var(--hp-secondary);
+  outline: none;
+}
+.lost-bubble:hover::before,
+.lost-bubble:focus-visible::before {
+  border-color: var(--hp-secondary);
+}
+.lost-bubble:hover .lost-rest,
+.lost-bubble:focus-visible .lost-rest {
+  display: none;
+}
+.lost-bubble:hover .lost-act,
+.lost-bubble:focus-visible .lost-act {
+  display: flex;
+}
+
+/* Clear of the corner controls on a narrow screen. */
+@media (max-width: 760px) {
+  .lost-toast {
+    bottom: 120px;
+  }
+}
+
+body[data-perf="low"] .lost-star,
+body[data-perf="low"] .lost-toast {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lost-star,
+  .lost-toast {
+    animation: none;
+  }
+}
+
 /* The seed cell holds its colour in EVERY state. Every other hex
    answers a pointer with hexpunk blue-to-green hue swap; this one
    answers with the invader instead, so the swap would be a second,

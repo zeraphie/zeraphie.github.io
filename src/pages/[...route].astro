@@ -243,6 +243,43 @@ const CurrentContent = currentPost?.Content;
       </div>
 
       <hp-hextrack id="track" loop hidden></hp-hextrack>
+
+      <!-- The lost toast: when no hexes are on screen for a beat,
+           the site's mark shows up with a way back. The bubble IS
+           the button — hover morphs its label, a tap just acts. -->
+      <div class="lost-toast" id="lost-toast" hidden>
+        <span class="lost-mark" aria-hidden="true">
+          <i class="lost-invader" id="lost-invader"></i>
+          <i class="lost-star"></i>
+          <i class="lost-star"></i>
+          <i class="lost-star"></i>
+        </span>
+        <button type="button" class="lost-bubble" id="lost-bubble" aria-label="Take me back">
+          <span class="lost-rest">
+            <span class="lost-line">hey, noticed you might be lost</span>
+            <span class="lost-sub">wanna go back?</span>
+          </span>
+          <span class="lost-act">
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+            </svg>
+            take me back
+          </span>
+        </button>
+      </div>
     </div>
 
     <div id="posts" hidden>
@@ -294,7 +331,7 @@ const CurrentContent = currentPost?.Content;
         type AxialCoord,
         type HpGrid,
       } from "@hexpunk/core/grid";
-      import type { HpBackground, HpPixel } from "@hexpunk/core";
+      import type { HpBackground, HpPixel, HpPixelPosition } from "@hexpunk/core";
       import type {
         HpHextrack,
         HpHextrackActivateDetail,
@@ -960,6 +997,80 @@ const clusters = createClusterLayer(world);
         } else {
           // Home, bloomed: fold the sections back to the lone seed.
           seedUnfold.open = false;
+        }
+      });
+
+      // ── the lost toast: the mark notices an empty viewport ──
+      const lostToast = document.getElementById("lost-toast")!;
+      const lostBubble = document.getElementById("lost-bubble")!;
+      const lostInvader = document.getElementById("lost-invader")!;
+
+      // The sprite's two real poses as shadow lists at toast scale —
+      // the same constants the seed cell wires into hp-pixel.
+      const LOST_SCALE = 4;
+      const poseShadow = (pose: HpPixelPosition[]): string =>
+        pose.map(([x, y]) => `${x * LOST_SCALE}px ${y * LOST_SCALE}px 0 0 currentColor`).join(", ");
+      lostInvader.style.boxShadow = poseShadow(INVADER_IDLE);
+      if (!PERF_LOW && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        lostInvader.animate(
+          [{ boxShadow: poseShadow(INVADER_IDLE) }, { boxShadow: poseShadow(INVADER_HOVER) }],
+          { duration: 1600, direction: "alternate", iterations: Infinity, easing: "ease-in-out" }
+        );
+      }
+
+      /** Does any world content intersect the viewport? The seed and
+       * the mounted cluster are the world's only occupants. */
+      function worldContentVisible(): boolean {
+        const margin = 40;
+        const w = stage.clientWidth;
+        const h = stage.clientHeight;
+        const rects = [seedCell.getBoundingClientRect(), clusters.mounted?.el.getBoundingClientRect()];
+        return rects.some(
+          (r) =>
+            r !== undefined &&
+            r.width > 0 &&
+            r.right > -margin &&
+            r.left < w + margin &&
+            r.bottom > -margin &&
+            r.top < h + margin
+        );
+      }
+
+      let lostSince = 0;
+      /** Once per drift: a dismissed toast stays away until hexes
+       * come back into frame. */
+      let lostShown = false;
+      window.setInterval(() => {
+        if (world.dived || document.visibilityState !== "visible") {
+          lostSince = 0;
+          lostShown = false;
+          lostToast.hidden = true;
+          return;
+        }
+        if (worldContentVisible()) {
+          lostSince = 0;
+          lostShown = false;
+          lostToast.hidden = true;
+          return;
+        }
+        if (!lostSince) {
+          lostSince = performance.now();
+          return;
+        }
+        if (!lostShown && performance.now() - lostSince >= 1000) {
+          lostShown = true;
+          lostToast.hidden = false;
+        }
+      }, 300);
+
+      lostBubble.addEventListener("click", () => {
+        lostToast.hidden = true;
+        centerOnRoute();
+      });
+      // A press anywhere else dismisses it for this drift.
+      stage.addEventListener("pointerdown", (event) => {
+        if (!lostToast.hidden && !lostToast.contains(event.target as Node)) {
+          lostToast.hidden = true;
         }
       });
 
