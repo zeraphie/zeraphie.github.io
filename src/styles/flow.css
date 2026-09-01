@@ -402,40 +402,32 @@ body[data-perf="low"] #world::part(recenter)::after {
    label into the action; on touch a tap simply acts. The wave is
    driven from script (WAAPI over the two real poses) so PERF_LOW
    and reduced motion can skip it. */
-.lost-veil {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: color-mix(in srgb, var(--hp-background) 60%, transparent);
-  /* Visual only: panning back must keep working underneath. */
-  pointer-events: none;
-  animation: lost-fade 240ms ease;
-}
-.lost-veil[hidden] {
-  display: none;
-}
-@keyframes lost-fade {
-  from {
-    opacity: 0;
-  }
-}
 .lost-toast {
   position: absolute;
   left: 50%;
-  bottom: 40px;
+  bottom: 0;
   transform: translateX(-50%);
-  z-index: 4;
+  /* Chrome above the world and its hover z-lifts, hs-back's layer:
+     the toast takes its own pointer events, never the grid. */
+  z-index: 20;
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 0;
+  /* An invisible 40px halo: all of it clickable, all of it hover. */
+  padding: 40px;
   border: 0;
   background: none;
   color: inherit;
   font: inherit;
+  /* Loose buttons wear elements.css's uppercase dress; this one
+     speaks lowercase. The action line re-uppercases itself. */
+  text-transform: none;
+  letter-spacing: normal;
   text-align: left;
   cursor: pointer;
-  animation: lost-in 240ms ease;
+  /* Rises in from below the screen edge; resting bottom is the
+     viewport bottom, so its own height is the whole journey. */
+  animation: lost-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .lost-toast[hidden] {
   display: none;
@@ -445,24 +437,23 @@ body[data-perf="low"] #world::part(recenter)::after {
 }
 @keyframes lost-in {
   from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(8px);
+    transform: translateX(-50%) translateY(100%);
   }
 }
 .lost-mark {
   position: relative;
+  display: grid;
+  place-items: center;
   width: 44px;
   height: 32px;
   flex: none;
 }
 .lost-invader {
-  position: absolute;
-  left: 20px;
-  top: 14px;
-  width: 4px;
-  height: 4px;
-  background: transparent;
   color: var(--hp-primary-bright);
+}
+/* Same anchor-pixel stopgap the seed carries (hexpunk item 1). */
+.lost-invader::part(canvas) {
+  background: currentColor;
 }
 .lost-star {
   position: absolute;
@@ -522,10 +513,15 @@ body[data-perf="low"] #world::part(recenter)::after {
   transform: rotate(45deg);
   transition: border-color 140ms ease;
 }
+/* Both labels share one grid cell, so the bubble's size never
+   changes on the morph — the larger (resting) label reserves it
+   and the two crossfade in place. */
 .lost-rest {
+  grid-area: 1 / 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  transition: opacity 140ms ease;
 }
 .lost-line {
   font-size: 12px;
@@ -536,7 +532,8 @@ body[data-perf="low"] #world::part(recenter)::after {
   color: var(--hp-on-surface-variant);
 }
 .lost-act {
-  display: none;
+  grid-area: 1 / 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
@@ -545,6 +542,9 @@ body[data-perf="low"] #world::part(recenter)::after {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 140ms ease;
 }
 /* The WHOLE component is the button: hovering anywhere morphs the
    bubble, keyboard focus does the same. */
@@ -558,30 +558,38 @@ body[data-perf="low"] #world::part(recenter)::after {
 }
 .lost-toast:hover .lost-rest,
 .lost-toast:focus-visible .lost-rest {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
 }
 .lost-toast:hover .lost-act,
 .lost-toast:focus-visible .lost-act {
-  display: flex;
+  visibility: visible;
+  opacity: 1;
 }
 
 /* Clear of the corner controls on a narrow screen. */
 @media (max-width: 760px) {
   .lost-toast {
-    bottom: 120px;
+    bottom: 80px;
   }
 }
 
 body[data-perf="low"] .lost-star,
-body[data-perf="low"] .lost-toast,
-body[data-perf="low"] .lost-veil {
+body[data-perf="low"] .lost-toast {
   animation: none;
+}
+body[data-perf="low"] .lost-rest,
+body[data-perf="low"] .lost-act {
+  transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .lost-star,
-  .lost-toast,
-  .lost-veil {
+  .lost-toast {
     animation: none;
+  }
+  .lost-rest,
+  .lost-act {
+    transition: none;
   }
 }
 

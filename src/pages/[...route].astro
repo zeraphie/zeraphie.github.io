@@ -248,10 +248,9 @@ const CurrentContent = currentPost?.Content;
            screen, the site's mark shows up over the grid with a way
            back. The WHOLE thing is the button — hovering anywhere
            morphs the bubble, clicking anywhere centers. -->
-      <div class="lost-veil" id="lost-veil" hidden></div>
       <button type="button" class="lost-toast" id="lost-toast" aria-label="Take me back" hidden>
         <span class="lost-mark" aria-hidden="true">
-          <i class="lost-invader" id="lost-invader"></i>
+          <hp-pixel class="lost-invader" id="lost-invader" pixel-size="4"></hp-pixel>
           <i class="lost-star"></i>
           <i class="lost-star"></i>
           <i class="lost-star"></i>
@@ -333,7 +332,7 @@ const CurrentContent = currentPost?.Content;
         type AxialCoord,
         type HpGrid,
       } from "@hexpunk/core/grid";
-      import type { HpBackground, HpPixel, HpPixelPosition } from "@hexpunk/core";
+      import type { HpBackground, HpPixel } from "@hexpunk/core";
       import type {
         HpHextrack,
         HpHextrackActivateDetail,
@@ -1007,20 +1006,20 @@ const clusters = createClusterLayer(world);
 
       // ── the lost toast: the mark notices an empty viewport ──
       const lostToast = document.getElementById("lost-toast")!;
-      const lostVeil = document.getElementById("lost-veil")!;
-      const lostInvader = document.getElementById("lost-invader")!;
-
-      // The sprite's two real poses as shadow lists at toast scale —
-      // the same constants the seed cell wires into hp-pixel.
-      const LOST_SCALE = 4;
-      const poseShadow = (pose: HpPixelPosition[]): string =>
-        pose.map(([x, y]) => `${x * LOST_SCALE}px ${y * LOST_SCALE}px 0 0 currentColor`).join(", ");
-      lostInvader.style.boxShadow = poseShadow(INVADER_IDLE);
-      if (!PERF_LOW && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        lostInvader.animate(
-          [{ boxShadow: poseShadow(INVADER_IDLE) }, { boxShadow: poseShadow(INVADER_HOVER) }],
-          { duration: 1600, direction: "alternate", iterations: Infinity, easing: "ease-in-out" }
-        );
+      // The mark is the same hp-pixel the seed wires, same two
+      // poses. The wave toggles `state` and lets the element's own
+      // box-shadow transition carry the arm sweep.
+      const lostInvader = document.getElementById("lost-invader") as HpPixel | null;
+      if (lostInvader) {
+        lostInvader.states = { idle: INVADER_IDLE, hover: INVADER_HOVER };
+        lostInvader.state = "idle";
+        if (!PERF_LOW && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          let lostArmsUp = false;
+          window.setInterval(() => {
+            lostArmsUp = !lostArmsUp;
+            lostInvader.state = lostArmsUp ? "hover" : "idle";
+          }, 800);
+        }
       }
 
       /** Does any world content intersect the viewport? The seed and
@@ -1041,58 +1040,113 @@ const clusters = createClusterLayer(world);
         );
       }
 
+      /** Drift diagnostics ride the ?debug convention. */
+      const lostLog = new URLSearchParams(location.search).has("debug")
+        ? (message: string) => console.info(message)
+        : () => {};
       let lostTimer = 0;
       /** Once per drift: a dismissed toast stays away until hexes
        * come back into frame. */
       let lostShown = false;
+      /** True while a drift is being watched — for log hygiene. */
+      let lostWatching = false;
+      let lostSawPan = false;
       function lostHide(): void {
         lostToast.hidden = true;
-        lostVeil.hidden = true;
       }
       /** Route change into the journal ends the drift outright. */
       function lostDismissForRoute(): void {
         lostShown = false;
+        lostWatching = false;
         lostHide();
       }
-      /** The debounced landing: the pan stopped — if it stopped on
-       * emptiness, the mark shows up. */
+      let lostBaseX = Number.NaN;
+      let lostBaseY = Number.NaN;
+      let lostGlideLogged = false;
+      /** The debounced landing — but a flick keeps gliding on
+       * inertia after the last pan event, and no event marks the
+       * true stop. So the settle waits for standstill: it samples
+       * the world's position and re-arms while it still moves. */
       function lostSettle(): void {
         lostTimer = 0;
-        if (world.dived || document.visibilityState !== "visible" || worldContentVisible()) {
+        if (world.dived || document.visibilityState !== "visible") {
+          return;
+        }
+        const rect = seedCell.getBoundingClientRect();
+        const priming = Number.isNaN(lostBaseX);
+        const moving =
+          priming || Math.abs(rect.left - lostBaseX) > 0.5 || Math.abs(rect.top - lostBaseY) > 0.5;
+        lostBaseX = rect.left;
+        lostBaseY = rect.top;
+        if (moving) {
+          if (!priming && !lostGlideLogged) {
+            lostGlideLogged = true;
+            lostLog("[lost] still gliding — waiting for standstill");
+          }
+          lostTimer = window.setTimeout(lostSettle, 150);
+          return;
+        }
+        const visible = worldContentVisible();
+        lostLog(`[lost] settled still: contentVisible=${visible} shownThisDrift=${lostShown}`);
+        if (visible) {
+          lostWatching = false;
+          lostShown = false;
           return;
         }
         if (!lostShown) {
           lostShown = true;
           lostToast.hidden = false;
-          lostVeil.hidden = false;
+          lostLog("[lost] showing");
         }
       }
       // Every pan event restarts the 0.5s debounce; hexes coming
       // back into frame end the drift immediately.
       world.addEventListener("hp-grid-pan", () => {
+        if (!lostSawPan) {
+          lostSawPan = true;
+          lostLog("[lost] first hp-grid-pan received");
+        }
         if (world.dived) {
           return;
         }
         window.clearTimeout(lostTimer);
         lostTimer = 0;
         if (worldContentVisible()) {
+          if (lostWatching || !lostToast.hidden) {
+            lostLog("[lost] hexes back — drift over");
+          }
+          lostWatching = false;
           lostShown = false;
           if (!lostToast.hidden) {
             lostHide();
           }
-          return;
+        } else if (!lostWatching) {
+          lostWatching = true;
+          lostLog("[lost] empty viewport — debouncing 0.5s");
         }
+        // ALWAYS arm: a flick's glide empties the viewport AFTER the
+        // last pan event, so the settle must run — and wait for
+        // standstill — even when hexes were visible at event time.
+        lostBaseX = Number.NaN;
+        lostBaseY = Number.NaN;
+        lostGlideLogged = false;
         lostTimer = window.setTimeout(lostSettle, 500);
       });
+      lostLog("[lost] wired — waiting for hp-grid-pan");
 
+      // The toast is chrome above the grid: its presses are its own,
+      // never the pan gesture's — the same swallow hs-back carries.
+      lostToast.addEventListener("pointerdown", (event) => event.stopPropagation());
       // Clicking anywhere on it centers; a press anywhere else
       // dismisses it for this drift.
       lostToast.addEventListener("click", () => {
+        lostLog("[lost] centered from the toast");
         lostHide();
         centerOnRoute();
       });
       stage.addEventListener("pointerdown", (event) => {
         if (!lostToast.hidden && !lostToast.contains(event.target as Node)) {
+          lostLog("[lost] dismissed by a press elsewhere");
           lostHide();
         }
       });
