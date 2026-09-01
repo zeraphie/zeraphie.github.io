@@ -313,12 +313,15 @@ body[data-perf="low"] hp-cluster .hx-reveal {
   right: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  padding: 5px 9px;
+  padding: 7px 10px;
   background: var(--hp-surface-container);
   border: 1px solid var(--hp-outline-variant);
   border-radius: 2px;
   font-size: 10px;
   font-weight: 600;
+  /* The chrome's shadow context collapses the inherited line box —
+     pin it so the padding reads as designed. */
+  line-height: 1;
   letter-spacing: 0.16em;
   color: var(--hp-on-surface);
   white-space: nowrap;
