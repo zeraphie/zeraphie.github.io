@@ -3,10 +3,10 @@ title: Warrior of Keyboard
 icon: keyboard
 description: "A co-op typing game for 1-4 players. Serverless peer-to-peer over WebRTC"
 date: 2026-08-27
-game: https://zeraphie.github.io/warrior-of-keyboard/
+game: /warrior-of-keyboard/
 ---
 
-[This project](https://zeraphie.github.io/warrior-of-keyboard/) spawned after watching the keynote for FFXIV's Fan Festival 2026 in Berlin. I've been an avid player of the game for a long time, and one thing caught my eye, a minigame that'll be added to the Gold Saucer with FF7 theming called Keybound Brawler. I felt like it was such a strange minigame to add to FFXIV, but I also saw it as a chance to see how I'd convert the sort of template that I'd made with my [Snecko](https://zeraphie.github.io/snecko/) game, and have a thorough multiplayer integration.
+[This project](/warrior-of-keyboard/) spawned after watching the keynote for FFXIV's Fan Festival 2026 in Berlin. I've been an avid player of the game for a long time, and one thing caught my eye, a minigame that'll be added to the Gold Saucer with FF7 theming called Keybound Brawler. I felt like it was such a strange minigame to add to FFXIV, but I also saw it as a chance to see how I'd convert the sort of template that I'd made with my [Snecko](/snecko/) game, and have a thorough multiplayer integration.
 
 Similarly to Snecko I also wanted to have as few dependencies as possible, as well as focussing on a canvas experience so it'd be consistent whether or not the browser had hardware acceleration available. Above everything, I wanted to have an intent that kept things on track for the game
 

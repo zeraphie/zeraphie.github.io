@@ -9,7 +9,7 @@ draft: true
 
 My name's Izzy and I made this site way back when I first started development, back in the days of making themes for WordPress and applications with Laravel, but have now moved on to newer technologies, like Reactjs and Nextjs, and dabbling in some Go instead of PHP.
 
-I'm also an avid user of Discord and play quite a bit of D&D so I tend to make a bunch of useful tools that I use throughout the day, like this handy [discord date formatter](https://zeraphie.github.io/discord-date-formatter/) because a bunch of my friends come from all sorts of timezones, as well as a new [stat roller for D&D 5th edition](https://codepen.io/chrysokitty/full/jOzgeMz).
+I'm also an avid user of Discord and play quite a bit of D&D so I tend to make a bunch of useful tools that I use throughout the day, like this handy [discord date formatter](/discord-date-formatter/) because a bunch of my friends come from all sorts of timezones, as well as a new [stat roller for D&D 5th edition](https://codepen.io/chrysokitty/full/jOzgeMz).
 
 ## About the site
 

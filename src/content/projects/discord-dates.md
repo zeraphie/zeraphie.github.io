@@ -6,7 +6,7 @@ date: 2022-10-23
 ---
 I use discord a **lot**. Like a lot a lot. I have groups of friends that are located in various parts of the world, and it's confusing as heck to transform the times that they say into my own time, for get togethers, D&D sessions, sometimes work and a lot more. Discord has this fancy feature that I don't really see anyone apart from discord bots using, with which you can give a specifically formatted timestamp and it will display that in the user's local timezone, making it soooo much easier to organise things.
 
-However, the amount of people who'll be able to get that timestamp is comparitively very few compared to the user base, so I wanted to make a tool that fixed that, giving a nice and easy to use manner by which a user can generate this formatted timestamp, and what I ended up with was [this tool](https://zeraphie.github.io/discord-date-formatter/).
+However, the amount of people who'll be able to get that timestamp is comparitively very few compared to the user base, so I wanted to make a tool that fixed that, giving a nice and easy to use manner by which a user can generate this formatted timestamp, and what I ended up with was [this tool](/discord-date-formatter/).
 
 ## The Format
 

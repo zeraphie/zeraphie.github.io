@@ -4,10 +4,10 @@ icon: worm
 logo: snecko
 description: "A roguelike version of the classic Snake game, featuring procedural generation, boss fights and different game modes"
 date: 2026-08-31
-game: https://zeraphie.github.io/snecko/
+game: /snecko/
 ---
 
-Many years ago, I tested myself to make a Snake game in JavaScript. This [codepen](https://codepen.io/chrysokitty/pen/wMGGyB) was the result and there were a bunch of bad practices that I'd used in it, woops. I've been playing a lot of [Slay the Spire 2](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/), and I wanted to make a much better snake game, but with a twist. So I made [Snecko](https://zeraphie.github.io/snecko/). At the beginning it was just a terminal based game, but I made it in a way that allowed me to play it in the browser as well, and you can still play it in either way.
+Many years ago, I tested myself to make a Snake game in JavaScript. This [codepen](https://codepen.io/chrysokitty/pen/wMGGyB) was the result and there were a bunch of bad practices that I'd used in it, woops. I've been playing a lot of [Slay the Spire 2](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/), and I wanted to make a much better snake game, but with a twist. So I made [Snecko](/snecko/). At the beginning it was just a terminal based game, but I made it in a way that allowed me to play it in the browser as well, and you can still play it in either way.
 
 Over time it became a pretty large project, with different game modes, boss fights, and even a mini souls-like boss fight. It became my testing and experimentation ground for random ideas and interests I wanted to explore. I see this game in two different ways, a technical exploration of cool concepts, and a fun game to play.
 
