@@ -402,6 +402,23 @@ body[data-perf="low"] #world::part(recenter)::after {
    label into the action; on touch a tap simply acts. The wave is
    driven from script (WAAPI over the two real poses) so PERF_LOW
    and reduced motion can skip it. */
+.lost-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: color-mix(in srgb, var(--hp-background) 60%, transparent);
+  /* Visual only: panning back must keep working underneath. */
+  pointer-events: none;
+  animation: lost-fade 240ms ease;
+}
+.lost-veil[hidden] {
+  display: none;
+}
+@keyframes lost-fade {
+  from {
+    opacity: 0;
+  }
+}
 .lost-toast {
   position: absolute;
   left: 50%;
@@ -411,10 +428,20 @@ body[data-perf="low"] #world::part(recenter)::after {
   display: flex;
   align-items: center;
   gap: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   animation: lost-in 240ms ease;
 }
 .lost-toast[hidden] {
   display: none;
+}
+.lost-toast:focus-visible {
+  outline: none;
 }
 @keyframes lost-in {
   from {
@@ -478,9 +505,6 @@ body[data-perf="low"] #world::part(recenter)::after {
   background: var(--hp-surface-container);
   border: 1px solid var(--hp-outline-variant);
   border-radius: 2px;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
   transition: border-color 140ms ease;
 }
 /* The nub that points at the speaker. */
@@ -522,21 +546,22 @@ body[data-perf="low"] #world::part(recenter)::after {
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.lost-bubble:hover,
-.lost-bubble:focus-visible {
-  border-color: var(--hp-secondary);
-  outline: none;
-}
-.lost-bubble:hover::before,
-.lost-bubble:focus-visible::before {
+/* The WHOLE component is the button: hovering anywhere morphs the
+   bubble, keyboard focus does the same. */
+.lost-toast:hover .lost-bubble,
+.lost-toast:focus-visible .lost-bubble {
   border-color: var(--hp-secondary);
 }
-.lost-bubble:hover .lost-rest,
-.lost-bubble:focus-visible .lost-rest {
+.lost-toast:hover .lost-bubble::before,
+.lost-toast:focus-visible .lost-bubble::before {
+  border-color: var(--hp-secondary);
+}
+.lost-toast:hover .lost-rest,
+.lost-toast:focus-visible .lost-rest {
   display: none;
 }
-.lost-bubble:hover .lost-act,
-.lost-bubble:focus-visible .lost-act {
+.lost-toast:hover .lost-act,
+.lost-toast:focus-visible .lost-act {
   display: flex;
 }
 
@@ -548,12 +573,14 @@ body[data-perf="low"] #world::part(recenter)::after {
 }
 
 body[data-perf="low"] .lost-star,
-body[data-perf="low"] .lost-toast {
+body[data-perf="low"] .lost-toast,
+body[data-perf="low"] .lost-veil {
   animation: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .lost-star,
-  .lost-toast {
+  .lost-toast,
+  .lost-veil {
     animation: none;
   }
 }

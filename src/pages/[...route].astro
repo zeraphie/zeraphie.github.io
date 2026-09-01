@@ -244,17 +244,19 @@ const CurrentContent = currentPost?.Content;
 
       <hp-hextrack id="track" loop hidden></hp-hextrack>
 
-      <!-- The lost toast: when no hexes are on screen for a beat,
-           the site's mark shows up with a way back. The bubble IS
-           the button — hover morphs its label, a tap just acts. -->
-      <div class="lost-toast" id="lost-toast" hidden>
+      <!-- The lost toast: when a pan settles with no hexes on
+           screen, the site's mark shows up over the grid with a way
+           back. The WHOLE thing is the button — hovering anywhere
+           morphs the bubble, clicking anywhere centers. -->
+      <div class="lost-veil" id="lost-veil" hidden></div>
+      <button type="button" class="lost-toast" id="lost-toast" aria-label="Take me back" hidden>
         <span class="lost-mark" aria-hidden="true">
           <i class="lost-invader" id="lost-invader"></i>
           <i class="lost-star"></i>
           <i class="lost-star"></i>
           <i class="lost-star"></i>
         </span>
-        <button type="button" class="lost-bubble" id="lost-bubble" aria-label="Take me back">
+        <span class="lost-bubble">
           <span class="lost-rest">
             <span class="lost-line">hey, noticed you might be lost</span>
             <span class="lost-sub">wanna go back?</span>
@@ -278,8 +280,8 @@ const CurrentContent = currentPost?.Content;
             </svg>
             take me back
           </span>
-        </button>
-      </div>
+        </span>
+      </button>
     </div>
 
     <div id="posts" hidden>
@@ -576,9 +578,12 @@ const clusters = createClusterLayer(world);
       );
 
       function setPath(route: Route): void {
-        void route;
         syncBack();
         syncCenterTip();
+        // The journal covers the stage: no toast may float over it.
+        if (route.item || route.doc) {
+          lostDismissForRoute();
+        }
         const item = clusterById(route.cat)?.items.find((entry) => entry.id === route.item);
         document.title = item
           ? `${item.label} · izelya.me`
@@ -1002,7 +1007,7 @@ const clusters = createClusterLayer(world);
 
       // ── the lost toast: the mark notices an empty viewport ──
       const lostToast = document.getElementById("lost-toast")!;
-      const lostBubble = document.getElementById("lost-bubble")!;
+      const lostVeil = document.getElementById("lost-veil")!;
       const lostInvader = document.getElementById("lost-invader")!;
 
       // The sprite's two real poses as shadow lists at toast scale —
@@ -1036,41 +1041,59 @@ const clusters = createClusterLayer(world);
         );
       }
 
-      let lostSince = 0;
+      let lostTimer = 0;
       /** Once per drift: a dismissed toast stays away until hexes
        * come back into frame. */
       let lostShown = false;
-      window.setInterval(() => {
-        if (world.dived || document.visibilityState !== "visible") {
-          lostSince = 0;
-          lostShown = false;
-          lostToast.hidden = true;
+      function lostHide(): void {
+        lostToast.hidden = true;
+        lostVeil.hidden = true;
+      }
+      /** Route change into the journal ends the drift outright. */
+      function lostDismissForRoute(): void {
+        lostShown = false;
+        lostHide();
+      }
+      /** The debounced landing: the pan stopped — if it stopped on
+       * emptiness, the mark shows up. */
+      function lostSettle(): void {
+        lostTimer = 0;
+        if (world.dived || document.visibilityState !== "visible" || worldContentVisible()) {
           return;
         }
-        if (worldContentVisible()) {
-          lostSince = 0;
-          lostShown = false;
-          lostToast.hidden = true;
-          return;
-        }
-        if (!lostSince) {
-          lostSince = performance.now();
-          return;
-        }
-        if (!lostShown && performance.now() - lostSince >= 1000) {
+        if (!lostShown) {
           lostShown = true;
           lostToast.hidden = false;
+          lostVeil.hidden = false;
         }
-      }, 300);
+      }
+      // Every pan event restarts the 0.5s debounce; hexes coming
+      // back into frame end the drift immediately.
+      world.addEventListener("hp-grid-pan", () => {
+        if (world.dived) {
+          return;
+        }
+        window.clearTimeout(lostTimer);
+        lostTimer = 0;
+        if (worldContentVisible()) {
+          lostShown = false;
+          if (!lostToast.hidden) {
+            lostHide();
+          }
+          return;
+        }
+        lostTimer = window.setTimeout(lostSettle, 500);
+      });
 
-      lostBubble.addEventListener("click", () => {
-        lostToast.hidden = true;
+      // Clicking anywhere on it centers; a press anywhere else
+      // dismisses it for this drift.
+      lostToast.addEventListener("click", () => {
+        lostHide();
         centerOnRoute();
       });
-      // A press anywhere else dismisses it for this drift.
       stage.addEventListener("pointerdown", (event) => {
         if (!lostToast.hidden && !lostToast.contains(event.target as Node)) {
-          lostToast.hidden = true;
+          lostHide();
         }
       });
 
