@@ -574,14 +574,10 @@ body[data-perf="low"] #world::part(recenter)::after {
   }
 }
 
-body[data-perf="low"] .lost-star,
-body[data-perf="low"] .lost-toast {
-  animation: none;
-}
-body[data-perf="low"] .lost-rest,
-body[data-perf="low"] .lost-act {
-  transition: none;
-}
+/* No PERF_LOW suppression here on purpose: the degrade tier guards
+   viewport-scale compositing, and the toast's motions are a small
+   transform slide and a 44px sprite — cheap even on the software
+   rasterizer. Reduced motion still stills everything. */
 @media (prefers-reduced-motion: reduce) {
   .lost-star,
   .lost-toast {

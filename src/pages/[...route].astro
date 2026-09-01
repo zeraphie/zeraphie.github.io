@@ -1013,7 +1013,9 @@ const clusters = createClusterLayer(world);
       if (lostInvader) {
         lostInvader.states = { idle: INVADER_IDLE, hover: INVADER_HOVER };
         lostInvader.state = "idle";
-        if (!PERF_LOW && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        // The wave runs on the degraded tier too — a 44px repaint,
+        // not viewport-scale work. Reduced motion stills it.
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           let lostArmsUp = false;
           window.setInterval(() => {
             lostArmsUp = !lostArmsUp;
